@@ -52,7 +52,7 @@ public class Main implements ActionListener{
         frame.pack(); 
         frame.setLocationRelativeTo(null); 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-        frame.setSize(400,300); 
+        frame.setSize(1600,900); 
         frame.setVisible(true); 
     }
 
