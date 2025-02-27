@@ -39,7 +39,7 @@ public class Main implements ActionListener{
         frame.add(label, BorderLayout.NORTH); 
         frame.add(buttonPanel, BorderLayout.CENTER);  
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-        frame.setSize(200,200); 
+        frame.setSize(1600,900); 
         frame.setVisible(true); 
     }
 
