@@ -7,7 +7,7 @@ public class Main implements ActionListener{
     private JButton startNew; 
     private JButton startSaved;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) {  
         Main gui = new Main(); 
         gui.go(); 
     }
@@ -16,6 +16,7 @@ public class Main implements ActionListener{
         //create new frame and page title
         JFrame frame = new JFrame("Pair-A-Normal Matchtivity"); 
 
+        //create header label 
         JLabel label = new JLabel("[under construction]", SwingConstants.CENTER);
         label.setFont(new Font("Serif", Font.PLAIN, 60)); 
         label.setOpaque(true); 
@@ -24,6 +25,7 @@ public class Main implements ActionListener{
         JPanel buttonPanel = new JPanel(); 
         buttonPanel.setBackground(Color.white); 
 
+        //buttons 
         startNew = new JButton("Start New Game"); 
         startSaved = new JButton("Start Saved Game"); 
 
@@ -41,6 +43,7 @@ public class Main implements ActionListener{
         frame.setVisible(true); 
     }
 
+    //on button click 
     public void actionPerformed(ActionEvent event) { 
         //change to connect with choose difficulty
         startNew.setText("I've been clicked!"); 
