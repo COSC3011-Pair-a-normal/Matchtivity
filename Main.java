@@ -22,24 +22,37 @@ public class Main implements ActionListener{
         label.setOpaque(true); 
         label.setBackground(Color.white); 
 
-        JPanel buttonPanel = new JPanel(); 
-        buttonPanel.setBackground(Color.white); 
+        JPanel frontScreen = new JPanel(new GridBagLayout()); 
+        frontScreen.setBackground(Color.white);
+        
+        //layout to directly choose where components go 
+        GridBagConstraints gbc = new GridBagConstraints(); 
+        gbc.gridx = 0; 
+        gbc.gridy = 0; 
+        gbc.anchor = GridBagConstraints.CENTER; 
+        gbc.insets = new Insets(10, 10, 10, 10); 
 
-        //buttons 
+        //buttons and set size 
         startNew = new JButton("Start New Game"); 
+        startNew.setPreferredSize(new Dimension(400, 100));
         startSaved = new JButton("Start Saved Game"); 
+        startSaved.setPreferredSize(new Dimension(400,100));
 
         //for clicking the button 
         startNew.addActionListener(this); 
 
-        //add buttons to panel 
-        buttonPanel.add(startNew);
-        buttonPanel.add(startSaved);  
+        //add 
+        frontScreen.add(startNew, gbc); 
+        gbc.gridy++; 
+        frontScreen.add(startSaved, gbc); 
 
+        frame.setLayout(new BorderLayout()); 
         frame.add(label, BorderLayout.NORTH); 
-        frame.add(buttonPanel, BorderLayout.CENTER);  
+        frame.add(frontScreen, BorderLayout.CENTER);  
+        frame.pack(); 
+        frame.setLocationRelativeTo(null); 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-        frame.setSize(200,200); 
+        frame.setSize(400,300); 
         frame.setVisible(true); 
     }
 
