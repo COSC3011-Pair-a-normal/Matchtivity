@@ -10,6 +10,8 @@ public class Main implements ActionListener {
     private JButton exitGame;
     private JFrame frame;
     private boolean timerStarted = false; // Ensure only one timer is created.
+    private boolean isPaused = false; // Tracks paused status.
+    private GameTimer gameTimer; // Game timer reference.
     public static Font rockSaltFont;
 
     public static void main(String[] args) {
@@ -102,14 +104,15 @@ public class Main implements ActionListener {
     // on button click 
     public void actionPerformed(ActionEvent event) { 
         // change to connect with choose difficulty
-        startNew.setText("I've been clicked!"); 
+//        startNew.setText("I've been clicked!"); 
 
         // Create and add timer once.
         if(!timerStarted)
         {
             // Create the timer panel.
             timerStarted = true;
-            Timer gameTimer = new Timer();
+            isPaused = false;
+            gameTimer = new GameTimer();
 
             // Calculate initial timer position.
             int frameWidth = frame.getWidth();
@@ -126,7 +129,7 @@ public class Main implements ActionListener {
             frame.getLayeredPane().add(gameTimer, JLayeredPane.POPUP_LAYER);
 
             // Add a listener that repositions the timer if the frame is resized.
-            frame.addComponentListener((new ComponentAdapter()
+            frame.addComponentListener(new ComponentAdapter()
             {
                 @Override
                 public void componentResized(ComponentEvent e)
@@ -138,11 +141,29 @@ public class Main implements ActionListener {
                     int newYPos = (int) (newFrameHeight * 0.05);
                     gameTimer.setBounds(newXPos, newYPos, timerWidth, timerHeight);
                 }  
-            }));
+            });
 
             // Update the frame layout.
             frame.revalidate();
             frame.repaint();
+
+            // Update start button text.
+            startNew.setText("Press to pause");
+        }
+        else
+        {
+            if(!isPaused)
+            {
+                gameTimer.pauseTimer();
+                isPaused = true;
+                startNew.setText("Press to resume");
+            }
+            else
+            {
+                gameTimer.resumeTimer();
+                isPaused = false;
+                startNew.setText("Press to pause");
+            }
         }
     }
 }
