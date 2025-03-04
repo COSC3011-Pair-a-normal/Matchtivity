@@ -1,169 +1,148 @@
 import javax.swing.*;
-import java.awt.*; 
-import java.awt.event.*; 
+import java.awt.*;
+import java.awt.event.*;
 import java.io.File;
 
 public class Main implements ActionListener {
-    // create buttons 
-    private JButton startNew; 
-    private JButton startSaved;
-    private JButton exitGame;
+    // Buttons
+    private JButton startNew, startSaved, exitGame;
+    private JButton easyButton, mediumButton, hardButton;
     private JFrame frame;
-    private boolean timerStarted = false; // Ensure only one timer is created.
-    private boolean isPaused = false; // Tracks paused status.
-    private GameTimer gameTimer; // Game timer reference.
+    private JPanel mainPanel;
+    private CardLayout cardLayout;
     public static Font rockSaltFont;
 
     public static void main(String[] args) {
-        
-        // Load the custom font, and set it globally.
-        try
-        {
+        // Load custom font
+        try {
             Font customFont = Font.createFont(Font.TRUETYPE_FONT,
-                new File("resources/fonts/Rock_Salt/RockSalt-Regular.ttf"));
+                    new File("resources/fonts/Rock_Salt/RockSalt-Regular.ttf"));
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(customFont);
             rockSaltFont = customFont;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        Main gui = new Main(); 
-        gui.go(); 
+
+        SwingUtilities.invokeLater(() -> new Main().initializeUI());
     }
 
-    // Helper method to derive custom font at specific size.
-    public static Font getCustomFont(float size)
-    {
-        if(rockSaltFont != null)
-        {
-            return rockSaltFont.deriveFont(size);
-        }
-        else
-        {
-            return new Font("Serif", Font.PLAIN, (int) size);
-        }
+    public static Font getCustomFont(float size) {
+        return (rockSaltFont != null) ? rockSaltFont.deriveFont(size) : new Font("Serif", Font.PLAIN, (int) size);
     }
 
-    public void go() {
-        // create new frame and page title
-        frame = new JFrame("Pair-A-Normal Matchtivity"); 
+    public void initializeUI() {
+        // Create the main frame
+        frame = new JFrame("Pair-A-Normal Matchtivity");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1600, 900);
+        frame.setLocationRelativeTo(null);
 
-        // create header label 
-        JLabel label = new JLabel("Pair-A-Normal Matchtivity", SwingConstants.CENTER);
-        label.setFont(getCustomFont((60f))); 
-        label.setOpaque(true); 
-        label.setBackground(Color.white); 
+        // 🔹 Set up CardLayout for switching screens
+        cardLayout = new CardLayout();
+        mainPanel = new JPanel(cardLayout);
 
-        JPanel frontScreen = new JPanel(new GridBagLayout()); 
-        frontScreen.setBackground(Color.white);
-        
-        // layout to directly choose where components go 
-        GridBagConstraints gbc = new GridBagConstraints(); 
-        gbc.gridx = 0; 
-        gbc.gridy = 0; 
-        gbc.anchor = GridBagConstraints.CENTER; 
-        gbc.insets = new Insets(10, 10, 10, 10); 
+        // 🔹 Add different screens
+        JPanel startScreen = createStartScreen();
+        JPanel difficultyScreen = createDifficultyScreen();
 
-        // buttons and set size 
-        startNew = new JButton("Start New Game"); 
+        mainPanel.add(startScreen, "StartScreen");
+        mainPanel.add(difficultyScreen, "DifficultyScreen");
+
+        frame.add(mainPanel);
+        frame.setVisible(true);
+    }
+
+    private JPanel createStartScreen() {
+        JPanel startScreen = new JPanel(new GridBagLayout());
+        startScreen.setBackground(Color.white);
+
+        JLabel titleLabel = new JLabel("Pair-A-Normal Matchtivity", SwingConstants.CENTER);
+        titleLabel.setFont(getCustomFont(60f));
+        titleLabel.setOpaque(true);
+        titleLabel.setBackground(Color.white);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        // 🔹 "Start New Game" Button (Switches to Difficulty Screen)
+        startNew = new JButton("Start New Game");
         startNew.setPreferredSize(new Dimension(400, 100));
         startNew.setFont(getCustomFont(30f));
+        startNew.addActionListener(this); // Will call actionPerformed()
 
-        startSaved = new JButton("Start Saved Game"); 
-        startSaved.setPreferredSize(new Dimension(400,100));
+        // 🔹 Other Buttons
+        startSaved = new JButton("Start Saved Game");
+        startSaved.setPreferredSize(new Dimension(400, 100));
         startSaved.setFont(getCustomFont(30f));
 
         exitGame = new JButton("Exit Game");
         exitGame.setPreferredSize(new Dimension(400, 100));
         exitGame.setFont(getCustomFont(30f));
+        exitGame.addActionListener(e -> System.exit(0)); // Exit the game
 
-        // add action listeners 
-        startNew.addActionListener(this); 
-        exitGame.addActionListener(e -> System.exit(0)); // exit game on click
-
-        // add buttons to the panel 
-        frontScreen.add(startNew, gbc); 
-        gbc.gridy++; 
-        frontScreen.add(startSaved, gbc); 
+        // 🔹 Add Buttons to Start Screen
+        startScreen.add(startNew, gbc);
         gbc.gridy++;
-        frontScreen.add(exitGame, gbc);
+        startScreen.add(startSaved, gbc);
+        gbc.gridy++;
+        startScreen.add(exitGame, gbc);
 
-        frame.setLayout(new BorderLayout()); 
-        frame.add(label, BorderLayout.NORTH); 
-        frame.add(frontScreen, BorderLayout.CENTER);  
-        frame.pack(); 
-        frame.setLocationRelativeTo(null); 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-        frame.setSize(1600,900); 
-        frame.setVisible(true); 
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(titleLabel, BorderLayout.NORTH);
+        panel.add(startScreen, BorderLayout.CENTER);
+
+        return panel;
     }
 
-    // on button click 
-    public void actionPerformed(ActionEvent event) { 
-        // change to connect with choose difficulty
-//        startNew.setText("I've been clicked!"); 
+    private JPanel createDifficultyScreen() {
+        JPanel difficultyScreen = new JPanel(new GridBagLayout());
+        difficultyScreen.setBackground(Color.white);
 
-        // Create and add timer once.
-        if(!timerStarted)
-        {
-            // Create the timer panel.
-            timerStarted = true;
-            isPaused = false;
-            gameTimer = new GameTimer();
+        JLabel difficultyLabel = new JLabel("Choose Difficulty", SwingConstants.CENTER);
+        difficultyLabel.setFont(getCustomFont(60f));
 
-            // Calculate initial timer position.
-            int frameWidth = frame.getWidth();
-            int frameHeight = frame.getHeight();
-            int timerWidth = 300;
-            int timerHeight = 100;
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
 
-            int timerXPos = (int) (frameWidth * 0.95) - timerWidth; // 10% margin from right.
-            int timerYPos = (int) (frameHeight * 0.05); // 5% margin from top.
+        // 🔹 Difficulty Buttons
+        easyButton = new JButton("Easy");
+        easyButton.setPreferredSize(new Dimension(400, 100));
+        easyButton.setFont(getCustomFont(30f));
 
-            gameTimer.setBounds(timerXPos, timerYPos, timerWidth, timerHeight);
+        mediumButton = new JButton("Medium");
+        mediumButton.setPreferredSize(new Dimension(400, 100));
+        mediumButton.setFont(getCustomFont(30f));
 
-            // Add timer panel to frame's layed pane for relative positioning.
-            frame.getLayeredPane().add(gameTimer, JLayeredPane.POPUP_LAYER);
+        hardButton = new JButton("Hard");
+        hardButton.setPreferredSize(new Dimension(400, 100));
+        hardButton.setFont(getCustomFont(30f));
 
-            // Add a listener that repositions the timer if the frame is resized.
-            frame.addComponentListener(new ComponentAdapter()
-            {
-                @Override
-                public void componentResized(ComponentEvent e)
-                {
-                    // Generate new positioning.
-                    int newFrameWidth = frame.getWidth();
-                    int newFrameHeight = frame.getHeight();
-                    int newXPos = (int) (newFrameWidth * 0.95) - timerWidth;
-                    int newYPos = (int) (newFrameHeight * 0.05);
-                    gameTimer.setBounds(newXPos, newYPos, timerWidth, timerHeight);
-                }  
-            });
+        // 🔹 Add Components to Difficulty Screen
+        
+        difficultyScreen.add(difficultyLabel, gbc);
+        gbc.gridy++;
+        difficultyScreen.add(easyButton, gbc);
+        gbc.gridy++;
+        difficultyScreen.add(mediumButton, gbc);
+        gbc.gridy++;
+        difficultyScreen.add(hardButton, gbc);
 
-            // Update the frame layout.
-            frame.revalidate();
-            frame.repaint();
+        return difficultyScreen;
+    }
 
-            // Update start button text.
-            startNew.setText("Press to pause");
-        }
-        else
-        {
-            if(!isPaused)
-            {
-                gameTimer.pauseTimer();
-                isPaused = true;
-                startNew.setText("Press to resume");
-            }
-            else
-            {
-                gameTimer.resumeTimer();
-                isPaused = false;
-                startNew.setText("Press to pause");
-            }
+    
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        if (event.getSource() == startNew) {
+            
+            cardLayout.show(mainPanel, "DifficultyScreen"); // switches screens to difficulty screen 
         }
     }
 }
