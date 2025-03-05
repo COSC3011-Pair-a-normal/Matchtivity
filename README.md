@@ -11,6 +11,6 @@ February 27, 2025:
 
 March 4, 2025:
 - Choose Difficulty (Brooklyn)
-- Choose Category (Caden)
+- Choose Category (Kobe)
 - Board layout (Maxie)
-- 
+- Click functionality (Carlie)
