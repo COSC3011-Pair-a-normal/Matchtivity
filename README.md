@@ -16,4 +16,5 @@ March 4, 2025:
 - Click functionality (Carlie)
 
 javac -cp "C:/javafx-sdk-21.0.6/lib/*" src/main/java/com/Main.java -d out
+
 java -cp "C:/javafx-sdk-21.0.6/lib/*;out" src.main.java.com.Main
