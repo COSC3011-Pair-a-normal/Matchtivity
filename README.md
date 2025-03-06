@@ -10,10 +10,12 @@ February 27, 2025:
 - Started Card class (Caden) 
 
 March 4, 2025:
-- Choose Difficulty (Brooklyn)
+- Choose Difficulty (Brooklyn & Caden)
 - Choose Category (Kobe)
 - Board layout (Maxie)
 - Click functionality (Carlie)
+
+Commands for compiling and running if using the terminal:
 
 javac -cp "C:/javafx-sdk-21.0.6/lib/*" src/main/java/com/Main.java -d out
 
