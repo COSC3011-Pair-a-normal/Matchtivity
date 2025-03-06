@@ -15,6 +15,7 @@ public class Main implements ActionListener {
     // Buttons
     private JButton startNew, startSaved, exitGame;
     private JButton easyButton, mediumButton, hardButton;
+    private JButton regDeck, colorDeck, customDeck;
     private JFrame frame;
     private JPanel mainPanel;
     private CardLayout cardLayout;
@@ -64,9 +65,11 @@ public class Main implements ActionListener {
         // Add different screens
         JPanel startScreen = createStartScreen();
         JPanel difficultyScreen = createDifficultyScreen();
+        JPanel categoryScreen = createCategoryScreen();
 
         mainPanel.add(startScreen, "StartScreen");
         mainPanel.add(difficultyScreen, "DifficultyScreen");
+        mainPanel.add(categoryScreen, "CategoryScreen");
 
         frame.add(mainPanel);
         frame.setVisible(true);
@@ -159,18 +162,62 @@ public class Main implements ActionListener {
         return difficultyScreen;
     }
     
+    private JPanel createCategoryScreen() {
+        JPanel categoryScreen = new JPanel(new GridBagLayout());
+        categoryScreen.setBackground(Color.white);
+
+        JLabel categoryLabel = new JLabel("Choose Your Category", SwingConstants.CENTER);
+        categoryLabel.setFont(getCustomFont(60f));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        // Category Buttons
+        regDeck = new JButton("Regular Deck");
+        regDeck.setPreferredSize(new Dimension(400, 100));
+        regDeck.setFont(getCustomFont(30f));
+        regDeck.addActionListener(this);
+        
+        colorDeck = new JButton("Color Deck");
+        colorDeck.setPreferredSize(new Dimension(400, 100));
+        colorDeck.setFont(getCustomFont(30f));
+        colorDeck.addActionListener(this);
+        
+        customDeck = new JButton("Custom Deck");
+        customDeck.setPreferredSize(new Dimension(400, 100));
+        customDeck.setFont(getCustomFont(30f));
+        customDeck.addActionListener(this);
+
+        // Add Components to category Screen
+        
+        categoryScreen.add(categoryLabel, gbc);
+        gbc.gridy++; 
+        categoryScreen.add(regDeck, gbc);
+        gbc.gridy++;
+        categoryScreen.add(colorDeck, gbc);
+        gbc.gridy++;
+        categoryScreen.add(customDeck, gbc);
+
+        return categoryScreen;
+    }
+
     @Override
     public void actionPerformed(ActionEvent event) { 
         if (event.getSource() == startNew) {
-            cardLayout.show(mainPanel, "DifficultyScreen"); // switches screens to difficulty screen 
-        } else if (event.getSource() == easyButton) {
-            EasyGameScreen();
-        } else if (event.getSource() == mediumButton) {
+            cardLayout.show(mainPanel, "DifficultyScreen");
+        } else if (event.getSource() == easyButton || event.getSource() == mediumButton || event.getSource() == hardButton) {
+            cardLayout.show(mainPanel, "CategoryScreen"); // Move to category selection after choosing difficulty
+        } else if (event.getSource() == regDeck) {
+            EasyGameScreen(); // Modify this to use difficulty selection
+        } else if (event.getSource() == colorDeck) {
             MediumGameScreen();
-        } else if (event.getSource() == hardButton) {
+        } else if (event.getSource() == customDeck) {
             HardGameScreen();
         }
-
+    }
             /*
             // Create and add timer once.
             if(!timerStarted)
@@ -261,7 +308,7 @@ public class Main implements ActionListener {
         });
     }
 */
-    }
+    
     private void EasyGameScreen() {
         // Initialize the JavaFX thread
         Platform.runLater(() -> {
