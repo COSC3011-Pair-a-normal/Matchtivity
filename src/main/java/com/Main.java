@@ -1,3 +1,5 @@
+package src.main.java.com;
+
 import javax.swing.*;
 import java.awt.*; 
 import java.awt.event.*; 
@@ -20,7 +22,7 @@ public class Main implements ActionListener {
         // Load custom font
         try {
             Font customFont = Font.createFont(Font.TRUETYPE_FONT,
-                new File("resources/fonts/Rock_Salt/RockSalt-Regular.ttf"));
+                new File("src\\main\\resources\\fonts\\Rock_Salt\\RockSalt-Regular.ttf"));
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(customFont);
             rockSaltFont = customFont;
@@ -145,7 +147,7 @@ public class Main implements ActionListener {
     public void actionPerformed(ActionEvent event) { 
         if (event.getSource() == startNew) {
             cardLayout.show(mainPanel, "DifficultyScreen"); // switches screens to difficulty screen 
-        } else if (event.getSource() == playGame) {
+        } else if (event.getSource() == event.getSource()) {
             // Create and add timer once.
             if(!timerStarted)
             {

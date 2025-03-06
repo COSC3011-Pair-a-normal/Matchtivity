@@ -16,7 +16,7 @@
             "request": "launch",
             "mainClass": "Main",
             "projectName": "Matchtivity_1b776ea3",
-            "vmArgs": "--module-path \"C:/javafx-sdk-21.0.6/lib\" --add-modules javafx.controls,javafx.fxml"
+            "vmArgs": "--module-path C:/javafx-sdk-21.0.6/lib --add-modules javafx.controls,javafx.fxml"
         }
     ]
 }
