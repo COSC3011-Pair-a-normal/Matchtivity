@@ -14,6 +14,7 @@ March 4, 2025:
 - Choose Category (Kobe)
 - Board layout (Maxie)
 - Click functionality (Carlie)
+- Continued work on timer functionality (Chance)
 
 Commands for compiling and running if using the terminal:
 
