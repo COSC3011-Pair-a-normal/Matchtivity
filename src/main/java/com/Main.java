@@ -1,5 +1,11 @@
 package src.main.java.com;
 
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.scene.control.Button;
+
 import javax.swing.*;
 import java.awt.*; 
 import java.awt.event.*; 
@@ -17,8 +23,12 @@ public class Main implements ActionListener {
     private GameTimer gameTimer; //Game timer reference
     public static Font rockSaltFont; //Game timer reference
     
+    private JFXPanel jfxPanel;
 
     public static void main(String[] args) {
+
+        initializeJavaFX();
+
         // Load custom font
         try {
             Font customFont = Font.createFont(Font.TRUETYPE_FONT,
@@ -31,6 +41,9 @@ public class Main implements ActionListener {
         }
         
         SwingUtilities.invokeLater(() -> new Main().initializeUI());
+    }
+    private static void initializeJavaFX() {
+        new JFXPanel();  // Creates the JavaFX runtime environment
     }
 
     public static Font getCustomFont(float size) {
@@ -121,14 +134,17 @@ public class Main implements ActionListener {
         easyButton = new JButton("Easy");
         easyButton.setPreferredSize(new Dimension(400, 100));
         easyButton.setFont(getCustomFont(30f));
+        easyButton.addActionListener(this);
 
         mediumButton = new JButton("Medium");
         mediumButton.setPreferredSize(new Dimension(400, 100));
         mediumButton.setFont(getCustomFont(30f));
+        mediumButton.addActionListener(this);
 
         hardButton = new JButton("Hard");
         hardButton.setPreferredSize(new Dimension(400, 100));
         hardButton.setFont(getCustomFont(30f));
+        hardButton.addActionListener(this);
 
         // Add Components to Difficulty Screen
         
@@ -147,7 +163,15 @@ public class Main implements ActionListener {
     public void actionPerformed(ActionEvent event) { 
         if (event.getSource() == startNew) {
             cardLayout.show(mainPanel, "DifficultyScreen"); // switches screens to difficulty screen 
-        } else if (event.getSource() == event.getSource()) {
+        } else if (event.getSource() == easyButton) {
+            EasyGameScreen();
+        } else if (event.getSource() == mediumButton) {
+            MediumGameScreen();
+        } else if (event.getSource() == hardButton) {
+            HardGameScreen();
+        }
+
+            /*
             // Create and add timer once.
             if(!timerStarted)
             {
@@ -207,7 +231,117 @@ public class Main implements ActionListener {
                 startNew.setText("Press to pause");
             }
         }
-
+ 
         }
+    private void showJavaFXGameScreen() {
+        // Initialize the JavaFX thread
+        Platform.runLater(() -> {
+            // Create a JavaFX Scene
+            StackPane gamePane = new StackPane();
+            Button startButton = new Button("Start Game");
+
+            // Set up the action for the start button
+            startButton.setOnAction(event -> {
+                // Game logic for starting the game goes here
+                System.out.println("Game Started with selected difficulty!");
+            });
+
+            gamePane.getChildren().add(startButton);
+            Scene scene = new Scene(gamePane, 1600, 900);
+
+            // Set up the JavaFX scene in the JFXPanel
+            jfxPanel = new JFXPanel();
+            jfxPanel.setScene(scene);
+
+            // Replace the content of the frame with JavaFX content
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(jfxPanel);
+            frame.revalidate();
+            frame.repaint();
+        });
     }
+*/
+    }
+    private void EasyGameScreen() {
+        // Initialize the JavaFX thread
+        Platform.runLater(() -> {
+            // Create a JavaFX Scene
+            StackPane gamePane = new StackPane();
+            Button startButton = new Button("Easy Game: under construction");
+
+            // Set up the action for the start button
+            startButton.setOnAction(event -> {
+                // Game logic for starting the game goes here
+                System.out.println("Game Started with selected difficulty!");
+            });
+
+            gamePane.getChildren().add(startButton);
+            Scene scene = new Scene(gamePane, 1600, 900);
+
+            // Set up the JavaFX scene in the JFXPanel
+            jfxPanel = new JFXPanel();
+            jfxPanel.setScene(scene);
+
+            // Replace the content of the frame with JavaFX content
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(jfxPanel);
+            frame.revalidate();
+            frame.repaint();
+        });
+    }
+    private void MediumGameScreen() {
+        // Initialize the JavaFX thread
+        Platform.runLater(() -> {
+            // Create a JavaFX Scene
+            StackPane gamePane = new StackPane();
+            Button startButton = new Button("Medium Game: under construction");
+
+            // Set up the action for the start button
+            startButton.setOnAction(event -> {
+                // Game logic for starting the game goes here
+                System.out.println("Game Started with selected difficulty!");
+            });
+
+            gamePane.getChildren().add(startButton);
+            Scene scene = new Scene(gamePane, 1600, 900);
+
+            // Set up the JavaFX scene in the JFXPanel
+            jfxPanel = new JFXPanel();
+            jfxPanel.setScene(scene);
+
+            // Replace the content of the frame with JavaFX content
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(jfxPanel);
+            frame.revalidate();
+            frame.repaint();
+        });
+    }
+    private void HardGameScreen() {
+        // Initialize the JavaFX thread
+        Platform.runLater(() -> {
+            // Create a JavaFX Scene
+            StackPane gamePane = new StackPane();
+            Button startButton = new Button("Hard Game: under construction");
+
+            // Set up the action for the start button
+            startButton.setOnAction(event -> {
+                // Game logic for starting the game goes here
+                System.out.println("Game Started with selected difficulty!");
+            });
+
+            gamePane.getChildren().add(startButton);
+            Scene scene = new Scene(gamePane, 1600, 900);
+
+            // Set up the JavaFX scene in the JFXPanel
+            jfxPanel = new JFXPanel();
+            jfxPanel.setScene(scene);
+
+            // Replace the content of the frame with JavaFX content
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(jfxPanel);
+            frame.revalidate();
+            frame.repaint();
+        });
+    }
+
 }
