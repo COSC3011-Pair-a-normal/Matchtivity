@@ -10,14 +10,20 @@ February 27, 2025:
 - Started Card class (Caden) 
 
 March 4, 2025:
-- Choose Difficulty (Brooklyn)
+- Choose Difficulty (Brooklyn & Caden)
 - Choose Category (Kobe)
 - Board layout (Maxie)
 - Click functionality (Carlie)
+- Continued work on timer functionality (Chance)
 
-javac --module-path C:/javafx-sdk-21.0.6/lib --add-modules javafx.controls,javafx.fxml,javafx.swing -d out src/main/java/com/Main.java
+March 6, 2025: 
+- Continue Choose Difficulty (Brooklyn)
+- Gameboard layout and card design (Maxie and Caden)
+- Menu (save and exit buttons while playing) (Chance)
+- Scoreboard (Carlie)
+- Win Game display (Kobe) 
 
-java --module-path C:/javafx-sdk-21.0.6/lib --add-modules javafx.controls,javafx.fxml -cp out src.main.java.com.Main
+Commands for compiling and running if using the terminal:
 
 javac -cp ".;C:/javafx-sdk-21.0.6/lib/*" src/main/java/com/Main.java -d out
 java -cp ".;C:/javafx-sdk-21.0.6/lib/*;out" src.main.java.com.Main

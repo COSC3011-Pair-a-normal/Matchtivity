@@ -165,7 +165,6 @@ public class Main implements ActionListener {
 
         return difficultyScreen;
     }
-
     private JPanel createCategoryScreen() {
         JPanel categoryScreen = new JPanel(new GridBagLayout());
         categoryScreen.setBackground(Color.white);
