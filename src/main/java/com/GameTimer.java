@@ -1,4 +1,4 @@
-package src.main.java.com;
+package com;
 // Implements a game timer panel using Swing that displays elapsed time in
 // HH:MM:SS format. Timer starts automatically when the panel is created, and
 // updates each second.

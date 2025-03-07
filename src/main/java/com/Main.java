@@ -1,7 +1,9 @@
-package src.main.java.com;
+package com;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.control.Button;
@@ -10,11 +12,14 @@ import javax.swing.*;
 import java.awt.*; 
 import java.awt.event.*; 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 public class Main implements ActionListener {
     // Buttons
     private JButton startNew, startSaved, exitGame;
     private JButton easyButton, mediumButton, hardButton;
+    private JButton regDeck, colorDeck, customDeck;
     private JFrame frame;
     private JPanel mainPanel;
     private CardLayout cardLayout;
@@ -64,9 +69,11 @@ public class Main implements ActionListener {
         // Add different screens
         JPanel startScreen = createStartScreen();
         JPanel difficultyScreen = createDifficultyScreen();
+        JPanel categoryScreen = createCategoryScreen();
 
         mainPanel.add(startScreen, "StartScreen");
         mainPanel.add(difficultyScreen, "DifficultyScreen");
+        mainPanel.add(categoryScreen, "CategoryScreen");
 
         frame.add(mainPanel);
         frame.setVisible(true);
@@ -158,18 +165,63 @@ public class Main implements ActionListener {
 
         return difficultyScreen;
     }
-    
+
+    private JPanel createCategoryScreen() {
+        JPanel categoryScreen = new JPanel(new GridBagLayout());
+        categoryScreen.setBackground(Color.white);
+
+        JLabel categoryLabel = new JLabel("Choose Your Category", SwingConstants.CENTER);
+        categoryLabel.setFont(getCustomFont(60f));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        // Category Buttons
+        regDeck = new JButton("Regular Deck");
+        regDeck.setPreferredSize(new Dimension(400, 100));
+        regDeck.setFont(getCustomFont(30f));
+        regDeck.addActionListener(this);
+        
+        colorDeck = new JButton("Color Deck");
+        colorDeck.setPreferredSize(new Dimension(400, 100));
+        colorDeck.setFont(getCustomFont(30f));
+        colorDeck.addActionListener(this);
+        
+        customDeck = new JButton("Custom Deck");
+        customDeck.setPreferredSize(new Dimension(400, 100));
+        customDeck.setFont(getCustomFont(30f));
+        customDeck.addActionListener(this);
+
+        // Add Components to category Screen
+        
+        categoryScreen.add(categoryLabel, gbc);
+        gbc.gridy++; 
+        categoryScreen.add(regDeck, gbc);
+        gbc.gridy++;
+        categoryScreen.add(colorDeck, gbc);
+        gbc.gridy++;
+        categoryScreen.add(customDeck, gbc);
+
+        return categoryScreen;
+    }
+
     @Override
     public void actionPerformed(ActionEvent event) { 
         if (event.getSource() == startNew) {
-            cardLayout.show(mainPanel, "DifficultyScreen"); // switches screens to difficulty screen 
-        } else if (event.getSource() == easyButton) {
-            EasyGameScreen();
-        } else if (event.getSource() == mediumButton) {
+            cardLayout.show(mainPanel, "DifficultyScreen");
+        } else if (event.getSource() == easyButton || event.getSource() == mediumButton || event.getSource() == hardButton) {
+            cardLayout.show(mainPanel, "CategoryScreen"); // Move to category selection after choosing difficulty
+        } else if (event.getSource() == regDeck) {
+            EasyGameScreen(); // Modify this to use difficulty selection
+        } else if (event.getSource() == colorDeck) {
             MediumGameScreen();
-        } else if (event.getSource() == hardButton) {
+        } else if (event.getSource() == customDeck) {
             HardGameScreen();
         }
+    }
 
             /*
             // Create and add timer once.
@@ -261,7 +313,7 @@ public class Main implements ActionListener {
         });
     }
 */
-    }
+    /*
     private void EasyGameScreen() {
         // Initialize the JavaFX thread
         Platform.runLater(() -> {
@@ -289,6 +341,43 @@ public class Main implements ActionListener {
             frame.repaint();
         });
     }
+        */
+        private void EasyGameScreen() {
+            // Initialize the JavaFX thread
+            Platform.runLater(() -> {
+                try {
+                    // Ensure the path to test.fxml is correct
+                    URL fxmlUrl = getClass().getResource("/test.fxml");
+                    if (fxmlUrl == null) {
+                        throw new IllegalStateException("FXML file not found: /test.fxml");
+                    }
+        
+                    // Create an FXMLLoader object to load the FXML file
+                    FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+        
+                    // Load the FXML file into the root node
+                    Parent root = fxmlLoader.load();
+        
+                    // Create the JavaFX scene with the loaded FXML
+                    Scene scene = new Scene(root, 1600, 900);
+        
+                    // Set up the JavaFX scene in the JFXPanel
+                    jfxPanel = new JFXPanel();
+                    jfxPanel.setScene(scene);
+        
+                    // Replace the content of the frame with JavaFX content
+                    frame.getContentPane().removeAll();
+                    frame.getContentPane().add(jfxPanel);
+                    frame.revalidate();
+                    frame.repaint();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (IllegalStateException e) {
+                    e.printStackTrace(); // Log the exception if the FXML is not found
+                }
+            });
+        }
+        
     private void MediumGameScreen() {
         // Initialize the JavaFX thread
         Platform.runLater(() -> {
@@ -299,7 +388,7 @@ public class Main implements ActionListener {
             // Set up the action for the start button
             startButton.setOnAction(event -> {
                 // Game logic for starting the game goes here
-                System.out.println("Game Started with selected difficulty!");
+                //System.out.println("Game Started with selected difficulty!");
             });
 
             gamePane.getChildren().add(startButton);
