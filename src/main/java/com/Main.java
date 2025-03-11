@@ -26,6 +26,7 @@ public class Main implements ActionListener {
     private boolean timerStarted = false; //Ensure only one timer created 
     private boolean isPaused = false; //Tracks paused status 
     private GameTimer gameTimer; //Game timer reference
+    private ScoreBoard scoreboard; //ScoreBoard object 
     public static Font rockSaltFont; //Game timer reference
     
     private JFXPanel jfxPanel;
@@ -110,12 +111,17 @@ public class Main implements ActionListener {
         exitGame.setFont(getCustomFont(30f));
         exitGame.addActionListener(e -> System.exit(0)); // Exit the game
 
+        //testing scoreboard 
+        //scoreboard = new ScoreBoard(); 
+
         // Add Buttons to Start Screen
         startScreen.add(startNew, gbc);
         gbc.gridy++;
         startScreen.add(startSaved, gbc);
         gbc.gridy++;
         startScreen.add(exitGame, gbc);
+        //gbc.gridy++;
+        //startScreen.add(scoreBoard, gbc); 
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(titleLabel, BorderLayout.NORTH);
@@ -165,6 +171,7 @@ public class Main implements ActionListener {
 
         return difficultyScreen;
     }
+
     private JPanel createCategoryScreen() {
         JPanel categoryScreen = new JPanel(new GridBagLayout());
         categoryScreen.setBackground(Color.white);

@@ -6,6 +6,34 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "com.Main",
+            "projectName": "Matchtivity_90581c2f"
+        },
+        {
+            "type": "java",
+            "name": "ScoreBoard",
+            "request": "launch",
+            "mainClass": "com.ScoreBoard",
+            "projectName": "Matchtivity_90581c2f"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "src.main.java.com.Main",
+            "projectName": "Matchtivity_90581c2f"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "Matchtivity_90581c2f"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
