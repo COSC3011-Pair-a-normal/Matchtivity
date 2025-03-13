@@ -111,17 +111,12 @@ public class Main implements ActionListener {
         exitGame.setFont(getCustomFont(30f));
         exitGame.addActionListener(e -> System.exit(0)); // Exit the game
 
-        //testing scoreboard 
-        //scoreboard = new ScoreBoard(); 
-
         // Add Buttons to Start Screen
         startScreen.add(startNew, gbc);
         gbc.gridy++;
         startScreen.add(startSaved, gbc);
         gbc.gridy++;
         startScreen.add(exitGame, gbc);
-        //gbc.gridy++;
-        //startScreen.add(scoreBoard, gbc); 
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(titleLabel, BorderLayout.NORTH);
@@ -372,6 +367,10 @@ public class Main implements ActionListener {
                         javafx.scene.text.Font rockSalt = javafx.scene.text.Font.loadFont(
                             getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 30.0);
 
+                        //load a smaller size of the font 
+                        javafx.scene.text.Font rockSaltSmall = javafx.scene.text.Font.loadFont(
+                            getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
+
                         // Create the GameMenuButton.
                         GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
 
@@ -392,7 +391,14 @@ public class Main implements ActionListener {
                         });
 
                         // Add the menu button to the scene.
-                        pane.getChildren().add(menuButton);
+                        pane.getChildren().add(menuButton); 
+
+                        scoreboard = new ScoreBoard(rockSaltSmall); 
+
+                        scoreboard.setLayoutX(600); 
+                        scoreboard.setLayoutY(50); 
+
+                        pane.getChildren().add(scoreboard); 
                     }
         
                     // Create the JavaFX scene with the loaded FXML
@@ -402,7 +408,6 @@ public class Main implements ActionListener {
                     jfxPanel = new JFXPanel();
                     jfxPanel.setScene(scene);
 
-                    
         
                     // Replace the content of the frame with JavaFX content
                     frame.getContentPane().removeAll();

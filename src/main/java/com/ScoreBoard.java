@@ -1,53 +1,46 @@
 package com;
 
-import javax.swing.*;
-import java.awt.*; 
-import java.awt.event.*; 
+import javafx.geometry.Pos; 
+import javafx.scene.control.Button;
+import javafx.scene.control.Label; 
+import javafx.scene.layout.VBox;  
+import javafx.scene.text.Font;
 
-/* Initalize in Main with: 
- * scoreboard = new ScoreBoard(); 
- * screen.add(scoreboard); 
- */
+public class ScoreBoard extends VBox{
+    private int score = 0;
+    private Label scoreLabel; 
 
-public class ScoreBoard extends JPanel{
-    private int score; 
-    private int length = 100; 
-    private int width = 50;  
-    private JLabel display; 
+    public ScoreBoard(Font font) {
+        //initalize label for the score 
+        scoreLabel = new Label ("Score: " + score); 
+        scoreLabel.setFont(font); 
 
-    public ScoreBoard() {
-        score = 0; 
-        
-        display = new JLabel("Score: " + this.score, JLabel.CENTER); 
-        
-        this.setSize(length, width); 
-        this.setLayout(new BorderLayout()); 
+        //buttons for increasing and clearing score, 
+        //update when clicked 
+        //eventually change with game functionality
+        Button increaseScore = new Button("Increase Score"); 
+        increaseScore.setFont(font); 
+        increaseScore.setOnAction(event -> increaseScore()); 
 
-        this.add(display, BorderLayout.CENTER); 
+        Button clearScore = new Button("Clear Score");  
+        clearScore.setFont(font); 
+        clearScore.setOnAction(event -> clearScore()); 
 
-        //button to manually update score, change to automatic
-        //when user matches two cards 
-        JButton updateButton = new JButton("Update Score"); 
-        this.add(updateButton, BorderLayout.SOUTH); 
-
-        updateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addScore(); 
-            }
-        }); 
+        //styling the "panel"
+        this.setSpacing(20); 
+        this.setAlignment(Pos.CENTER); 
+        this.getChildren().addAll(scoreLabel, increaseScore, clearScore); 
     }
 
-    public void addScore() {
-        //increase score and update text 
+    //increase and clear methods 
+    private void increaseScore() {
         score++; 
-        display.setText("Score: " + score); 
+        scoreLabel.setText("Score: " + score); 
     }
 
-    public void clear() {
-        //reset score and update text 
-        score = 0;
-        display.setText("Score: " + score); 
+    private void clearScore() {
+        score = 0; 
+        scoreLabel.setText("Score: " + score); 
     }
 
 }
