@@ -363,6 +363,37 @@ public class Main implements ActionListener {
         
                     // Load the FXML file into the root node
                     Parent root = fxmlLoader.load();
+
+                    if(root instanceof javafx.scene.layout.Pane)
+                    {
+                        javafx.scene.layout.Pane pane = (javafx.scene.layout.Pane) root;
+
+                        // Load the font.
+                        javafx.scene.text.Font rockSalt = javafx.scene.text.Font.loadFont(
+                            getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 30.0);
+
+                        // Create the GameMenuButton.
+                        GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
+
+                        // Position the button.
+                        menuButton.setLayoutX(50);
+                        menuButton.setLayoutY(50);
+
+                        menuButton.setOnSave(event ->
+                        {
+                            // Insert save logic here.
+                            System.out.println("Game saved! That's creamy and dreamy!");
+                        });
+
+                        menuButton.setOnExit(event ->
+                        {
+                            // Insert exit logic here.
+                            System.exit(0);
+                        });
+
+                        // Add the menu button to the scene.
+                        pane.getChildren().add(menuButton);
+                    }
         
                     // Create the JavaFX scene with the loaded FXML
                     Scene scene = new Scene(root, 1600, 900);
@@ -370,6 +401,8 @@ public class Main implements ActionListener {
                     // Set up the JavaFX scene in the JFXPanel
                     jfxPanel = new JFXPanel();
                     jfxPanel.setScene(scene);
+
+                    
         
                     // Replace the content of the frame with JavaFX content
                     frame.getContentPane().removeAll();
