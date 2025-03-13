@@ -350,7 +350,7 @@ public class Main implements ActionListener {
                     // Ensure the path to test.fxml is correct
                     URL fxmlUrl = getClass().getResource("/test.fxml");
                     if (fxmlUrl == null) {
-                        throw new IllegalStateException("FXML file not found: /test.fxml");
+                        throw new IllegalStateException("FXML file not found: /easy.fxml");
                     }
         
                     // Create an FXMLLoader object to load the FXML file
