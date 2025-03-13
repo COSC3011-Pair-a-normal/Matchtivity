@@ -348,7 +348,7 @@ public class Main implements ActionListener {
             Platform.runLater(() -> {
                 try {
                     // Ensure the path to test.fxml is correct
-                    URL fxmlUrl = getClass().getResource("/test.fxml");
+                    URL fxmlUrl = getClass().getResource("/easy.fxml");
                     if (fxmlUrl == null) {
                         throw new IllegalStateException("FXML file not found: /easy.fxml");
                     }
@@ -395,8 +395,8 @@ public class Main implements ActionListener {
 
                         scoreboard = new ScoreBoard(rockSaltSmall); 
 
-                        scoreboard.setLayoutX(600); 
-                        scoreboard.setLayoutY(50); 
+                        scoreboard.setLayoutX(50);
+                        scoreboard.setLayoutY(400); 
 
                         pane.getChildren().add(scoreboard); 
                     }
