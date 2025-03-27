@@ -2,12 +2,16 @@ package com;
 
 import javafx.fxml.Initializable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.net.URL;
 import javafx.scene.image.Image;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.util.Duration;
 
 public class GameController implements Initializable {
 
@@ -16,6 +20,9 @@ public class GameController implements Initializable {
 
     @FXML
     private FlowPane imagesFlowPane;
+
+    private List<ImageView> flippedCards = new ArrayList<>();
+    private boolean processingCards = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -28,7 +35,6 @@ public class GameController implements Initializable {
     private void initializeImageView() {
         for (int i = 0; i < imagesFlowPane.getChildren().size();i++) {
             ImageView imageView = (ImageView) imagesFlowPane.getChildren().get(i);
-            //Image image = new Image("/images/classic/2_of_clubs.png");
             Image image = backImage;
             imageView.setImage(image);
 
@@ -37,7 +43,10 @@ public class GameController implements Initializable {
             // functionality for making the folder for the current card images will go here
 
             imageView.setOnMouseClicked(event -> {
-                flipCard((int) imageView.getUserData());
+                //only allow two cards to be flipped at a time 
+                if (!processingCards && flippedCards.size() < 2) {
+                    flipCard((int) imageView.getUserData());    
+                }
             });
         }
     }
@@ -48,10 +57,53 @@ public class GameController implements Initializable {
         System.out.println(imageView.getImage() == backImage);
         if (imageView.getImage() == backImage) {
             image = new Image("/images/classic/ace_of_spades.png");
+            flippedCards.add(imageView);
+            System.out.println("Flipped: " + flippedCards.size()); 
         } else {
             image = backImage;
+            flippedCards.remove(imageView); 
+            System.out.println("Reversed: " + flippedCards.size());
         }
         imageView.setImage(image);
+
+        
+        if (flippedCards.size() == 2) {
+            processingCards = true; 
+            processFlippedCards(); 
+        }
+    }
+    
+    private void processFlippedCards() {
+        ImageView firstCard = flippedCards.get(0); 
+        ImageView secondCard = flippedCards.get(1);
+
+        //currently not working correctly 
+        boolean cardsMatch = firstCard.getImage().equals(secondCard.getImage()); 
+
+        if (cardsMatch) {
+            System.out.println("Match!");
+            //increase score
+            //remove from screen 
+        } else {
+            System.out.println("No match!");
+            
+            //delay for 1.5 seconds to see cards 
+            PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+
+            pause.setOnFinished(event -> {
+                //reset the flipped cards 
+                for (ImageView card : flippedCards) {
+                    card.setImage(backImage);
+                }
+
+                flippedCards.clear();
+                processingCards = false;
+            });
+
+            //pause
+            pause.play();
+            }
+
     }
 
 }

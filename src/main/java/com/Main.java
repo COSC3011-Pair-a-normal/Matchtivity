@@ -364,10 +364,12 @@ public class Main implements ActionListener {
                     {
                         javafx.scene.layout.Pane pane = (javafx.scene.layout.Pane) root;
 
+                        
                         GameTimer gameTimer = new GameTimer();
                         gameTimer.setLayoutX(1300);
                         gameTimer.setLayoutY(5);
                         pane.getChildren().add(gameTimer);
+                        
 
                         // Load the font.
                         javafx.scene.text.Font rockSalt = javafx.scene.text.Font.loadFont(
@@ -448,10 +450,12 @@ public class Main implements ActionListener {
             jfxPanel = new JFXPanel();
             jfxPanel.setScene(scene);
 
+            
             GameTimer gameTimer = new GameTimer();
             gameTimer.setLayoutX(100);
             gameTimer.setLayoutY(50);
             gamePane.getChildren().add(gameTimer);
+            
 
             // Replace the content of the frame with JavaFX content
             frame.getContentPane().removeAll();
