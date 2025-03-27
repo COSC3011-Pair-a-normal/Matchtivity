@@ -1,31 +1,57 @@
-// Implements a game timer panel using Swing that displays elapsed time in
-// HH:MM:SS format. Timer starts automatically when the panel is created, and
-// updates each second.
+/*
+Implements a JavaFX control that displays the time elapsed in HH:MM:SS format.
+The time starts when the control is created, and then updates every second.
+
+Usage example:
+
+Within a JavaFX scene:
+GameTimer gameTimer = new GameTimer();
+// Alter x/y pos as needed.
+gameTimer.setLayoutX(100);
+gameTimer.setLayoutY(50);
+pane.getChildren().add(gameTimer);
+
+Call pauseTimer(), resumeTimer(), stopTimer() as needed to control timer
+progress.
+
+*/
 
 package com;
 
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.util.Duration;
 
-public class GameTimer extends JPanel
+public class GameTimer extends StackPane
 {
-    private JLabel timeLabel; // Display elapsed time HH:MM:SS.
-    private long startTime; // Time in milli when timer was started.
+    private Label timeLabel;
+    private long startTime;
     private long elapsedGameTime = 0;
     private boolean isPaused = false;
-    private javax.swing.Timer timer;
+    private Timeline timeline;
 
     public GameTimer()
     {
-        // Create label starting at time 00:00:00 with center alignment.
-        timeLabel = new JLabel("00:00:00", SwingConstants.CENTER);
+        // Create label starting at time 00:00:00.
+        timeLabel = new Label("00:00:00");
         // Set custom font from main, using helper, at size 40.
-        timeLabel.setFont(Main.getCustomFont(40f));
-        this.setBackground(Color.white);
-        // Add label to the panel.
-        this.add(timeLabel);
+        Font rockSalt = Font.loadFont(getClass().getResource
+            ("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 40);
+        timeLabel.setFont(rockSalt);
+
+        // Center the label.
+        // this.setAlignment(Pos.CENTER);
+        this.setStyle("-fx-background-color: white;");
+        this.getChildren().add(timeLabel);
 
         // Start timer to begin updating elapsed time.
         startTimer();
@@ -35,16 +61,10 @@ public class GameTimer extends JPanel
     private void startTimer()
     {
         startTime = System.currentTimeMillis();
-        // Updates timer every 1000ms(1 second).
-        timer = new javax.swing.Timer(1000, new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                updateTimer();
-            }
-        });
-
-        timer.start();
+        // Create a Timeline that calls updateTimer() every second.
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> updateTimer()));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
 
     // Updates the timer with the elapsed time.
@@ -63,7 +83,7 @@ public class GameTimer extends JPanel
     // Stops the timer.
     public void stopTimer()
     {
-        timer.stop();
+        timeline.stop();
     }
 
     // Pauses the timer, calculates and stores the elapsed time.
@@ -72,7 +92,7 @@ public class GameTimer extends JPanel
         if(!isPaused)
         {
             elapsedGameTime += System.currentTimeMillis() - startTime;
-            timer.stop();
+            timeline.pause();
             isPaused = true;
         }
     }
@@ -83,7 +103,7 @@ public class GameTimer extends JPanel
         if(isPaused)
         {
             startTime = System.currentTimeMillis();
-            timer.start();
+            timeline.play();
             isPaused = false;
         }
     }

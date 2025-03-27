@@ -15,8 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-// Wewewwewewewewwew
-
 public class Main implements ActionListener {
     // Buttons
     private JButton startNew, startSaved, exitGame;
@@ -104,7 +102,8 @@ public class Main implements ActionListener {
         startNew.addActionListener(this); // Will call actionPerformed()
 
         // Other Buttons
-        startSaved = new JButton("Start Saved Game"); 
+        startSaved = new JButton("Start Saved Game");
+        startSaved.setFocusPainted(false);
         startSaved.setPreferredSize(new Dimension(400, 100));
         startSaved.setFont(getCustomFont(30f));
 
@@ -443,6 +442,11 @@ public class Main implements ActionListener {
             // Set up the JavaFX scene in the JFXPanel
             jfxPanel = new JFXPanel();
             jfxPanel.setScene(scene);
+
+            GameTimer gameTimer = new GameTimer();
+            gameTimer.setLayoutX(100);
+            gameTimer.setLayoutY(50);
+            gamePane.getChildren().add(gameTimer);
 
             // Replace the content of the frame with JavaFX content
             frame.getContentPane().removeAll();
