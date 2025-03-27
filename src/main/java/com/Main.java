@@ -364,6 +364,11 @@ public class Main implements ActionListener {
                     {
                         javafx.scene.layout.Pane pane = (javafx.scene.layout.Pane) root;
 
+                        GameTimer gameTimer = new GameTimer();
+                        gameTimer.setLayoutX(1300);
+                        gameTimer.setLayoutY(5);
+                        pane.getChildren().add(gameTimer);
+
                         // Load the font.
                         javafx.scene.text.Font rockSalt = javafx.scene.text.Font.loadFont(
                             getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 30.0);

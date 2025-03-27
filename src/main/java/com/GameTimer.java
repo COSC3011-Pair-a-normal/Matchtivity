@@ -50,7 +50,7 @@ public class GameTimer extends StackPane
 
         // Center the label.
         // this.setAlignment(Pos.CENTER);
-        this.setStyle("-fx-background-color: white;");
+        // this.setStyle("-fx-background-color: white;");
         this.getChildren().add(timeLabel);
 
         // Start timer to begin updating elapsed time.
