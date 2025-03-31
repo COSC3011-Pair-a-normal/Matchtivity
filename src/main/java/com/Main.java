@@ -464,32 +464,66 @@ public class Main implements ActionListener {
             frame.repaint();
         });
     }
-    private void HardGameScreen() {
+  private void HardGameScreen() {
         // Initialize the JavaFX thread
         Platform.runLater(() -> {
-            // Create a JavaFX Scene
-            StackPane gamePane = new StackPane();
-            Button startButton = new Button("Hard Game: under construction");
-
-            // Set up the action for the start button
-            startButton.setOnAction(event -> {
-                // Game logic for starting the game goes here
-                System.out.println("Game Started with selected difficulty!");
-            });
-
-            gamePane.getChildren().add(startButton);
-            Scene scene = new Scene(gamePane, 1600, 900);
-
-            // Set up the JavaFX scene in the JFXPanel
-            jfxPanel = new JFXPanel();
-            jfxPanel.setScene(scene);
-
-            // Replace the content of the frame with JavaFX content
-            frame.getContentPane().removeAll();
-            frame.getContentPane().add(jfxPanel);
-            frame.revalidate();
-            frame.repaint();
+            try {
+                // Load hard_regular.fxml (30 cards, regular deck)
+                URL fxmlUrl = getClass().getResource("/hard.fxml");
+                if (fxmlUrl == null) {
+                    throw new IllegalStateException("FXML file not found: /hard_regular.fxml");
+                }
+    
+                FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+                Parent root = fxmlLoader.load();
+    
+                if (root instanceof javafx.scene.layout.Pane) {
+                    javafx.scene.layout.Pane pane = (javafx.scene.layout.Pane) root;
+    
+                    // Add GameTimer
+                    GameTimer gameTimer = new GameTimer();
+                    gameTimer.setLayoutX(1300);
+                    gameTimer.setLayoutY(5);
+                    pane.getChildren().add(gameTimer);
+    
+                    // Load fonts
+                    javafx.scene.text.Font rockSalt = javafx.scene.text.Font.loadFont(
+                        getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 30.0);
+                    javafx.scene.text.Font rockSaltSmall = javafx.scene.text.Font.loadFont(
+                        getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
+    
+                    // Menu button
+                    GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
+                    menuButton.setLayoutX(50);
+                    menuButton.setLayoutY(50);
+                    menuButton.setOnSave(event -> {
+                        System.out.println("Hard game saved!");
+                    });
+                    menuButton.setOnExit(event -> {
+                        System.exit(0);
+                    });
+                    pane.getChildren().add(menuButton);
+    
+                    // Scoreboard
+                    scoreboard = new ScoreBoard(rockSaltSmall);
+                    scoreboard.setLayoutX(50);
+                    scoreboard.setLayoutY(400);
+                    pane.getChildren().add(scoreboard);
+                }
+    
+                // Set the scene
+                Scene scene = new Scene(root, 1600, 900);
+                jfxPanel = new JFXPanel();
+                jfxPanel.setScene(scene);
+    
+                frame.getContentPane().removeAll();
+                frame.getContentPane().add(jfxPanel);
+                frame.revalidate();
+                frame.repaint();
+    
+            } catch (IOException | IllegalStateException e) {
+                e.printStackTrace();
+            }
         });
     }
-
 }
