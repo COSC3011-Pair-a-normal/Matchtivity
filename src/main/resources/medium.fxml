@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -15,87 +14,87 @@
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageView2" fitHeight="200.0" fitWidth="250.0" layoutX="541.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="250.0" layoutX="541.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageView3" fitHeight="200.0" fitWidth="250.0" layoutX="630.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="250.0" layoutX="630.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageView4" fitHeight="200.0" fitWidth="250.0" layoutX="363.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="250.0" layoutX="363.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageView5" fitHeight="200.0" fitWidth="250.0" layoutX="541.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="250.0" layoutX="541.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageView6" fitHeight="200.0" fitWidth="250.0" layoutX="720.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="250.0" layoutX="720.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageView7" fitHeight="200.0" fitWidth="250.0" layoutX="630.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="250.0" layoutX="630.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageView8" fitHeight="200.0" fitWidth="250.0" layoutX="808.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="250.0" layoutX="808.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageView9" fitHeight="200.0" fitWidth="250.0" layoutX="987.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="250.0" layoutX="987.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageView10" fitHeight="200.0" fitWidth="250.0" layoutX="363.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="250.0" layoutX="363.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageView11" fitHeight="200.0" fitWidth="250.0" layoutX="541.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="250.0" layoutX="541.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageView12" fitHeight="200.0" fitWidth="250.0" layoutX="720.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="250.0" layoutX="720.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageView13" fitHeight="200.0" fitWidth="250.0" layoutX="630.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="250.0" layoutX="630.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageView14" fitHeight="200.0" fitWidth="250.0" layoutX="808.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="250.0" layoutX="808.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageView15" fitHeight="200.0" fitWidth="250.0" layoutX="987.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="250.0" layoutX="987.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageView16" fitHeight="200.0" fitWidth="250.0" layoutX="363.0" layoutY="480.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="250.0" layoutX="363.0" layoutY="480.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageView17" fitHeight="200.0" fitWidth="250.0" layoutX="541.0" layoutY="480.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="250.0" layoutX="541.0" layoutY="480.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageView18" fitHeight="200.0" fitWidth="250.0" layoutX="720.0" layoutY="480.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="250.0" layoutX="720.0" layoutY="480.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
@@ -104,4 +103,3 @@
       </FlowPane>
    </children>
 </AnchorPane>
-
