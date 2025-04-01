@@ -1,0 +1,48 @@
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.GameController">
+   <children>
+      <FlowPane fx:id="imagesFlowPane" alignment="CENTER" hgap="30.0" vgap="20.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="100.0">
+         <children>
+            <!-- 30 cards with smaller 100x150 sizing -->
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+            <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true"><image><Image url="@images/classic/2_of_diamonds.png"/></image></ImageView>
+         </children>
+      </FlowPane>
+   </children>
+</AnchorPane>
