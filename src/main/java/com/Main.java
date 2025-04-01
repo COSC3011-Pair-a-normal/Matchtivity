@@ -430,6 +430,92 @@ public class Main implements ActionListener {
             });
         }
         
+        private void MediumGameScreen() {
+            // Initialize the JavaFX thread
+            Platform.runLater(() -> {
+                try {
+                    // Ensure the path to test.fxml is correct
+                    URL fxmlUrl = getClass().getResource("/medium.fxml");
+                    if (fxmlUrl == null) {
+                        throw new IllegalStateException("FXML file not found: /medium.fxml");
+                    }
+        
+                    // Create an FXMLLoader object to load the FXML file
+                    FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+        
+                    // Load the FXML file into the root node
+                    Parent root = fxmlLoader.load();
+
+                    if(root instanceof javafx.scene.layout.Pane)
+                    {
+                        javafx.scene.layout.Pane pane = (javafx.scene.layout.Pane) root;
+
+                        
+                        GameTimer gameTimer = new GameTimer();
+                        gameTimer.setLayoutX(1300);
+                        gameTimer.setLayoutY(5);
+                        pane.getChildren().add(gameTimer);
+                        
+
+                        // Load the font.
+                        javafx.scene.text.Font rockSalt = javafx.scene.text.Font.loadFont(
+                            getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 30.0);
+
+                        //load a smaller size of the font 
+                        javafx.scene.text.Font rockSaltSmall = javafx.scene.text.Font.loadFont(
+                            getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
+
+                        // Create the GameMenuButton.
+                        GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
+
+                        // Position the button.
+                        menuButton.setLayoutX(50);
+                        menuButton.setLayoutY(50);
+
+                        menuButton.setOnSave(event ->
+                        {
+                            // Insert save logic here.
+                            System.out.println("Game saved! That's creamy and dreamy!");
+                        });
+
+                        menuButton.setOnExit(event ->
+                        {
+                            // Insert exit logic here.
+                            System.exit(0);
+                        });
+
+                        // Add the menu button to the scene.
+                        pane.getChildren().add(menuButton); 
+
+                        scoreboard = new ScoreBoard(rockSaltSmall); 
+
+                        scoreboard.setLayoutX(50);
+                        scoreboard.setLayoutY(400); 
+
+                        pane.getChildren().add(scoreboard); 
+                    }
+        
+                    // Create the JavaFX scene with the loaded FXML
+                    Scene scene = new Scene(root, 1600, 900);
+        
+                    // Set up the JavaFX scene in the JFXPanel
+                    jfxPanel = new JFXPanel();
+                    jfxPanel.setScene(scene);
+
+        
+                    // Replace the content of the frame with JavaFX content
+                    frame.getContentPane().removeAll();
+                    frame.getContentPane().add(jfxPanel);
+                    frame.revalidate();
+                    frame.repaint();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (IllegalStateException e) {
+                    e.printStackTrace(); // Log the exception if the FXML is not found
+                }
+            });
+        }
+    /*  
     private void MediumGameScreen() {
         // Initialize the JavaFX thread
         Platform.runLater(() -> {
@@ -464,6 +550,8 @@ public class Main implements ActionListener {
             frame.repaint();
         });
     }
+    */
+
   private void HardGameScreen() {
         // Initialize the JavaFX thread
         Platform.runLater(() -> {
