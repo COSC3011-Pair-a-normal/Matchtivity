@@ -8,9 +8,9 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.GameController">
    <children>
         <!-- Removed prefHeight and prefWidth to allow dynamic resizing -->
-      <FlowPane fx:id="mediumGameboard" alignment="CENTER" hgap="40.0" vgap="20.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="100.0">
+      <FlowPane fx:id="imagesFlowPane" alignment="CENTER" hgap="40.0" vgap="20.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="100.0">
          <children>
-            <ImageView fx:id="imageView1" fitHeight="200.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imageView" fitHeight="200.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/classic/2_of_diamonds.png" />
                </image>
@@ -104,3 +104,4 @@
       </FlowPane>
    </children>
 </AnchorPane>
+
