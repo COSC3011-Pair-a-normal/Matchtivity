@@ -33,7 +33,7 @@ public class GameController implements Initializable {
         + "images" + File.separator + "currentImages";
 
     // Image resource
-    public static final Image backImage = new Image("/images/back_of_card.png");
+    public static final Image backImage = new Image("/images/back_of_card.png"); 
 
     // this needs to be generalized depending on the size of the game, but for right now it is 10 cards for easy mode => 5 pairs => 5 images
     // 0,1,2,3,4 are the unique imageID's, and each imageID has two cards that correspond to a matching pair
@@ -125,14 +125,12 @@ public class GameController implements Initializable {
                 // Create the Image object from the file URI
                 image = new Image(frontImageFile.toURI().toString());
                 flippedCards.add(imageView);
-                System.out.println("Flipped: " + flippedCards.size()); 
             } else {
                 image = backImage;  // Flip it back to the back image
             }
         } else {
             image = backImage;
             flippedCards.remove(imageView); 
-            System.out.println("Reversed: " + flippedCards.size());
         }
     
         // Update the image on the imageView
@@ -152,16 +150,22 @@ public class GameController implements Initializable {
         boolean cardsMatch = cardIDtoImageID.get((int) firstCard.getUserData()) == cardIDtoImageID.get((int) secondCard.getUserData());
 
         if (cardsMatch) {
-            System.out.println("Match!");
-            //increase score
-            // currently the cards just stay flipped once they are matched, a matchedCards list will probably be necessary for saving the game
-            flippedCards.clear();
+            Main.scoreboard.increaseScore(); 
+            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+
+            pause.setOnFinished(event -> {
+                firstCard.setVisible(false); 
+                secondCard.setVisible(false); 
+
+                flippedCards.clear(); 
+            }); 
+
+            pause.play(); 
+
             processingCards = false;
-        } else {
-            System.out.println("No match!");
-            
-            //delay for 1.5 seconds to see cards 
-            PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+        } else { 
+            //delay for 1 second to see cards 
+            PauseTransition pause = new PauseTransition(Duration.seconds(1));
 
             pause.setOnFinished(event -> {
                 //reset the flipped cards 

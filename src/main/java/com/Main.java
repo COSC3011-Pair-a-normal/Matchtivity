@@ -26,7 +26,7 @@ public class Main implements ActionListener {
     private boolean timerStarted = false; //Ensure only one timer created 
     private boolean isPaused = false; //Tracks paused status 
     private GameTimer gameTimer; //Game timer reference
-    private ScoreBoard scoreboard; //ScoreBoard object 
+    public static ScoreBoard scoreboard; //ScoreBoard object 
     public static Font rockSaltFont; //Game timer reference
     
     private JFXPanel jfxPanel;
@@ -375,9 +375,7 @@ public class Main implements ActionListener {
                         javafx.scene.text.Font rockSalt = javafx.scene.text.Font.loadFont(
                             getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 30.0);
 
-                        //load a smaller size of the font 
-                        javafx.scene.text.Font rockSaltSmall = javafx.scene.text.Font.loadFont(
-                            getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
+                        
 
                         // Create the GameMenuButton.
                         GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
@@ -399,14 +397,20 @@ public class Main implements ActionListener {
                         });
 
                         // Add the menu button to the scene.
-                        pane.getChildren().add(menuButton); 
+                        pane.getChildren().add(menuButton);  
 
+
+                        //create the scoreboard 
+                        //load a smaller size of the font 
+                        javafx.scene.text.Font rockSaltSmall = javafx.scene.text.Font.loadFont(
+                            getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
+                        
                         scoreboard = new ScoreBoard(rockSaltSmall); 
-
+                        
                         scoreboard.setLayoutX(50);
                         scoreboard.setLayoutY(400); 
-
-                        pane.getChildren().add(scoreboard); 
+                        
+                        pane.getChildren().add(scoreboard);
                     }
         
                     // Create the JavaFX scene with the loaded FXML
