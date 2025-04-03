@@ -27,3 +27,14 @@ Commands for compiling and running if using the terminal:
 
 javac -cp ".;C:/javafx-sdk-21.0.6/lib/*" src/main/java/com/Main.java -d out
 java -cp ".;C:/javafx-sdk-21.0.6/lib/*;out" src.main.java.com.Main
+
+
+Google API key:
+
+
+773ee75beed1b221bc266fc7aee2b774cae5864fdd288dc78faed4a2b7910653
+
+
+https://serpapi.com/google-images-api
+
+
