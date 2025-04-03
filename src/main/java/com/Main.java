@@ -28,11 +28,11 @@ public class Main implements ActionListener {
     private GameTimer gameTimer; //Game timer reference
     public static ScoreBoard scoreboard; //ScoreBoard object 
     public static Font rockSaltFont; //Game timer reference
-    private int cardCount; // Number of cards based on users choice of difficulty
+    private static int cardCount; // Number of cards based on users choice of difficulty
     private int easyCount = 10;
     private int mediumCount = 18;
     private int hardCount = 28;
-    private String deckCategory; //stores the deck
+    private static String deckCategory; //stores the deck
     
     private JFXPanel jfxPanel;
 
@@ -220,6 +220,7 @@ public class Main implements ActionListener {
         if (event.getSource() == startNew) {
             cardLayout.show(mainPanel, "DifficultyScreen");
         } else if (event.getSource() == easyButton || event.getSource() == mediumButton || event.getSource() == hardButton) {
+            cardCount = easyCount;
             cardLayout.show(mainPanel, "CategoryScreen"); // Move to category selection after choosing difficulty
         } else if (event.getSource() == regDeck) {
             EasyGameScreen(); // Modify this to use difficulty selection
@@ -622,5 +623,11 @@ public class Main implements ActionListener {
                 e.printStackTrace();
             }
         });
+    }
+    public static String getCategory() {
+        return deckCategory;
+    }
+    public static int getCardCount() {
+        return cardCount;
     }
 }
