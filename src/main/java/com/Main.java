@@ -219,15 +219,42 @@ public class Main implements ActionListener {
     public void actionPerformed(ActionEvent event) { 
         if (event.getSource() == startNew) {
             cardLayout.show(mainPanel, "DifficultyScreen");
-        } else if (event.getSource() == easyButton || event.getSource() == mediumButton || event.getSource() == hardButton) {
+        } else if (event.getSource() == easyButton) {
             cardCount = easyCount;
             cardLayout.show(mainPanel, "CategoryScreen"); // Move to category selection after choosing difficulty
+        } else if (event.getSource() == mediumButton) {
+            cardCount = mediumCount;
+            cardLayout.show(mainPanel, "CategoryScreen"); // Move to category selection after choosing difficulty
+        }  else if (event.getSource() == hardButton) {
+            cardCount = hardCount;
+            cardLayout.show(mainPanel, "CategoryScreen"); // Move to category selection after choosing difficulty
         } else if (event.getSource() == regDeck) {
-            EasyGameScreen(); // Modify this to use difficulty selection
+            deckCategory = "regular";
+            if (cardCount == easyCount) {
+                EasyGameScreen();
+            } else if (cardCount == mediumCount) {
+                MediumGameScreen();
+            } else if (cardCount == hardCount) {
+                HardGameScreen();
+            }
         } else if (event.getSource() == colorDeck) {
-            MediumGameScreen();
+            deckCategory = "color";
+            if (cardCount == easyCount) {
+                EasyGameScreen();
+            } else if (cardCount == mediumCount) {
+                MediumGameScreen();
+            } else if (cardCount == hardCount) {
+                HardGameScreen();
+            }
         } else if (event.getSource() == customDeck) {
-            HardGameScreen();
+            deckCategory = "custom";
+            if (cardCount == easyCount) {
+                EasyGameScreen();
+            } else if (cardCount == mediumCount) {
+                MediumGameScreen();
+            } else if (cardCount == hardCount) {
+                HardGameScreen();
+            }
         }
     }
 
