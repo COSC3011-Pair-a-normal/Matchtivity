@@ -9,16 +9,22 @@ public class ScoreBoard extends VBox{
     private int score = 0;
     private Label scoreLabel; 
 
-    public ScoreBoard(Font font) {
-        //initalize label for the score 
-        scoreLabel = new Label ("Score: " + score); 
-        scoreLabel.setFont(font); 
+    private static ScoreBoard uniqueScoreBoard; 
 
-
-        //styling the "panel"
+    private ScoreBoard() {
+        scoreLabel = new Label("Score: " + score); 
         this.setSpacing(20); 
         this.setAlignment(Pos.CENTER); 
         this.getChildren().add(scoreLabel); 
+    }
+
+    public static synchronized ScoreBoard getScoreBoard(Font font) {
+        if (uniqueScoreBoard == null) {
+            uniqueScoreBoard = new ScoreBoard(); 
+            uniqueScoreBoard.scoreLabel.setFont(font); 
+        }
+
+        return uniqueScoreBoard; 
     }
 
     //increase and clear methods 
@@ -27,11 +33,10 @@ public class ScoreBoard extends VBox{
         scoreLabel.setText("Score: " + score); 
     }
 
-    /*
-    private void clearScore() {
+    
+    public void clearScore() {
         score = 0; 
         scoreLabel.setText("Score: " + score); 
     }
-    */
 
 }

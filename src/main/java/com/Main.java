@@ -405,7 +405,7 @@ public class Main implements ActionListener {
                         javafx.scene.text.Font rockSaltSmall = javafx.scene.text.Font.loadFont(
                             getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
                         
-                        scoreboard = new ScoreBoard(rockSaltSmall); 
+                        scoreboard = ScoreBoard.getScoreBoard(rockSaltSmall); 
                         
                         scoreboard.setLayoutX(50);
                         scoreboard.setLayoutY(400); 
@@ -491,7 +491,7 @@ public class Main implements ActionListener {
                         // Add the menu button to the scene.
                         pane.getChildren().add(menuButton); 
 
-                        scoreboard = new ScoreBoard(rockSaltSmall); 
+                        scoreboard = ScoreBoard.getScoreBoard(rockSaltSmall); 
 
                         scoreboard.setLayoutX(50);
                         scoreboard.setLayoutY(400); 
@@ -597,7 +597,7 @@ public class Main implements ActionListener {
                     pane.getChildren().add(menuButton);
     
                     // Scoreboard
-                    scoreboard = new ScoreBoard(rockSaltSmall);
+                    scoreboard = ScoreBoard.getScoreBoard(rockSaltSmall);
                     scoreboard.setLayoutX(50);
                     scoreboard.setLayoutY(400);
                     pane.getChildren().add(scoreboard);
