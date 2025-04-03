@@ -28,6 +28,11 @@ public class Main implements ActionListener {
     private GameTimer gameTimer; //Game timer reference
     public static ScoreBoard scoreboard; //ScoreBoard object 
     public static Font rockSaltFont; //Game timer reference
+    private int cardCount; // Number of cards based on users choice of difficulty
+    private int easyCount = 10;
+    private int mediumCount = 18;
+    private int hardCount = 28;
+    private String deckCategory; //stores the deck
     
     private JFXPanel jfxPanel;
 
