@@ -27,7 +27,7 @@ public class Main implements ActionListener {
     private boolean isPaused = false; //Tracks paused status 
     private GameTimer gameTimer; //Game timer reference
     public static ScoreBoard scoreboard; //ScoreBoard object 
-    public static Font rockSaltFont; //Game timer reference
+    public static Font rockSaltFont; //Font reference 
     
     private JFXPanel jfxPanel;
 
@@ -390,6 +390,11 @@ public class Main implements ActionListener {
                             System.out.println("Game saved! That's creamy and dreamy!");
                         });
 
+                        menuButton.setOnRestart(event -> 
+                        {
+                            System.out.println("Restart the game!"); 
+                        }); 
+
                         menuButton.setOnExit(event ->
                         {
                             // Insert exit logic here.
@@ -480,6 +485,10 @@ public class Main implements ActionListener {
                         {
                             // Insert save logic here.
                             System.out.println("Game saved! That's creamy and dreamy!");
+                        });
+
+                        menuButton.setOnRestart(event -> {
+                            System.out.println("Restart game!"); 
                         });
 
                         menuButton.setOnExit(event ->
@@ -591,6 +600,9 @@ public class Main implements ActionListener {
                     menuButton.setOnSave(event -> {
                         System.out.println("Hard game saved!");
                     });
+                    menuButton.setOnRestart(event -> {
+                        System.out.println("Restart game!"); 
+                    }); 
                     menuButton.setOnExit(event -> {
                         System.exit(0);
                     });
