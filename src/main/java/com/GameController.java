@@ -4,7 +4,7 @@ import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 
 import java.io.File;
 import java.net.URL;
@@ -18,7 +18,7 @@ public class GameController implements Initializable {
     private ImageView imageView;
 
     @FXML
-    private FlowPane imagesFlowPane;
+    private GridPane imagesGridPane;
 
     private List<ImageView> flippedCards = new ArrayList<>();
     private boolean processingCards = false;
@@ -42,8 +42,8 @@ public class GameController implements Initializable {
 
     // This method will initialize the image view and set the back of the card
     private void initializeImageView() {
-        for (int i = 0; i < imagesFlowPane.getChildren().size(); i++) {
-            ImageView imageView = (ImageView) imagesFlowPane.getChildren().get(i);
+        for (int i = 0; i < imagesGridPane.getChildren().size(); i++) {
+            ImageView imageView = (ImageView) imagesGridPane.getChildren().get(i);
             imageView.setImage(backImage);  // Set back image for each card
 
             imageView.setUserData(i); // Each card has an identification number (0, 1, 2, ...)
@@ -60,7 +60,7 @@ public class GameController implements Initializable {
 
     // Flip the card (showing the front image and then flipping back to the back)
     private void flipCard(int cardID) {
-        ImageView imageView = (ImageView) imagesFlowPane.getChildren().get(cardID);
+        ImageView imageView = (ImageView) imagesGridPane.getChildren().get(cardID);
         Image image;
     
         if (imageView.getImage() == backImage) {
@@ -132,8 +132,5 @@ public class GameController implements Initializable {
             //pause
             pause.play();
             }
-
     }
-
-   
 }
