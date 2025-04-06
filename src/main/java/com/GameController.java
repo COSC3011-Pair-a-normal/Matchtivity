@@ -108,7 +108,7 @@ public class GameController implements Initializable {
 
         if (cardsMatch) {
             Main.scoreboard.increaseScore(); 
-            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+            PauseTransition pause = new PauseTransition(Duration.seconds(0.8));
 
             pause.setOnFinished(event -> {
                 firstCard.setVisible(false); 
@@ -121,8 +121,8 @@ public class GameController implements Initializable {
 
             processingCards = false;
         } else { 
-            //delay for 1 second to see cards 
-            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+            //delay for 0.8 second to see cards 
+            PauseTransition pause = new PauseTransition(Duration.seconds(0.8));
 
             pause.setOnFinished(event -> {
                 //reset the flipped cards 
