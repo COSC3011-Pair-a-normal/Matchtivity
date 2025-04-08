@@ -101,7 +101,8 @@ public class Main implements ActionListener {
         gbc.anchor = GridBagConstraints.CENTER;
 
         // "Start New Game" Button (Switches to Difficulty Screen)
-        startNew = new JButton("Start New Game"); 
+        startNew = new JButton("Start New Game");
+        startNew.setFocusPainted(false);
         startNew.setPreferredSize(new Dimension(400, 100));
         startNew.setFont(getCustomFont(30f));
         startNew.addActionListener(this); // Will call actionPerformed()
@@ -113,6 +114,7 @@ public class Main implements ActionListener {
         startSaved.setFont(getCustomFont(30f));
 
         exitGame = new JButton("Exit Game");
+        exitGame.setFocusPainted(false);
         exitGame.setPreferredSize(new Dimension(400, 100));
         exitGame.setFont(getCustomFont(30f));
         exitGame.addActionListener(e -> System.exit(0)); // Exit the game
@@ -146,16 +148,19 @@ public class Main implements ActionListener {
 
         // Difficulty Buttons
         easyButton = new JButton("Easy");
+        easyButton.setFocusPainted(false);
         easyButton.setPreferredSize(new Dimension(400, 100));
         easyButton.setFont(getCustomFont(30f));
         easyButton.addActionListener(this);
 
         mediumButton = new JButton("Medium");
+        mediumButton.setFocusPainted(false);
         mediumButton.setPreferredSize(new Dimension(400, 100));
         mediumButton.setFont(getCustomFont(30f));
         mediumButton.addActionListener(this);
 
         hardButton = new JButton("Hard");
+        hardButton.setFocusPainted(false);
         hardButton.setPreferredSize(new Dimension(400, 100));
         hardButton.setFont(getCustomFont(30f));
         hardButton.addActionListener(this);
@@ -188,16 +193,19 @@ public class Main implements ActionListener {
 
         // Category Buttons
         regDeck = new JButton("Regular Deck");
+        regDeck.setFocusPainted(false);
         regDeck.setPreferredSize(new Dimension(400, 100));
         regDeck.setFont(getCustomFont(30f));
         regDeck.addActionListener(this);
         
         colorDeck = new JButton("Color Deck");
+        colorDeck.setFocusPainted(false);
         colorDeck.setPreferredSize(new Dimension(400, 100));
         colorDeck.setFont(getCustomFont(30f));
         colorDeck.addActionListener(this);
         
         customDeck = new JButton("Custom Deck");
+        customDeck.setFocusPainted(false);
         customDeck.setPreferredSize(new Dimension(400, 100));
         customDeck.setFont(getCustomFont(30f));
         customDeck.addActionListener(this);
