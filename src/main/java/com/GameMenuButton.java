@@ -118,18 +118,4 @@ public class GameMenuButton extends MenuButton
     {
         exitButton.setOnAction(handler);
     }
-
-    // Close the menu if already open, instead of reopening it.
-    @Override
-    public void fire()
-    {
-        if (isShowing())
-        {
-            hide();
-        }
-        else
-        {
-            super.fire();
-        }
-    }
 }
