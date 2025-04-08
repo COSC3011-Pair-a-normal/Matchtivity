@@ -238,15 +238,18 @@ public class Main implements ActionListener {
             cardLayout.show(mainPanel, "CategoryScreen"); // Move to category selection after choosing difficulty
         } else if (event.getSource() == regDeck) {
             deckCategory = "regular";
-            if (cardCount == easyCount) {
-                EasyGameScreen();
-            } else if (cardCount == mediumCount) {
-                MediumGameScreen();
-            } else if (cardCount == hardCount) {
-                HardGameScreen();
-            }
+            startGame(cardCount, deckCategory); 
         } else if (event.getSource() == colorDeck) {
             deckCategory = "color";
+            startGame(cardCount, deckCategory); 
+        } else if (event.getSource() == customDeck) {
+            deckCategory = "custom";
+            startGame(cardCount, deckCategory); 
+        }
+    }
+
+    public void startGame(int cardCount, String deckCategory) {
+        if (deckCategory == "regular") {
             if (cardCount == easyCount) {
                 EasyGameScreen();
             } else if (cardCount == mediumCount) {
@@ -254,8 +257,15 @@ public class Main implements ActionListener {
             } else if (cardCount == hardCount) {
                 HardGameScreen();
             }
-        } else if (event.getSource() == customDeck) {
-            deckCategory = "custom";
+        } else if (deckCategory == "color") {
+            if (cardCount == easyCount) {
+                EasyGameScreen();
+            } else if (cardCount == mediumCount) {
+                MediumGameScreen();
+            } else if (cardCount == hardCount) {
+                HardGameScreen();
+            }
+        } else if (deckCategory == "custom") {
             if (cardCount == easyCount) {
                 EasyGameScreen();
             } else if (cardCount == mediumCount) {
@@ -410,13 +420,23 @@ public class Main implements ActionListener {
                         gameTimer.setLayoutX(1300);
                         gameTimer.setLayoutY(5);
                         pane.getChildren().add(gameTimer);
+
+                        //create the scoreboard 
+                        //load a smaller size of the font 
+                        javafx.scene.text.Font rockSaltSmall = javafx.scene.text.Font.loadFont(
+                            getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
+                        
+                        scoreboard = ScoreBoard.getScoreBoard(rockSaltSmall); 
+                        
+                        scoreboard.setLayoutX(50);
+                        scoreboard.setLayoutY(400); 
+                        
+                        pane.getChildren().add(scoreboard);
                         
 
                         // Load the font.
                         javafx.scene.text.Font rockSalt = javafx.scene.text.Font.loadFont(
                             getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 30.0);
-
-                        
 
                         // Create the GameMenuButton.
                         GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
@@ -434,6 +454,8 @@ public class Main implements ActionListener {
                         menuButton.setOnRestart(event -> 
                         {
                             System.out.println("Restart the game!"); 
+                            scoreboard.clearScore();
+                            startGame(cardCount, deckCategory);
                         }); 
 
                         menuButton.setOnExit(event ->
@@ -444,19 +466,6 @@ public class Main implements ActionListener {
 
                         // Add the menu button to the scene.
                         pane.getChildren().add(menuButton);  
-
-
-                        //create the scoreboard 
-                        //load a smaller size of the font 
-                        javafx.scene.text.Font rockSaltSmall = javafx.scene.text.Font.loadFont(
-                            getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
-                        
-                        scoreboard = ScoreBoard.getScoreBoard(rockSaltSmall); 
-                        
-                        scoreboard.setLayoutX(50);
-                        scoreboard.setLayoutY(400); 
-                        
-                        pane.getChildren().add(scoreboard);
                     }
         
                     // Create the JavaFX scene with the loaded FXML
@@ -515,6 +524,13 @@ public class Main implements ActionListener {
                         javafx.scene.text.Font rockSaltSmall = javafx.scene.text.Font.loadFont(
                             getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
 
+                        scoreboard = ScoreBoard.getScoreBoard(rockSaltSmall); 
+
+                        scoreboard.setLayoutX(50);
+                        scoreboard.setLayoutY(400); 
+
+                        pane.getChildren().add(scoreboard); 
+                        
                         // Create the GameMenuButton.
                         GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
 
@@ -530,6 +546,8 @@ public class Main implements ActionListener {
 
                         menuButton.setOnRestart(event -> {
                             System.out.println("Restart game!"); 
+                            scoreboard.clearScore(); 
+                            startGame(cardCount, deckCategory); 
                         });
 
                         menuButton.setOnExit(event ->
@@ -540,13 +558,6 @@ public class Main implements ActionListener {
 
                         // Add the menu button to the scene.
                         pane.getChildren().add(menuButton); 
-
-                        scoreboard = ScoreBoard.getScoreBoard(rockSaltSmall); 
-
-                        scoreboard.setLayoutX(50);
-                        scoreboard.setLayoutY(400); 
-
-                        pane.getChildren().add(scoreboard); 
                     }
         
                     // Create the JavaFX scene with the loaded FXML
@@ -634,6 +645,12 @@ public class Main implements ActionListener {
                     javafx.scene.text.Font rockSaltSmall = javafx.scene.text.Font.loadFont(
                         getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
     
+                    // Scoreboard
+                    scoreboard = ScoreBoard.getScoreBoard(rockSaltSmall);
+                    scoreboard.setLayoutX(50);
+                    scoreboard.setLayoutY(400);
+                    pane.getChildren().add(scoreboard);
+
                     // Menu button
                     GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
                     menuButton.setLayoutX(50);
@@ -643,17 +660,13 @@ public class Main implements ActionListener {
                     });
                     menuButton.setOnRestart(event -> {
                         System.out.println("Restart game!"); 
+                        scoreboard.clearScore(); 
+                        startGame(cardCount, deckCategory); 
                     }); 
                     menuButton.setOnExit(event -> {
                         System.exit(0);
                     });
                     pane.getChildren().add(menuButton);
-    
-                    // Scoreboard
-                    scoreboard = ScoreBoard.getScoreBoard(rockSaltSmall);
-                    scoreboard.setLayoutX(50);
-                    scoreboard.setLayoutY(400);
-                    pane.getChildren().add(scoreboard);
                 }
     
                 // Set the scene

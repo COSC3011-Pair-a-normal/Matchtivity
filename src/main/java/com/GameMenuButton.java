@@ -63,6 +63,7 @@ public class GameMenuButton extends MenuButton
     {
         super(text);
         setFont(font);                          // Apply the font to the MenuButton.
+        setPrefWidth(200); 
 
         Label saveLabel = new Label("Save");    // Create a Label for saveButton.
         saveLabel.setFont(font);                // Set saveButton Label font.
