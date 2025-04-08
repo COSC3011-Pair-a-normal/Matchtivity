@@ -31,7 +31,7 @@ public class Main implements ActionListener {
     private static int cardCount; // Number of cards based on users choice of difficulty
     private int easyCount = 10;
     private int mediumCount = 18;
-    private int hardCount = 28;
+    private int hardCount = 30;
     private static String deckCategory; //stores the deck
     
     private JFXPanel jfxPanel;
