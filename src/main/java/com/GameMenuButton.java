@@ -46,18 +46,21 @@ package com;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.control.MenuButton;
+import javafx.geometry.Side;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.text.Font;
 import javafx.scene.input.MouseEvent;
 
-public class GameMenuButton extends MenuButton
+public class GameMenuButton extends ToggleButton
 {
     private MenuItem saveButton;
     private MenuItem restartButton; 
     private MenuItem exitButton;
     private int buttonPadding = 22;
+    private ContextMenu contextMenu;
 
     public GameMenuButton(String text, Font font)
     {
@@ -89,15 +92,22 @@ public class GameMenuButton extends MenuButton
         exitButton = new MenuItem();            // Create exitButton MenuItem.
         exitButton.setGraphic(exitLabel);       // Apply exitLabel graphic to exitButton.
         
-        // Add the menu items, saveButton and exitButton, to the MenuButton.
-        this.getItems().addAll(saveButton, restartButton, exitButton);
+        // Create the ContextMenu and disable autoHide so it remains open until explicityly closed via click.
+        contextMenu = new ContextMenu();
+        contextMenu.getItems().addAll(saveButton, restartButton, exitButton);
+        contextMenu.setAutoHide(false);
 
-        this.addEventFilter(MouseEvent.MOUSE_PRESSED, event ->
+        // Toggle the ContextMenu when the toggle button is clicked.
+        this.setOnMouseClicked(event ->
         {
-            if(this.isShowing())
+            if(this.isSelected())
             {
-                this.hide();
-                event.consume();
+                // Show the menu below the toggle button (offsets can be adjusted as needed)
+                contextMenu.show(this, Side.BOTTOM, 0, 0);
+            }
+            else
+            {
+                contextMenu.hide();
             }
         });
     }
