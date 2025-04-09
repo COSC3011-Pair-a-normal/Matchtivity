@@ -233,48 +233,106 @@ public class Main implements ActionListener {
         } else if (event.getSource() == mediumButton) {
             cardCount = mediumCount;
             cardLayout.show(mainPanel, "CategoryScreen"); // Move to category selection after choosing difficulty
-        }  else if (event.getSource() == hardButton) {
+        } else if (event.getSource() == hardButton) {
             cardCount = hardCount;
             cardLayout.show(mainPanel, "CategoryScreen"); // Move to category selection after choosing difficulty
         } else if (event.getSource() == regDeck) {
             deckCategory = "regular";
-            startGame(cardCount, deckCategory); 
+            startGame(cardCount, deckCategory);
         } else if (event.getSource() == colorDeck) {
             deckCategory = "color";
-            startGame(cardCount, deckCategory); 
+            startGame(cardCount, deckCategory);
         } else if (event.getSource() == customDeck) {
             deckCategory = "custom";
-            startGame(cardCount, deckCategory); 
+            startGame(cardCount, deckCategory);
         }
     }
 
     public void startGame(int cardCount, String deckCategory) {
-        if (deckCategory == "regular") {
+        if (deckCategory.equals("regular")) {
             if (cardCount == easyCount) {
-                EasyGameScreen();
+                new EasyGameScreen(frame);
             } else if (cardCount == mediumCount) {
-                MediumGameScreen();
+                new MediumGameScreen(frame);
             } else if (cardCount == hardCount) {
-                HardGameScreen();
+                new HardGameScreen(frame);
             }
-        } else if (deckCategory == "color") {
+        } else if (deckCategory.equals("color")) {
             if (cardCount == easyCount) {
-                EasyGameScreen();
+                new EasyGameScreen(frame);
             } else if (cardCount == mediumCount) {
-                MediumGameScreen();
+                new MediumGameScreen(frame);
             } else if (cardCount == hardCount) {
-                HardGameScreen();
+                new HardGameScreen(frame);
             }
-        } else if (deckCategory == "custom") {
+        } else if (deckCategory.equals("custom")) {
             if (cardCount == easyCount) {
-                EasyGameScreen();
+                new EasyGameScreen(frame);
             } else if (cardCount == mediumCount) {
-                MediumGameScreen();
+                new MediumGameScreen(frame);
             } else if (cardCount == hardCount) {
-                HardGameScreen();
+                new HardGameScreen(frame);
             }
         }
     }
+
+    
+    
+
+
+    // @Override
+    // public void actionPerformed(ActionEvent event) { 
+    //     if (event.getSource() == startNew) {
+    //         cardLayout.show(mainPanel, "DifficultyScreen");
+    //     } else if (event.getSource() == easyButton) {
+    //         cardCount = easyCount;
+    //         cardLayout.show(mainPanel, "CategoryScreen"); // Move to category selection after choosing difficulty
+    //     } else if (event.getSource() == mediumButton) {
+    //         cardCount = mediumCount;
+    //         cardLayout.show(mainPanel, "CategoryScreen"); // Move to category selection after choosing difficulty
+    //     }  else if (event.getSource() == hardButton) {
+    //         cardCount = hardCount;
+    //         cardLayout.show(mainPanel, "CategoryScreen"); // Move to category selection after choosing difficulty
+    //     } else if (event.getSource() == regDeck) {
+    //         deckCategory = "regular";
+    //         startGame(cardCount, deckCategory); 
+    //     } else if (event.getSource() == colorDeck) {
+    //         deckCategory = "color";
+    //         startGame(cardCount, deckCategory); 
+    //     } else if (event.getSource() == customDeck) {
+    //         deckCategory = "custom";
+    //         startGame(cardCount, deckCategory); 
+    //     }
+    // }
+
+    // public void startGame(int cardCount, String deckCategory) {
+    // if (deckCategory.equals("regular")) {
+    //     if (cardCount == easyCount) {
+    //         new EasyGameScreen(frame);
+    //     } else if (cardCount == mediumCount) {
+    //         new MediumGameScreen(frame);
+    //     } else if (cardCount == hardCount) {
+    //         new HardGameScreen(frame);
+    //     }
+    // } else if (deckCategory.equals("color")) {
+    //     if (cardCount == easyCount) {
+    //         new EasyGameScreen(frame);
+    //     } else if (cardCount == mediumCount) {
+    //         new MediumGameScreen(frame);
+    //     } else if (cardCount == hardCount) {
+    //         new HardGameScreen(frame);
+    //     }
+    // } else if (deckCategory.equals("custom")) {
+    //     if (cardCount == easyCount) {
+    //         new EasyGameScreen(frame);
+    //     } else if (cardCount == mediumCount) {
+    //         new MediumGameScreen(frame);
+    //     } else if (cardCount == hardCount) {
+    //         new HardGameScreen(frame);
+    //     }
+    // }
+    // }
+
 
             /*
             // Create and add timer once.
@@ -395,295 +453,295 @@ public class Main implements ActionListener {
         });
     }
         */
-        private void EasyGameScreen() {
-            // Initialize the JavaFX thread
-            Platform.runLater(() -> {
-                try {
-                    // Ensure the path to test.fxml is correct
-                    URL fxmlUrl = getClass().getResource("/easy.fxml");
-                    if (fxmlUrl == null) {
-                        throw new IllegalStateException("FXML file not found: /easy.fxml");
-                    }
+//         private void EasyGameScreen() {
+//             // Initialize the JavaFX thread
+//             Platform.runLater(() -> {
+//                 try {
+//                     // Ensure the path to test.fxml is correct
+//                     URL fxmlUrl = getClass().getResource("/easy.fxml");
+//                     if (fxmlUrl == null) {
+//                         throw new IllegalStateException("FXML file not found: /easy.fxml");
+//                     }
         
-                    // Create an FXMLLoader object to load the FXML file
-                    FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+//                     // Create an FXMLLoader object to load the FXML file
+//                     FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
         
-                    // Load the FXML file into the root node
-                    Parent root = fxmlLoader.load();
+//                     // Load the FXML file into the root node
+//                     Parent root = fxmlLoader.load();
 
-                    if(root instanceof javafx.scene.layout.Pane)
-                    {
-                        javafx.scene.layout.Pane pane = (javafx.scene.layout.Pane) root;
+//                     if(root instanceof javafx.scene.layout.Pane)
+//                     {
+//                         javafx.scene.layout.Pane pane = (javafx.scene.layout.Pane) root;
 
                         
-                        GameTimer gameTimer = new GameTimer();
-                        gameTimer.setLayoutX(1300);
-                        gameTimer.setLayoutY(5);
-                        pane.getChildren().add(gameTimer);
+//                         GameTimer gameTimer = new GameTimer();
+//                         gameTimer.setLayoutX(1300);
+//                         gameTimer.setLayoutY(5);
+//                         pane.getChildren().add(gameTimer);
 
-                        //create the scoreboard 
-                        //load a smaller size of the font 
-                        javafx.scene.text.Font rockSaltSmall = javafx.scene.text.Font.loadFont(
-                            getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
+//                         //create the scoreboard 
+//                         //load a smaller size of the font 
+//                         javafx.scene.text.Font rockSaltSmall = javafx.scene.text.Font.loadFont(
+//                             getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
                         
-                        scoreboard = ScoreBoard.getScoreBoard(rockSaltSmall); 
+//                         scoreboard = ScoreBoard.getScoreBoard(rockSaltSmall); 
                         
-                        scoreboard.setLayoutX(50);
-                        scoreboard.setLayoutY(400); 
+//                         scoreboard.setLayoutX(50);
+//                         scoreboard.setLayoutY(400); 
                         
-                        pane.getChildren().add(scoreboard);
-                        
-
-                        // Load the font.
-                        javafx.scene.text.Font rockSalt = javafx.scene.text.Font.loadFont(
-                            getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 30.0);
-
-                        // Create the GameMenuButton.
-                        GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
-
-                        // Position the button.
-                        menuButton.setLayoutX(50);
-                        menuButton.setLayoutY(50);
-
-                        menuButton.setOnSave(event ->
-                        {
-                            // Insert save logic here.
-                            System.out.println("Game saved! That's creamy and dreamy!");
-                        });
-
-                        menuButton.setOnRestart(event -> 
-                        {
-                            System.out.println("Restart the game!"); 
-                            scoreboard.clearScore();
-                            startGame(cardCount, deckCategory);
-                        }); 
-
-                        menuButton.setOnExit(event ->
-                        {
-                            // Insert exit logic here.
-                            System.exit(0);
-                        });
-
-                        // Add the menu button to the scene.
-                        pane.getChildren().add(menuButton);  
-                    }
-        
-                    // Create the JavaFX scene with the loaded FXML
-                    Scene scene = new Scene(root, 1600, 900);
-        
-                    // Set up the JavaFX scene in the JFXPanel
-                    jfxPanel = new JFXPanel();
-                    jfxPanel.setScene(scene);
-
-        
-                    // Replace the content of the frame with JavaFX content
-                    frame.getContentPane().removeAll();
-                    frame.getContentPane().add(jfxPanel);
-                    frame.revalidate();
-                    frame.repaint();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (IllegalStateException e) {
-                    e.printStackTrace(); // Log the exception if the FXML is not found
-                }
-            });
-        }
-        
-        private void MediumGameScreen() {
-            // Initialize the JavaFX thread
-            Platform.runLater(() -> {
-                try {
-                    // Ensure the path to test.fxml is correct
-                    URL fxmlUrl = getClass().getResource("/medium.fxml");
-                    if (fxmlUrl == null) {
-                        throw new IllegalStateException("FXML file not found: /medium.fxml");
-                    }
-        
-                    // Create an FXMLLoader object to load the FXML file
-                    FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
-        
-                    // Load the FXML file into the root node
-                    Parent root = fxmlLoader.load();
-
-                    if(root instanceof javafx.scene.layout.Pane)
-                    {
-                        javafx.scene.layout.Pane pane = (javafx.scene.layout.Pane) root;
-
-                        
-                        GameTimer gameTimer = new GameTimer();
-                        gameTimer.setLayoutX(1300);
-                        gameTimer.setLayoutY(5);
-                        pane.getChildren().add(gameTimer);
+//                         pane.getChildren().add(scoreboard);
                         
 
-                        // Load the font.
-                        javafx.scene.text.Font rockSalt = javafx.scene.text.Font.loadFont(
-                            getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 30.0);
+//                         // Load the font.
+//                         javafx.scene.text.Font rockSalt = javafx.scene.text.Font.loadFont(
+//                             getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 30.0);
 
-                        //load a smaller size of the font 
-                        javafx.scene.text.Font rockSaltSmall = javafx.scene.text.Font.loadFont(
-                            getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
+//                         // Create the GameMenuButton.
+//                         GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
 
-                        scoreboard = ScoreBoard.getScoreBoard(rockSaltSmall); 
+//                         // Position the button.
+//                         menuButton.setLayoutX(50);
+//                         menuButton.setLayoutY(50);
 
-                        scoreboard.setLayoutX(50);
-                        scoreboard.setLayoutY(400); 
+//                         menuButton.setOnSave(event ->
+//                         {
+//                             // Insert save logic here.
+//                             System.out.println("Game saved! That's creamy and dreamy!");
+//                         });
 
-                        pane.getChildren().add(scoreboard); 
+                        // menuButton.setOnRestart(event -> 
+                        // {
+                        //     System.out.println("Restart the game!"); 
+                        //     scoreboard.clearScore();
+                        //     startGame(cardCount, deckCategory);
+                        // }); 
+
+//                         menuButton.setOnExit(event ->
+//                         {
+//                             // Insert exit logic here.
+//                             System.exit(0);
+//                         });
+
+//                         // Add the menu button to the scene.
+//                         pane.getChildren().add(menuButton);  
+//                     }
+        
+//                     // Create the JavaFX scene with the loaded FXML
+//                     Scene scene = new Scene(root, 1600, 900);
+        
+//                     // Set up the JavaFX scene in the JFXPanel
+//                     jfxPanel = new JFXPanel();
+//                     jfxPanel.setScene(scene);
+
+        
+//                     // Replace the content of the frame with JavaFX content
+//                     frame.getContentPane().removeAll();
+//                     frame.getContentPane().add(jfxPanel);
+//                     frame.revalidate();
+//                     frame.repaint();
+//                 } catch (IOException e) {
+//                     e.printStackTrace();
+//                 } catch (IllegalStateException e) {
+//                     e.printStackTrace(); // Log the exception if the FXML is not found
+//                 }
+//             });
+//         }
+        
+//         private void MediumGameScreen() {
+//             // Initialize the JavaFX thread
+//             Platform.runLater(() -> {
+//                 try {
+//                     // Ensure the path to test.fxml is correct
+//                     URL fxmlUrl = getClass().getResource("/medium.fxml");
+//                     if (fxmlUrl == null) {
+//                         throw new IllegalStateException("FXML file not found: /medium.fxml");
+//                     }
+        
+//                     // Create an FXMLLoader object to load the FXML file
+//                     FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+        
+//                     // Load the FXML file into the root node
+//                     Parent root = fxmlLoader.load();
+
+//                     if(root instanceof javafx.scene.layout.Pane)
+//                     {
+//                         javafx.scene.layout.Pane pane = (javafx.scene.layout.Pane) root;
+
                         
-                        // Create the GameMenuButton.
-                        GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
+//                         GameTimer gameTimer = new GameTimer();
+//                         gameTimer.setLayoutX(1300);
+//                         gameTimer.setLayoutY(5);
+//                         pane.getChildren().add(gameTimer);
+                        
 
-                        // Position the button.
-                        menuButton.setLayoutX(50);
-                        menuButton.setLayoutY(50);
+//                         // Load the font.
+//                         javafx.scene.text.Font rockSalt = javafx.scene.text.Font.loadFont(
+//                             getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 30.0);
 
-                        menuButton.setOnSave(event ->
-                        {
-                            // Insert save logic here.
-                            System.out.println("Game saved! That's creamy and dreamy!");
-                        });
+//                         //load a smaller size of the font 
+//                         javafx.scene.text.Font rockSaltSmall = javafx.scene.text.Font.loadFont(
+//                             getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
 
-                        menuButton.setOnRestart(event -> {
-                            System.out.println("Restart game!"); 
-                            scoreboard.clearScore(); 
-                            startGame(cardCount, deckCategory); 
-                        });
+//                         scoreboard = ScoreBoard.getScoreBoard(rockSaltSmall); 
 
-                        menuButton.setOnExit(event ->
-                        {
-                            // Insert exit logic here.
-                            System.exit(0);
-                        });
+//                         scoreboard.setLayoutX(50);
+//                         scoreboard.setLayoutY(400); 
 
-                        // Add the menu button to the scene.
-                        pane.getChildren().add(menuButton); 
-                    }
+//                         pane.getChildren().add(scoreboard); 
+                        
+//                         // Create the GameMenuButton.
+//                         GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
+
+//                         // Position the button.
+//                         menuButton.setLayoutX(50);
+//                         menuButton.setLayoutY(50);
+
+//                         menuButton.setOnSave(event ->
+//                         {
+//                             // Insert save logic here.
+//                             System.out.println("Game saved! That's creamy and dreamy!");
+//                         });
+
+//                         menuButton.setOnRestart(event -> {
+//                             System.out.println("Restart game!"); 
+//                             scoreboard.clearScore(); 
+//                             startGame(cardCount, deckCategory); 
+//                         });
+
+//                         menuButton.setOnExit(event ->
+//                         {
+//                             // Insert exit logic here.
+//                             System.exit(0);
+//                         });
+
+//                         // Add the menu button to the scene.
+//                         pane.getChildren().add(menuButton); 
+//                     }
         
-                    // Create the JavaFX scene with the loaded FXML
-                    Scene scene = new Scene(root, 1600, 900);
+//                     // Create the JavaFX scene with the loaded FXML
+//                     Scene scene = new Scene(root, 1600, 900);
         
-                    // Set up the JavaFX scene in the JFXPanel
-                    jfxPanel = new JFXPanel();
-                    jfxPanel.setScene(scene);
+//                     // Set up the JavaFX scene in the JFXPanel
+//                     jfxPanel = new JFXPanel();
+//                     jfxPanel.setScene(scene);
 
         
-                    // Replace the content of the frame with JavaFX content
-                    frame.getContentPane().removeAll();
-                    frame.getContentPane().add(jfxPanel);
-                    frame.revalidate();
-                    frame.repaint();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (IllegalStateException e) {
-                    e.printStackTrace(); // Log the exception if the FXML is not found
-                }
-            });
-        }
-    /*  
-    private void MediumGameScreen() {
-        // Initialize the JavaFX thread
-        Platform.runLater(() -> {
-            // Create a JavaFX Scene
-            StackPane gamePane = new StackPane();
-            Button startButton = new Button("Medium Game: under construction");
+//                     // Replace the content of the frame with JavaFX content
+//                     frame.getContentPane().removeAll();
+//                     frame.getContentPane().add(jfxPanel);
+//                     frame.revalidate();
+//                     frame.repaint();
+//                 } catch (IOException e) {
+//                     e.printStackTrace();
+//                 } catch (IllegalStateException e) {
+//                     e.printStackTrace(); // Log the exception if the FXML is not found
+//                 }
+//             });
+//         }
+//     /*  
+//     private void MediumGameScreen() {
+//         // Initialize the JavaFX thread
+//         Platform.runLater(() -> {
+//             // Create a JavaFX Scene
+//             StackPane gamePane = new StackPane();
+//             Button startButton = new Button("Medium Game: under construction");
 
-            // Set up the action for the start button
-            startButton.setOnAction(event -> {
-                // Game logic for starting the game goes here
-                //System.out.println("Game Started with selected difficulty!");
-            });
+//             // Set up the action for the start button
+//             startButton.setOnAction(event -> {
+//                 // Game logic for starting the game goes here
+//                 //System.out.println("Game Started with selected difficulty!");
+//             });
 
-            gamePane.getChildren().add(startButton);
-            Scene scene = new Scene(gamePane, 1600, 900);
+//             gamePane.getChildren().add(startButton);
+//             Scene scene = new Scene(gamePane, 1600, 900);
 
-            // Set up the JavaFX scene in the JFXPanel
-            jfxPanel = new JFXPanel();
-            jfxPanel.setScene(scene);
+//             // Set up the JavaFX scene in the JFXPanel
+//             jfxPanel = new JFXPanel();
+//             jfxPanel.setScene(scene);
 
             
-            GameTimer gameTimer = new GameTimer();
-            gameTimer.setLayoutX(100);
-            gameTimer.setLayoutY(50);
-            gamePane.getChildren().add(gameTimer);
+//             GameTimer gameTimer = new GameTimer();
+//             gameTimer.setLayoutX(100);
+//             gameTimer.setLayoutY(50);
+//             gamePane.getChildren().add(gameTimer);
             
 
-            // Replace the content of the frame with JavaFX content
-            frame.getContentPane().removeAll();
-            frame.getContentPane().add(jfxPanel);
-            frame.revalidate();
-            frame.repaint();
-        });
-    }
-    */
+//             // Replace the content of the frame with JavaFX content
+//             frame.getContentPane().removeAll();
+//             frame.getContentPane().add(jfxPanel);
+//             frame.revalidate();
+//             frame.repaint();
+//         });
+//     }
+//     */
 
-  private void HardGameScreen() {
-        // Initialize the JavaFX thread
-        Platform.runLater(() -> {
-            try {
-                // Load hard_regular.fxml (30 cards, regular deck)
-                URL fxmlUrl = getClass().getResource("/hard.fxml");
-                if (fxmlUrl == null) {
-                    throw new IllegalStateException("FXML file not found: /hard_regular.fxml");
-                }
+//   private void HardGameScreen() {
+//         // Initialize the JavaFX thread
+//         Platform.runLater(() -> {
+//             try {
+//                 // Load hard_regular.fxml (30 cards, regular deck)
+//                 URL fxmlUrl = getClass().getResource("/hard.fxml");
+//                 if (fxmlUrl == null) {
+//                     throw new IllegalStateException("FXML file not found: /hard_regular.fxml");
+//                 }
     
-                FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
-                Parent root = fxmlLoader.load();
+//                 FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+//                 Parent root = fxmlLoader.load();
     
-                if (root instanceof javafx.scene.layout.Pane) {
-                    javafx.scene.layout.Pane pane = (javafx.scene.layout.Pane) root;
+//                 if (root instanceof javafx.scene.layout.Pane) {
+//                     javafx.scene.layout.Pane pane = (javafx.scene.layout.Pane) root;
     
-                    // Add GameTimer
-                    GameTimer gameTimer = new GameTimer();
-                    gameTimer.setLayoutX(1300);
-                    gameTimer.setLayoutY(5);
-                    pane.getChildren().add(gameTimer);
+//                     // Add GameTimer
+//                     GameTimer gameTimer = new GameTimer();
+//                     gameTimer.setLayoutX(1300);
+//                     gameTimer.setLayoutY(5);
+//                     pane.getChildren().add(gameTimer);
     
-                    // Load fonts
-                    javafx.scene.text.Font rockSalt = javafx.scene.text.Font.loadFont(
-                        getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 30.0);
-                    javafx.scene.text.Font rockSaltSmall = javafx.scene.text.Font.loadFont(
-                        getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
+//                     // Load fonts
+//                     javafx.scene.text.Font rockSalt = javafx.scene.text.Font.loadFont(
+//                         getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 30.0);
+//                     javafx.scene.text.Font rockSaltSmall = javafx.scene.text.Font.loadFont(
+//                         getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
     
-                    // Scoreboard
-                    scoreboard = ScoreBoard.getScoreBoard(rockSaltSmall);
-                    scoreboard.setLayoutX(50);
-                    scoreboard.setLayoutY(400);
-                    pane.getChildren().add(scoreboard);
+//                     // Scoreboard
+//                     scoreboard = ScoreBoard.getScoreBoard(rockSaltSmall);
+//                     scoreboard.setLayoutX(50);
+//                     scoreboard.setLayoutY(400);
+//                     pane.getChildren().add(scoreboard);
 
-                    // Menu button
-                    GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
-                    menuButton.setLayoutX(50);
-                    menuButton.setLayoutY(50);
-                    menuButton.setOnSave(event -> {
-                        System.out.println("Hard game saved!");
-                    });
-                    menuButton.setOnRestart(event -> {
-                        System.out.println("Restart game!"); 
-                        scoreboard.clearScore(); 
-                        startGame(cardCount, deckCategory); 
-                    }); 
-                    menuButton.setOnExit(event -> {
-                        System.exit(0);
-                    });
-                    pane.getChildren().add(menuButton);
-                }
+//                     // Menu button
+//                     GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
+//                     menuButton.setLayoutX(50);
+//                     menuButton.setLayoutY(50);
+//                     menuButton.setOnSave(event -> {
+//                         System.out.println("Hard game saved!");
+//                     });
+//                     menuButton.setOnRestart(event -> {
+//                         System.out.println("Restart game!"); 
+//                         scoreboard.clearScore(); 
+//                         startGame(cardCount, deckCategory); 
+//                     }); 
+//                     menuButton.setOnExit(event -> {
+//                         System.exit(0);
+//                     });
+//                     pane.getChildren().add(menuButton);
+//                 }
     
-                // Set the scene
-                Scene scene = new Scene(root, 1600, 900);
-                jfxPanel = new JFXPanel();
-                jfxPanel.setScene(scene);
+//                 // Set the scene
+//                 Scene scene = new Scene(root, 1600, 900);
+//                 jfxPanel = new JFXPanel();
+//                 jfxPanel.setScene(scene);
     
-                frame.getContentPane().removeAll();
-                frame.getContentPane().add(jfxPanel);
-                frame.revalidate();
-                frame.repaint();
+//                 frame.getContentPane().removeAll();
+//                 frame.getContentPane().add(jfxPanel);
+//                 frame.revalidate();
+//                 frame.repaint();
     
-            } catch (IOException | IllegalStateException e) {
-                e.printStackTrace();
-            }
-        });
-    }
+//             } catch (IOException | IllegalStateException e) {
+//                 e.printStackTrace();
+//             }
+//         });
+//     }
     public static String getCategory() {
         return deckCategory;
     }
