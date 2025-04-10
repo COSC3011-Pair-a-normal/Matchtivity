@@ -46,22 +46,27 @@ package com;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.control.MenuButton;
+import javafx.geometry.Side;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.text.Font;
 import javafx.scene.input.MouseEvent;
 
-public class GameMenuButton extends MenuButton
+public class GameMenuButton extends ToggleButton
 {
     private MenuItem saveButton;
+    private MenuItem restartButton; 
     private MenuItem exitButton;
     private int buttonPadding = 22;
+    private ContextMenu contextMenu;
 
     public GameMenuButton(String text, Font font)
     {
         super(text);
         setFont(font);                          // Apply the font to the MenuButton.
+        setPrefWidth(200); 
 
         Label saveLabel = new Label("Save");    // Create a Label for saveButton.
         saveLabel.setFont(font);                // Set saveButton Label font.
@@ -71,6 +76,14 @@ public class GameMenuButton extends MenuButton
         saveButton = new MenuItem();            // Create saveButton MenuItem.
         saveButton.setGraphic(saveLabel);       // Apply svaeLabel graphic to saveButton.
 
+        Label restartLabel = new Label("Restart");    //restart button label 
+        restartLabel.setFont(font);                
+        restartLabel.setAlignment(Pos.CENTER);     
+        // Set/bind the width of the restartButton to equal that of the MenuButton.
+        restartLabel.prefWidthProperty().bind(this.widthProperty().subtract(buttonPadding));
+        restartButton = new MenuItem();            
+        restartButton.setGraphic(restartLabel);       
+
         Label exitLabel = new Label("Exit");    // Create a Label for exitButton.
         exitLabel.setFont(font);                // Set exitButton Label font.
         exitLabel.setAlignment(Pos.CENTER);    // Center the exit graphic.
@@ -79,15 +92,22 @@ public class GameMenuButton extends MenuButton
         exitButton = new MenuItem();            // Create exitButton MenuItem.
         exitButton.setGraphic(exitLabel);       // Apply exitLabel graphic to exitButton.
         
-        // Add the menu items, saveButton and exitButton, to the MenuButton.
-        this.getItems().addAll(saveButton, exitButton);
+        // Create the ContextMenu and disable autoHide so it remains open until explicityly closed via click.
+        contextMenu = new ContextMenu();
+        contextMenu.getItems().addAll(saveButton, restartButton, exitButton);
+        contextMenu.setAutoHide(false);
 
-        this.addEventFilter(MouseEvent.MOUSE_PRESSED, event ->
+        // Toggle the ContextMenu when the toggle button is clicked.
+        this.setOnMouseClicked(event ->
         {
-            if(this.isShowing())
+            if(this.isSelected())
             {
-                this.hide();
-                event.consume();
+                // Show the menu below the toggle button (offsets can be adjusted as needed)
+                contextMenu.show(this, Side.BOTTOM, 0, 0);
+            }
+            else
+            {
+                contextMenu.hide();
             }
         });
     }
@@ -98,23 +118,14 @@ public class GameMenuButton extends MenuButton
         saveButton.setOnAction(handler);
     }
 
+    public void setOnRestart(EventHandler<ActionEvent> handler)
+    {
+        restartButton.setOnAction(handler); 
+    }
+
     // Set the action for the exitButton MenuItem.
     public void setOnExit(EventHandler<ActionEvent> handler)
     {
         exitButton.setOnAction(handler);
-    }
-
-    // Close the menu if already open, instead of reopening it.
-    @Override
-    public void fire()
-    {
-        if (isShowing())
-        {
-            hide();
-        }
-        else
-        {
-            super.fire();
-        }
     }
 }

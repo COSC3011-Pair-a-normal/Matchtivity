@@ -235,127 +235,47 @@ public class Main implements ActionListener {
         } else if (event.getSource() == mediumButton) {
             cardCount = mediumCount;
             cardLayout.show(mainPanel, "CategoryScreen"); // Move to category selection after choosing difficulty
-        }  else if (event.getSource() == hardButton) {
+        } else if (event.getSource() == hardButton) {
             cardCount = hardCount;
             cardLayout.show(mainPanel, "CategoryScreen"); // Move to category selection after choosing difficulty
         } else if (event.getSource() == regDeck) {
             deckCategory = "regular";
-            if (cardCount == easyCount) {
-                EasyGameScreen();
-            } else if (cardCount == mediumCount) {
-                MediumGameScreen();
-            } else if (cardCount == hardCount) {
-                HardGameScreen();
-            }
+            startGame(cardCount, deckCategory);
         } else if (event.getSource() == colorDeck) {
             deckCategory = "color";
-            if (cardCount == easyCount) {
-                EasyGameScreen();
-            } else if (cardCount == mediumCount) {
-                MediumGameScreen();
-            } else if (cardCount == hardCount) {
-                HardGameScreen();
-            }
+            startGame(cardCount, deckCategory);
         } else if (event.getSource() == customDeck) {
             deckCategory = "custom";
-            if (cardCount == easyCount) {
-                EasyGameScreen();
-            } else if (cardCount == mediumCount) {
-                MediumGameScreen();
-            } else if (cardCount == hardCount) {
-                HardGameScreen();
-            }
+            startGame(cardCount, deckCategory);
         }
     }
 
-            /*
-            // Create and add timer once.
-            if(!timerStarted)
-            {
-                // Create the timer panel.
-                timerStarted = true;
-            isPaused = false;
-            gameTimer = new GameTimer();
-
-                // Calculate initial timer position.
-                int frameWidth = frame.getWidth();
-                int frameHeight = frame.getHeight();
-                int timerWidth = 300;
-                int timerHeight = 100;
-
-                int timerXPos = (int) (frameWidth * 0.95) - timerWidth; // 10% margin from right.
-                int timerYPos = (int) (frameHeight * 0.05); // 5% margin from top.
-
-                gameTimer.setBounds(timerXPos, timerYPos, timerWidth, timerHeight);
-
-                // Add timer panel to frame's layed pane for relative positioning.
-                frame.getLayeredPane().add(gameTimer, JLayeredPane.POPUP_LAYER);
-
-                // Add a listener that repositions the timer if the frame is resized.
-            frame.addComponentListener(new ComponentAdapter()
-                {
-                    @Override
-                    public void componentResized(ComponentEvent e)
-                    {
-                        // Generate new positioning.
-                        int newFrameWidth = frame.getWidth();
-                        int newFrameHeight = frame.getHeight();
-                        int newXPos = (int) (newFrameWidth * 0.95) - timerWidth;
-                        int newYPos = (int) (newFrameHeight * 0.05);
-                        gameTimer.setBounds(newXPos, newYPos, timerWidth, timerHeight);
-                    }  
-            });
-
-                // Update the frame layout.
-                frame.revalidate();
-                frame.repaint();
-
-            // Update start button text.
-            startNew.setText("Press to pause");
-        }
-        else
-        {
-            if(!isPaused)
-            {
-                gameTimer.pauseTimer();
-                isPaused = true;
-                startNew.setText("Press to resume");
+    public void startGame(int cardCount, String deckCategory) {
+        if (deckCategory.equals("regular")) {
+            if (cardCount == easyCount) {
+                new EasyGameScreen(frame);
+            } else if (cardCount == mediumCount) {
+                new MediumGameScreen(frame);
+            } else if (cardCount == hardCount) {
+                new HardGameScreen(frame);
             }
-            else
-            {
-                gameTimer.resumeTimer();
-                isPaused = false;
-                startNew.setText("Press to pause");
+        } else if (deckCategory.equals("color")) {
+            if (cardCount == easyCount) {
+                new EasyGameScreen(frame);
+            } else if (cardCount == mediumCount) {
+                new MediumGameScreen(frame);
+            } else if (cardCount == hardCount) {
+                new HardGameScreen(frame);
+            }
+        } else if (deckCategory.equals("custom")) {
+            if (cardCount == easyCount) {
+                new EasyGameScreen(frame);
+            } else if (cardCount == mediumCount) {
+                new MediumGameScreen(frame);
+            } else if (cardCount == hardCount) {
+                new HardGameScreen(frame);
             }
         }
- 
-        }
-    private void showJavaFXGameScreen() {
-        // Initialize the JavaFX thread
-        Platform.runLater(() -> {
-            // Create a JavaFX Scene
-            StackPane gamePane = new StackPane();
-            Button startButton = new Button("Start Game");
-
-            // Set up the action for the start button
-            startButton.setOnAction(event -> {
-                // Game logic for starting the game goes here
-                System.out.println("Game Started with selected difficulty!");
-            });
-
-            gamePane.getChildren().add(startButton);
-            Scene scene = new Scene(gamePane, 1600, 900);
-
-            // Set up the JavaFX scene in the JFXPanel
-            jfxPanel = new JFXPanel();
-            jfxPanel.setScene(scene);
-
-            // Replace the content of the frame with JavaFX content
-            frame.getContentPane().removeAll();
-            frame.getContentPane().add(jfxPanel);
-            frame.revalidate();
-            frame.repaint();
-        });
     }
 */
     /*
@@ -422,22 +342,22 @@ public class Main implements ActionListener {
 
                         // Create the GameMenuButton.
                         GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
-                        
+
                         // Position the button.
                         menuButton.setLayoutX(50);
                         menuButton.setLayoutY(50);
 
-                        menuButton.setOnSave(event -> saveGame());
-                        // {
-                        //     // Insert save logic here.
-                        //     System.out.println("Game saved! That's creamy and dreamy!");
-                        // });
+                        menuButton.setOnSave(event ->
+                        {
+                            // Insert save logic here.
+                            System.out.println("Game saved! That's creamy and dreamy!");
+                        });
 
-                        menuButton.setOnExit(event -> System.exit(0));
-                        // {
-                        //     // Insert exit logic here.
-                        //     System.exit(0);
-                        // });
+                        menuButton.setOnExit(event ->
+                        {
+                            // Insert exit logic here.
+                            System.exit(0);
+                        });
 
                         // Add the menu button to the scene.
                         pane.getChildren().add(menuButton);  
