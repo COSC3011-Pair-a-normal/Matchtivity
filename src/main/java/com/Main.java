@@ -8,11 +8,13 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.control.Button;
 
+import java.util.Set;
+import java.io.*;
+import java.util.HashSet;
+
 import javax.swing.*;
 import java.awt.*; 
-import java.awt.event.*; 
-import java.io.File;
-import java.io.IOException;
+import java.awt.event.*;
 import java.net.URL;
 
 public class Main implements ActionListener {
@@ -31,7 +33,7 @@ public class Main implements ActionListener {
     private static int cardCount; // Number of cards based on users choice of difficulty
     private int easyCount = 10;
     private int mediumCount = 18;
-    private int hardCount = 28;
+    private int hardCount = 30;
     private static String deckCategory; //stores the deck
     
     private JFXPanel jfxPanel;
@@ -420,22 +422,22 @@ public class Main implements ActionListener {
 
                         // Create the GameMenuButton.
                         GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
-
+                        
                         // Position the button.
                         menuButton.setLayoutX(50);
                         menuButton.setLayoutY(50);
 
-                        menuButton.setOnSave(event ->
-                        {
-                            // Insert save logic here.
-                            System.out.println("Game saved! That's creamy and dreamy!");
-                        });
+                        menuButton.setOnSave(event -> saveGame());
+                        // {
+                        //     // Insert save logic here.
+                        //     System.out.println("Game saved! That's creamy and dreamy!");
+                        // });
 
-                        menuButton.setOnExit(event ->
-                        {
-                            // Insert exit logic here.
-                            System.exit(0);
-                        });
+                        menuButton.setOnExit(event -> System.exit(0));
+                        // {
+                        //     // Insert exit logic here.
+                        //     System.exit(0);
+                        // });
 
                         // Add the menu button to the scene.
                         pane.getChildren().add(menuButton);  
@@ -664,5 +666,58 @@ public class Main implements ActionListener {
     }
     public static int getCardCount() {
         return cardCount;
+    }
+
+    private void saveGame() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("matchtivity.dat"))) {
+            int score = scoreboard.getScore();//From ScoreBoard.java
+            long elapsedTime = gameTimer.getElapsedTime(); // Assuming GameTimer has a getElapsedTime() method
+            Set<Integer> matchedCards = new HashSet<>(); // Replace with actual matched cards logic
+
+            GameState gameState = new GameState(score, elapsedTime, matchedCards);
+            oos.writeObject(gameState);
+            System.out.println("Game saved successfully!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // private void loadGame() {
+    //     try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("game_state.dat"))) {
+    //         GameState gameState = (GameState) ois.readObject();
+    
+    //         // Restore game state
+    //         scoreboard.setScore(gameState.getScore()); // Assuming ScoreBoard has a setScore() method
+    //         gameTimer.setElapsedTime(gameState.getElapsedTime()); // Assuming GameTimer has a setElapsedTime() method
+    //         Set<Integer> matchedCards = gameState.getMatchedCards();
+    //         // Restore matched cards logic here
+    
+    //         System.out.println("Game loaded successfully!");
+    //     } catch (IOException | ClassNotFoundException e) {
+    //         e.printStackTrace();
+    //     }
+    // }
+
+    public class GameState implements Serializable {
+        private static final long serialVersionUID = 1L;
+    
+        private int score;
+        private long elapsedTime; // Time in milliseconds
+        private Set<Integer> matchedCards; // IDs of matched cards
+    
+        public GameState(int score, long elapsedTime, Set<Integer> matchedCards) {
+            this.score = score;
+            this.elapsedTime = elapsedTime;
+            this.matchedCards = matchedCards;
+        }
+        public int getScore() {
+            return score;
+        }
+        public long getElapsedTime() {
+            return elapsedTime;
+        }
+        public Set<Integer> getMatchedCards() {
+            return matchedCards;
+        }
     }
 }

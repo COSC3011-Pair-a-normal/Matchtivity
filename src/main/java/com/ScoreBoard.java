@@ -39,4 +39,8 @@ public class ScoreBoard extends VBox{
         scoreLabel.setText("Score: " + score); 
     }
 
+    public int getScore() {
+        return score; 
+    }
+
 }

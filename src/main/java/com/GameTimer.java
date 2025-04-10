@@ -107,4 +107,8 @@ public class GameTimer extends StackPane
             isPaused = false;
         }
     }
+
+    public long getElapsedTime() {
+        return elapsedGameTime + (System.currentTimeMillis() - startTime);
+    }
 }
