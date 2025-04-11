@@ -277,7 +277,6 @@ public class Main implements ActionListener {
             }
         }
     }
-*/
     /*
     private void EasyGameScreen() {
         // Initialize the JavaFX thread
