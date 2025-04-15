@@ -61,7 +61,7 @@ public class Deck {
         String directoryPath = System.getProperty("user.dir") + File.separator 
                                + "src" + File.separator + "main" + File.separator 
                                + "resources" + File.separator + "images" + File.separator;
-        File directory = new File(directoryPath  + "classic");
+        File directory = new File(directoryPath + category.toString()); 
         
         if (directory.exists() && directory.isDirectory()) {
             File[] files = directory.listFiles();

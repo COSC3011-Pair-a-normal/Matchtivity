@@ -31,6 +31,7 @@ public class GameController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         int cardCount = Main.getCardCount();
+
         for (int i = 0; i < cardCount/2; i++) {
             cardIDtoImageID.add(i);
         }

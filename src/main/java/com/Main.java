@@ -21,7 +21,7 @@ public class Main implements ActionListener {
     // Buttons
     private JButton startNew, startSaved, exitGame;
     private JButton easyButton, mediumButton, hardButton;
-    private JButton regDeck, colorDeck, customDeck;
+    private JButton regDeck, colorDeck, themedDeck, customDeck;
     private JFrame frame;
     private JPanel mainPanel;
     private CardLayout cardLayout;
@@ -205,6 +205,12 @@ public class Main implements ActionListener {
         colorDeck.setPreferredSize(new Dimension(400, 100));
         colorDeck.setFont(getCustomFont(30f));
         colorDeck.addActionListener(this);
+
+        themedDeck = new JButton("Themed Deck"); 
+        themedDeck.setFocusPainted(false); 
+        themedDeck.setPreferredSize(new Dimension(400, 100)); 
+        themedDeck.setFont(getCustomFont(30f)); 
+        themedDeck.addActionListener(this); 
         
         customDeck = new JButton("Custom Deck");
         customDeck.setFocusPainted(false);
@@ -220,6 +226,8 @@ public class Main implements ActionListener {
         gbc.gridy++;
         categoryScreen.add(colorDeck, gbc);
         gbc.gridy++;
+        categoryScreen.add(themedDeck, gbc); 
+        gbc.gridy++; 
         categoryScreen.add(customDeck, gbc);
 
         return categoryScreen;
@@ -244,6 +252,9 @@ public class Main implements ActionListener {
         } else if (event.getSource() == colorDeck) {
             deckCategory = "color";
             startGame(cardCount, deckCategory);
+        } else if (event.getSource() == themedDeck) {
+            deckCategory = "themed"; 
+            startGame(cardCount, deckCategory); 
         } else if (event.getSource() == customDeck) {
             deckCategory = "custom";
             startGame(cardCount, deckCategory);
@@ -266,6 +277,14 @@ public class Main implements ActionListener {
                 new MediumGameScreen(frame);
             } else if (cardCount == hardCount) {
                 new HardGameScreen(frame);
+            }
+        } else if (deckCategory.equals("themed")) {
+            if (cardCount == easyCount) {
+                new EasyGameScreen(frame); 
+            } else if (cardCount == mediumCount) {
+                new MediumGameScreen(frame); 
+            } else if (cardCount == hardCount) {
+                new HardGameScreen(frame); 
             }
         } else if (deckCategory.equals("custom")) {
             if (cardCount == easyCount) {
