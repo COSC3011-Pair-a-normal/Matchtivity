@@ -16,6 +16,13 @@ public abstract class BaseGameScreen
     protected JFXPanel jfxPanel;
     protected String fxmlPath;
 
+    private Main main;
+
+public void setMain(Main main) {
+    this.main = main;
+}
+
+
     public BaseGameScreen(JFrame frame, String fxmlPath)
     {
         this.frame = frame;
@@ -37,6 +44,12 @@ public abstract class BaseGameScreen
                 }
                 FXMLLoader loader = new FXMLLoader(url);
                 Parent root = loader.load();
+                Object controller = loader.getController();
+              if (controller instanceof GameController) {
+             ((GameController) controller).setMain(Main.getInstance());
+}
+
+                
 
                 // If the loaded root is a Pane, add common UI elements.
                 if (root instanceof Pane)

@@ -35,6 +35,8 @@ public class Main implements ActionListener {
     private int mediumCount = 18;
     private int hardCount = 30;
     private static String deckCategory; //stores the deck
+    private static Main instance; // Singleton for access
+
     
     private JFXPanel jfxPanel;
 
@@ -63,8 +65,15 @@ public class Main implements ActionListener {
         return (rockSaltFont != null) ? rockSaltFont.deriveFont(size) : new Font("Serif", Font.PLAIN, (int) size);
     }
 
+    public static Main getInstance() {
+        return instance;
+    }
+    
+
     public void initializeUI() {
         // Create the main frame
+        instance = this;
+
         frame = new JFrame("Pair-A-Normal Matchtivity"); 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1600, 900);
@@ -317,6 +326,43 @@ public class Main implements ActionListener {
             e.printStackTrace();
         }
     }
+    public void returnToSwingPanel() {
+        SwingUtilities.invokeLater(() -> {
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(mainPanel);
+            frame.revalidate();
+            frame.repaint();
+        });
+    }
+    
+
+    public void showWinScreen() {
+        SwingUtilities.invokeLater(() -> {
+            JPanel winScreen = new JPanel(new BorderLayout());
+            winScreen.setBackground(Color.white);
+    
+            JLabel winLabel = new JLabel("WOOOOOOO YOU WIN!", SwingConstants.CENTER);
+            winLabel.setFont(getCustomFont(60f));
+            winLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    
+            winScreen.add(winLabel, BorderLayout.CENTER);
+    
+            mainPanel.add(winScreen, "WinScreen");
+            cardLayout.show(mainPanel, "WinScreen");
+
+            System.out.println("🏁 Switching to win screen...");
+System.out.println("mainPanel components: " + mainPanel.getComponentCount());
+for (Component c : mainPanel.getComponents()) {
+    System.out.println(" - " + c.getClass().getName());
+}
+
+    
+            if (gameTimer != null) {
+                gameTimer.stopTimer(); // Make sure this is stopTimer(), not stop()
+            }
+        });
+    }
+    
 
     public class GameState implements Serializable {
         private static final long serialVersionUID = 1L;

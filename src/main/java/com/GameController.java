@@ -11,6 +11,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.*;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.util.Duration;
 //import javax.swing.text.html.ImageView; 
 
@@ -111,12 +112,29 @@ public class GameController implements Initializable {
             Main.scoreboard.increaseScore(); 
             PauseTransition pause = new PauseTransition(Duration.seconds(0.8));
 
-            pause.setOnFinished(event -> {
-                firstCard.setVisible(false); 
-                secondCard.setVisible(false); 
+           pause.setOnFinished(event -> {
+    firstCard.setVisible(false); 
+    secondCard.setVisible(false); 
+    flippedCards.clear();
 
-                flippedCards.clear(); 
-            }); 
+    // ✅ Check if all cards are matched
+    int totalMatched = 0;
+    for (javafx.scene.Node node : imagesGridPane.getChildren()) {
+        if (node instanceof ImageView && !node.isVisible()) {
+            totalMatched++;
+        }
+    }
+
+    if (totalMatched == Main.getCardCount()) {
+        System.out.println("🎯 All cards matched!");
+        Platform.runLater(() -> {
+            main.returnToSwingPanel(); // 💥 bring the swing panel back
+            main.showWinScreen();      // THEN show win screen
+        });
+        
+
+    }
+});
 
             pause.play(); 
 
@@ -176,6 +194,8 @@ public class GameController implements Initializable {
             row.setPercentHeight(100.0 / rows);  // Evenly distribute height
             imagesGridPane.getRowConstraints().add(row);
         }
+
+        
     
         // Adjust the card sizes and spacing
         for (int row = 0; row < rows; row++) {
@@ -193,8 +213,19 @@ public class GameController implements Initializable {
                 javafx.scene.layout.GridPane.setMargin(imageView, new javafx.geometry.Insets(0)); // No margin
             }
         }
+
+        
     
         // Center the grid within the available space
         imagesGridPane.setAlignment(Pos.CENTER); // Center the entire grid in the available space
     }             
+// Reference to Main
+private Main main;
+
+public void setMain(Main main) {
+    this.main = main;
+    System.out.println("✅ main set in GameController: " + main);
 }
+
+}
+
