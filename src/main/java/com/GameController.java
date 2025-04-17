@@ -12,7 +12,13 @@ import java.net.URL;
 import java.util.*;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.animation.RotateTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.Interpolator;
+import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
+
 //import javax.swing.text.html.ImageView; 
 
 public class GameController implements Initializable {
@@ -67,39 +73,57 @@ public class GameController implements Initializable {
 
     // Flip the card (showing the front image and then flipping back to the back)
     private void flipCard(int cardID) {
-        ImageView imageView = (ImageView) imagesGridPane.getChildren().get(cardID);
-        Image image;
-    
-        if (imageView.getImage() == backImage) {
-            // Get the image corresponding to the current card ID from the shuffled cardIDtoImageID array
-            Integer imageID = cardIDtoImageID.get(cardID);
-            String directoryPath = System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "images" + File.separator + "currentImages";
-            File directory = new File(directoryPath);
-        
-            // Check if the directory exists and is a directory
-            if (directory.exists() && directory.isDirectory()) {
-                // List all the files in the directory (filtering for image files)
-                File[] files = directory.listFiles();
-                File frontImageFile = files[imageID];
-                // Create the Image object from the file URI
-                image = new Image(frontImageFile.toURI().toString());
-                flippedCards.add(imageView);
-            } else {
-                image = backImage;  // Flip it back to the back image
-            }
-        } else {
-            image = backImage;
-            flippedCards.remove(imageView); 
-        }
-    
-        // Update the image on the imageView
-        imageView.setImage(image);
+    ImageView imageView = (ImageView) imagesGridPane.getChildren().get(cardID);
 
-        if (flippedCards.size() == 2) {
-            processingCards = true; 
-            processFlippedCards(); 
-        }
+    // Are we flipping from back → front, or front → back?
+    boolean flippingToFront = imageView.getImage() == backImage;
+    Image newImage;
+
+    if (flippingToFront) {
+        // — your original directory logic —
+        String directoryPath = System.getProperty("user.dir")
+            + File.separator + "src" + File.separator + "main"
+            + File.separator + "resources" + File.separator + "images"
+            + File.separator + "currentImages";
+        File directory = new File(directoryPath);
+
+        // Grab the file and build the Image
+        File[] files = directory.listFiles();
+        File frontImageFile = files[cardIDtoImageID.get(cardID)];
+        newImage = new Image(frontImageFile.toURI().toString());
+
+        flippedCards.add(imageView);
+    } else {
+        newImage = backImage;
+        flippedCards.remove(imageView);
     }
+
+    // — flip animation —
+    RotateTransition rotator = new RotateTransition(Duration.millis(500), imageView);
+    rotator.setAxis(Rotate.Y_AXIS);
+    if (flippingToFront) {
+        rotator.setFromAngle(0);
+        rotator.setToAngle(180);
+    } else {
+        rotator.setFromAngle(180);
+        rotator.setToAngle(360);
+    }
+    rotator.setInterpolator(Interpolator.LINEAR);
+
+    PauseTransition pause = new PauseTransition(Duration.millis(250));
+    pause.setOnFinished(e -> imageView.setImage(newImage));
+
+    ParallelTransition flip = new ParallelTransition(rotator, pause);
+    flip.play();
+
+    // once two cards are face‑up, start your matching logic
+    if (flippedCards.size() == 2) {
+        processingCards = true;
+        processFlippedCards();
+    }
+    }
+
+    
 
     private void processFlippedCards() {
         ImageView firstCard = flippedCards.get(0); 
@@ -139,23 +163,34 @@ public class GameController implements Initializable {
             pause.play(); 
 
             processingCards = false;
-        } else { 
-            //delay for 0.8 second to see cards 
-            PauseTransition pause = new PauseTransition(Duration.seconds(0.8));
-
-            pause.setOnFinished(event -> {
-                //reset the flipped cards 
+        } else {
+            // let player see both cards for 0.8s
+            PauseTransition wait = new PauseTransition(Duration.seconds(0.8));
+            wait.setOnFinished(evt -> {
                 for (ImageView card : flippedCards) {
-                    card.setImage(backImage);
+                    // 1) rotate from 180° to 360°
+                    RotateTransition r1 = new RotateTransition(Duration.millis(500), card);
+                    r1.setAxis(Rotate.Y_AXIS);
+                    r1.setFromAngle(180);
+                    r1.setToAngle(360);
+                    r1.setInterpolator(Interpolator.LINEAR);
+        
+                    // 2) halfway through (250ms), swap it back to the backside
+                    PauseTransition p = new PauseTransition(Duration.millis(250));
+                    p.setOnFinished(e2 -> card.setImage(backImage));
+        
+                    // 3) play both together, then reset rotation to 0
+                    ParallelTransition flipBack = new ParallelTransition(r1, p);
+                    flipBack.setOnFinished(e2 -> card.setRotate(0));
+                    flipBack.play();
                 }
-
+        
+                // clear state once all flip‑backs are running
                 flippedCards.clear();
                 processingCards = false;
             });
-
-            //pause
-            pause.play();
-            }
+            wait.play();
+        }        
     }
     
     private void adjustGridSize() {
