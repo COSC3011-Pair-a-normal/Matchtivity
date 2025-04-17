@@ -85,10 +85,12 @@ public class Main implements ActionListener {
 
         // Add different screens
         JPanel startScreen = createStartScreen();
+        JPanel loadSavedScreen = createLoadSavedScreen(); 
         JPanel difficultyScreen = createDifficultyScreen();
         JPanel categoryScreen = createCategoryScreen();
 
         mainPanel.add(startScreen, "StartScreen");
+        mainPanel.add(loadSavedScreen, "LoadSavedScreen"); 
         mainPanel.add(difficultyScreen, "DifficultyScreen");
         mainPanel.add(categoryScreen, "CategoryScreen");
 
@@ -123,6 +125,7 @@ public class Main implements ActionListener {
         startSaved.setFocusPainted(false);
         startSaved.setPreferredSize(new Dimension(400, 100));
         startSaved.setFont(getCustomFont(30f));
+        startSaved.addActionListener(this); 
 
         exitGame = new JButton("Exit Game");
         exitGame.setFocusPainted(false);
@@ -142,6 +145,35 @@ public class Main implements ActionListener {
         panel.add(startScreen, BorderLayout.CENTER);
 
         return panel;
+    }
+
+    private JPanel createLoadSavedScreen() {
+        JPanel loadSavedScreen = new JPanel(new GridBagLayout());
+        loadSavedScreen.setBackground(Color.white);
+
+        JLabel loadSavedLabel = new JLabel("Choose Game:", SwingConstants.CENTER);
+        loadSavedLabel.setFont(getCustomFont(60f));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        //add in how to actually choose a saved game 
+
+        // Add Components to Difficulty Screen
+        
+        loadSavedScreen.add(loadSavedLabel, gbc);
+        /*
+        gbc.gridy++; 
+        difficultyScreen.add(easyButton, gbc);
+        gbc.gridy++;
+        difficultyScreen.add(mediumButton, gbc);
+        gbc.gridy++;
+        difficultyScreen.add(hardButton, gbc);
+        */
+        return loadSavedScreen;
     }
 
     private JPanel createDifficultyScreen() {
@@ -246,6 +278,8 @@ public class Main implements ActionListener {
     public void actionPerformed(ActionEvent event) { 
         if (event.getSource() == startNew) {
             cardLayout.show(mainPanel, "DifficultyScreen");
+        } else if (event.getSource()  == startSaved) {
+            cardLayout.show(mainPanel, "LoadSavedScreen"); 
         } else if (event.getSource() == easyButton) {
             cardCount = easyCount;
             cardLayout.show(mainPanel, "CategoryScreen"); // Move to category selection after choosing difficulty
@@ -326,6 +360,7 @@ public class Main implements ActionListener {
             e.printStackTrace();
         }
     }
+
     public void returnToSwingPanel() {
         SwingUtilities.invokeLater(() -> {
             frame.getContentPane().removeAll();
