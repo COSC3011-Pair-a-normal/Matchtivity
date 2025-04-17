@@ -141,7 +141,7 @@ public class GameController implements Initializable {
     secondCard.setVisible(false); 
     flippedCards.clear();
 
-    // ✅ Check if all cards are matched
+    // Check if all cards are matched
     int totalMatched = 0;
     for (javafx.scene.Node node : imagesGridPane.getChildren()) {
         if (node instanceof ImageView && !node.isVisible()) {
@@ -150,10 +150,9 @@ public class GameController implements Initializable {
     }
 
     if (totalMatched == Main.getCardCount()) {
-        System.out.println("🎯 All cards matched!");
         Platform.runLater(() -> {
-            main.returnToSwingPanel(); // 💥 bring the swing panel back
-            main.showWinScreen();      // THEN show win screen
+            main.returnToSwingPanel(); // bring the swing panel back
+            main.showWinScreen();      // then it shows the win screen
         });
         
 
@@ -259,7 +258,6 @@ private Main main;
 
 public void setMain(Main main) {
     this.main = main;
-    System.out.println("✅ main set in GameController: " + main);
 }
 
 }

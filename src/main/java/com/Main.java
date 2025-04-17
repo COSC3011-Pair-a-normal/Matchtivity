@@ -360,7 +360,26 @@ public class Main implements ActionListener {
             e.printStackTrace();
         }
     }
+     // private void loadGame() {
+    //     try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("matchtivity.dat"))) {
+    //         GameState gameState = (GameState) ois.readObject();
 
+    //         // Restore game state
+    //         scoreboard.setScore(gameState.getScore());
+    //         gameTimer.setElapsedTime(gameState.getElapsedTime());
+
+    //         // Restore matched cards
+    //         GameController gameController = ...; // Obtain a reference to the GameController instance
+    //         Set<Integer> matchedCards = gameState.getMatchedCards();
+    //         for (Integer cardID : matchedCards) {
+    //             gameController.markCardAsMatched(cardID); // Implement this method in GameController
+    //         }
+
+    //         System.out.println("Game loaded successfully!");
+    //     } catch (IOException | ClassNotFoundException e) {
+    //         e.printStackTrace();
+    //     }
+    // }
     public void returnToSwingPanel() {
         SwingUtilities.invokeLater(() -> {
             frame.getContentPane().removeAll();
