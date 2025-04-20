@@ -32,7 +32,7 @@ public class GameController implements Initializable {
     private List<ImageView> flippedCards = new ArrayList<>();
     private boolean processingCards = false;
 
-    public static final Image backImage = new Image("/images/back_of_card.png"); 
+    public static final Image backImage = new Image("/images/BackOfCard_Orange.png"); 
     public List<Integer> cardIDtoImageID = new ArrayList<>();
 
     @Override
