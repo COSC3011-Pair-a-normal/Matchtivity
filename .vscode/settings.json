@@ -1,5 +1,6 @@
 {
     "java.project.referencedLibraries": [
+        ".vscode\\json-20210307.jar",
         "c:\\javafx-sdk-21.0.6\\lib\\javafx.media.jar",
         "c:\\javafx-sdk-21.0.6\\lib\\javafx.base.jar",
         "c:\\javafx-sdk-21.0.6\\lib\\javafx.swing.jar",
@@ -10,7 +11,7 @@
         "c:\\javafx-sdk-21.0.6\\lib\\javafx.graphics.jar"
     ],
     "java.project.sourcePaths": [
-        "src/main/java",          // Java source files
-        "src/main/resources"     // Resources such as FXML files
+        "src\\main\\java",
+        "src\\main\\resources"
     ]
 }
