@@ -80,6 +80,8 @@ public void setMain(Main main) {
     {
     // Add GameTimer
     GameTimer gameTimer = new GameTimer();
+    Main.getInstance().setGameTimer(gameTimer);
+
     gameTimer.setLayoutX(1300);
     gameTimer.setLayoutY(5);
     pane.getChildren().add(gameTimer);

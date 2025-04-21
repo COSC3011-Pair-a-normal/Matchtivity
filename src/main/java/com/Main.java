@@ -147,6 +147,11 @@ public class Main implements ActionListener {
         return panel;
     }
 
+    public void setGameTimer(GameTimer timer) {
+        this.gameTimer = timer;
+    }
+    
+
     private JPanel createLoadSavedScreen() {
         JPanel loadSavedScreen = new JPanel(new GridBagLayout());
         loadSavedScreen.setBackground(Color.white);
@@ -392,30 +397,54 @@ public class Main implements ActionListener {
 
     public void showWinScreen() {
         SwingUtilities.invokeLater(() -> {
-            JPanel winScreen = new JPanel(new BorderLayout());
+            JPanel winScreen = new JPanel();
+            winScreen.setLayout(new BoxLayout(winScreen, BoxLayout.Y_AXIS));
             winScreen.setBackground(Color.white);
     
             JLabel winLabel = new JLabel("WOOOOOOO YOU WIN!", SwingConstants.CENTER);
             winLabel.setFont(getCustomFont(60f));
-            winLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            winLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     
-            winScreen.add(winLabel, BorderLayout.CENTER);
+            int finalScore = (scoreboard != null) ? scoreboard.getScore() : 0;
+            JLabel scoreLabel = new JLabel("Final Score: " + finalScore);
+            scoreLabel.setFont(getCustomFont(40f));
+            scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    
+            long elapsedMillis = (gameTimer != null) ? gameTimer.getElapsedTime() : 0;
+            long seconds = (elapsedMillis / 1000) % 60;
+            long minutes = (elapsedMillis / 1000) / 60;
+            JLabel timeLabel = new JLabel(String.format("Time: %02d:%02d", minutes, seconds));
+            timeLabel.setFont(getCustomFont(40f));
+            timeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    
+            winScreen.add(Box.createVerticalGlue());
+            winScreen.add(winLabel);
+            winScreen.add(Box.createVerticalStrut(30));
+            winScreen.add(scoreLabel);
+            winScreen.add(Box.createVerticalStrut(20));
+            winScreen.add(timeLabel);
+
+
+            JButton exitButton = new JButton("Exit Game");
+            exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            exitButton.setPreferredSize(new Dimension(200, 60));
+            exitButton.setFont(getCustomFont(30f));
+            exitButton.addActionListener(e -> System.exit(0));
+
+            winScreen.add(exitButton);
+            winScreen.add(Box.createVerticalGlue());
+
+            winScreen.add(Box.createVerticalGlue());
     
             mainPanel.add(winScreen, "WinScreen");
             cardLayout.show(mainPanel, "WinScreen");
-
-            System.out.println("🏁 Switching to win screen...");
-System.out.println("mainPanel components: " + mainPanel.getComponentCount());
-for (Component c : mainPanel.getComponents()) {
-    System.out.println(" - " + c.getClass().getName());
-}
-
     
             if (gameTimer != null) {
-                gameTimer.stopTimer(); // Make sure this is stopTimer(), not stop()
+                gameTimer.stopTimer(); // stop the timer
             }
         });
     }
+    
     
 
     public class GameState implements Serializable {
