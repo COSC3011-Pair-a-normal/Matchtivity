@@ -99,22 +99,28 @@ public class GameController implements Initializable {
     }
 
     // — flip animation —
-    RotateTransition rotator = new RotateTransition(Duration.millis(500), imageView);
-    rotator.setAxis(Rotate.Y_AXIS);
-    if (flippingToFront) {
-        rotator.setFromAngle(0);
-        rotator.setToAngle(180);
-    } else {
-        rotator.setFromAngle(180);
-        rotator.setToAngle(360);
-    }
-    rotator.setInterpolator(Interpolator.LINEAR);
+    RotateTransition spinOut = new RotateTransition(Duration.millis(250), imageView);
+    spinOut.setAxis(Rotate.Y_AXIS);
+    spinOut.setFromAngle(0);
+    spinOut.setToAngle(90);
+    spinOut.setInterpolator(Interpolator.LINEAR);
 
-    PauseTransition pause = new PauseTransition(Duration.millis(250));
-    pause.setOnFinished(e -> imageView.setImage(newImage));
+    spinOut.setOnFinished(evt -> {
+    // halfway through (90°), swap in the new image
+    imageView.setImage(newImage);
+    // set us up at 270° for the second half
+    imageView.setRotate(270);
+    // spin from 270° → 360° (i.e. back to 0°)
+    RotateTransition spinIn = new RotateTransition(Duration.millis(250), imageView);
+    spinIn.setAxis(Rotate.Y_AXIS);
+    spinIn.setFromAngle(270);
+    spinIn.setToAngle(360);
+    spinIn.setInterpolator(Interpolator.LINEAR);
+    spinIn.play();
+    });
 
-    ParallelTransition flip = new ParallelTransition(rotator, pause);
-    flip.play();
+    // kick off the first half
+    spinOut.play();
 
     // once two cards are face‑up, start your matching logic
     if (flippedCards.size() == 2) {
@@ -167,23 +173,31 @@ public class GameController implements Initializable {
             PauseTransition wait = new PauseTransition(Duration.seconds(0.8));
             wait.setOnFinished(evt -> {
                 for (ImageView card : flippedCards) {
-                    // 1) rotate from 180° to 360°
-                    RotateTransition r1 = new RotateTransition(Duration.millis(500), card);
-                    r1.setAxis(Rotate.Y_AXIS);
-                    r1.setFromAngle(180);
-                    r1.setToAngle(360);
-                    r1.setInterpolator(Interpolator.LINEAR);
-        
-                    // 2) halfway through (250ms), swap it back to the backside
-                    PauseTransition p = new PauseTransition(Duration.millis(250));
-                    p.setOnFinished(e2 -> card.setImage(backImage));
-        
-                    // 3) play both together, then reset rotation to 0
-                    ParallelTransition flipBack = new ParallelTransition(r1, p);
-                    flipBack.setOnFinished(e2 -> card.setRotate(0));
-                    flipBack.play();
+                    // 1) spin the front face away: 0° → 90°
+                    RotateTransition spinOut = new RotateTransition(Duration.millis(250), card);
+                    spinOut.setAxis(Rotate.Y_AXIS);
+                    spinOut.setFromAngle(0);
+                    spinOut.setToAngle(90);
+                    spinOut.setInterpolator(Interpolator.LINEAR);
+
+                    spinOut.setOnFinished(e2 -> {
+                        // halfway: swap to the backside
+                        card.setImage(backImage);
+                        // set us up at 270° (i.e. -90°) so the second half spins forward
+                        card.setRotate(270);
+
+                        // 2) spin the back‑face into view: 270° → 360°
+                        RotateTransition spinIn = new RotateTransition(Duration.millis(250), card);
+                        spinIn.setAxis(Rotate.Y_AXIS);
+                        spinIn.setFromAngle(270);
+                        spinIn.setToAngle(360);
+                        spinIn.setInterpolator(Interpolator.LINEAR);
+                        spinIn.play();
+                    });
+
+                    spinOut.play();
                 }
-        
+
                 // clear state once all flip‑backs are running
                 flippedCards.clear();
                 processingCards = false;
