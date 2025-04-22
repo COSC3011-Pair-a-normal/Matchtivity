@@ -1,4 +1,4 @@
-/**
+/*
  * Main JavaFX application:
  * Shows Start → Difficulty → Category screens
  * Launches the chosen game screen (Easy/Medium/Hard)
@@ -10,6 +10,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView; 
 import javafx.scene.layout.*;
 import javafx.geometry.Pos;
 import javafx.scene.text.Font;
@@ -17,7 +19,7 @@ import javafx.stage.Stage;
 
 public class MainApp extends Application {
     private Stage primaryStage;
-    private Scene startScene, difficultyScene, categoryScene, winScene;
+    private Scene startScene, difficultyScene, categoryScene, winScene, savedScene; 
     private final int easyCount = 10, mediumCount = 18, hardCount = 30;
     private int cardCount;
     private String deckCategory;
@@ -33,6 +35,7 @@ public class MainApp extends Application {
         initStartScene();      // Build the Start screen.
         initDifficultyScene(); // Build Difficulty screen.
         initCategoryScene();   // Build Category screen.
+        initStartSavedScene(); // Buid Start Saved screen. 
 
         stage.setScene(startScene);
         stage.show();
@@ -48,6 +51,7 @@ public class MainApp extends Application {
     private Label titleLabel(String text, double size) {
         Label lbl = new Label(text);
         lbl.setFont(Font.font("Rock Salt", size));
+        lbl.setStyle("-fx-text-fill: white;"); 
         lbl.setAlignment(Pos.CENTER);
         return lbl;
     }
@@ -56,6 +60,16 @@ public class MainApp extends Application {
     private void styleButton(Button btn) {
         btn.setFont(Font.font("Rock Salt", 30));
         btn.setPrefSize(400, 100);
+    }
+
+    // Helper to return uniform background image. 
+    private ImageView getBackgroundImage() {
+        ImageView background = new ImageView(new Image("/images/purpleBackground.jpg")); 
+        background.setFitWidth(1600); 
+        background.setFitHeight(900); 
+        background.setPreserveRatio(false); 
+
+        return background; 
     }
 
     // Build the very first Start screen.
@@ -71,12 +85,21 @@ public class MainApp extends Application {
         styleButton(exitGame);
 
         startNew.setOnAction(e -> primaryStage.setScene(difficultyScene));
-        // TODO: implement load‑saved logic
+        startSaved.setOnAction(e -> primaryStage.setScene(savedScene));
         exitGame.setOnAction(e -> primaryStage.close());
+
+        Image backgroundImage = new Image("/images/purpleBackground.jpg"); 
+        BackgroundImage bgImage = new BackgroundImage(
+            backgroundImage, 
+            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, 
+            BackgroundPosition.CENTER, 
+            new BackgroundSize(100, 100, true, true, true, false)
+        ); 
 
         menu.getChildren().addAll(startNew, startSaved, exitGame);
         BorderPane root = new BorderPane(menu);
         root.setTop(titleLabel("Pair‑A‑Normal Matchtivity", 60));
+        root.setBackground(new Background(bgImage));
         BorderPane.setAlignment(root.getTop(), Pos.CENTER);
 
         startScene = new Scene(root, 1600, 900);
@@ -99,8 +122,10 @@ public class MainApp extends Application {
         medium.setOnAction(e -> { cardCount = mediumCount; primaryStage.setScene(categoryScene); });
         hard.setOnAction(e -> { cardCount = hardCount; primaryStage.setScene(categoryScene); });
 
+        ImageView bg = getBackgroundImage(); 
+
         menu.getChildren().addAll(lbl, easy, medium, hard);
-        difficultyScene = new Scene(new StackPane(menu), 1600, 900);
+        difficultyScene = new Scene(new StackPane(bg, menu), 1600, 900);
     }
 
     // Build the Deck category selection screen.
@@ -123,8 +148,26 @@ public class MainApp extends Application {
         themed.setOnAction(e -> { deckCategory = "themed";  startGame(); });
         custom.setOnAction(e -> { deckCategory = "custom";  startGame(); });
 
+        ImageView bg = getBackgroundImage(); 
+
         menu.getChildren().addAll(lbl, reg, color, themed, custom);
-        categoryScene = new Scene(new StackPane(menu), 1600, 900);
+        categoryScene = new Scene(new StackPane(bg, menu), 1600, 900);
+    }
+
+    private void initStartSavedScene() {
+        VBox menu = new VBox(20);
+        menu.setAlignment(Pos.CENTER);
+
+        Label lbl = titleLabel("Start Saved Game", 60); 
+        Button exitGame = new Button("Exit Game");
+        styleButton(exitGame);
+
+        exitGame.setOnAction(e -> primaryStage.close());
+
+        ImageView bg = getBackgroundImage(); 
+
+        menu.getChildren().addAll(lbl, exitGame);
+        savedScene = new Scene(new StackPane(bg, menu), 1600, 900);
     }
 
     /**
@@ -156,19 +199,23 @@ public class MainApp extends Application {
         Label winLbl   = titleLabel("WOOOOOOO YOU WIN!", 60);
         Label scoreLbl = new Label("Final Score: " + finalScore);
         scoreLbl.setFont(Font.font("Rock Salt", 40));
+        scoreLbl.setStyle("-fx-text-fill: white;"); 
 
         int mins = (int)(elapsedMillis / 60000);
         int secs = (int)(elapsedMillis / 1000) % 60;
         Label timeLbl = new Label(String.format("Time: %02d:%02d", mins, secs));
         timeLbl.setFont(Font.font("Rock Salt", 40));
+        timeLbl.setStyle("-fx-text-fill: white;"); 
 
         Button home = new Button("Home");
         styleButton(home);
         home.setOnAction(e -> goToStartScene());
 
+        ImageView bg = getBackgroundImage(); 
+
         VBox vbox = new VBox(30, winLbl, scoreLbl, timeLbl, home);
         vbox.setAlignment(Pos.CENTER);
-        winScene = new Scene(new StackPane(vbox), 1600, 900);
+        winScene = new Scene(new StackPane(bg, vbox), 1600, 900);
 
         primaryStage.setScene(winScene);
     }
