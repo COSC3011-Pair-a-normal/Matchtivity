@@ -3,10 +3,9 @@
   "configurations": [
     {
       "type": "java",
-      "name": "Launch Matchtivity",
+      "name": "Run MainApp",
       "request": "launch",
       "mainClass": "com.MainApp",
-      "projectName": "Matchtivity_8dcdbed",
       "vmArgs": "--module-path \"C:/javafx-sdk-21.0.6/lib\" --add-modules javafx.controls,javafx.fxml"
     }
   ]
