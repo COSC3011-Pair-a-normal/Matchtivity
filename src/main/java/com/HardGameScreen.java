@@ -1,11 +1,13 @@
+/**
+ * Hard‑difficulty game screen.
+ * Loads hard.fxml and injects common UI.
+ */
 package com;
 
-import javax.swing.JFrame;
+import javafx.stage.Stage;
 
-public class HardGameScreen extends BaseGameScreen
-{
-    public HardGameScreen(JFrame frame)
-    {
-        super(frame, "/hard.fxml");
+public class HardGameScreen extends BaseGameScreen {
+    public HardGameScreen(MainApp app, Stage stage) {
+        super(app, stage, "/hard.fxml");
     }
 }

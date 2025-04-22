@@ -1,278 +1,249 @@
+/**
+ * Controller for the game board. 
+ * Initializes card grid with back‑of‑card images.
+ * Handles card flipping animations.
+ * Implements matching logic and win detection.
+ * Dynamically resizes grid based on difficulty.
+ */
 package com;
 
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-
-import java.io.File;
-import java.net.URL;
-import java.util.*;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.animation.RotateTransition;
-import javafx.animation.PauseTransition;
-import javafx.animation.ParallelTransition;
 import javafx.animation.Interpolator;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 
-//import javax.swing.text.html.ImageView; 
+import java.io.File;
+import java.net.URL;
+import java.util.*;
 
 public class GameController implements Initializable {
+    @FXML private GridPane imagesGridPane;      // Grid containing all card ImageViews.
+    private MainApp mainApp;                    // Reference back to the JavaFX application.
+    private List<ImageView> flippedCards = new ArrayList<>(); // Currently face‑up cards.
+    private boolean processing = false;         // Prevents extra clicks during evaluation.
 
-    @FXML
-    private ImageView imageView;
-
-    @FXML
-    private GridPane imagesGridPane;
-
-    private List<ImageView> flippedCards = new ArrayList<>();
-    private boolean processingCards = false;
-
-    public static final Image backImage = new Image("/images/BackOfCard_Orange.png"); 
-    public List<Integer> cardIDtoImageID = new ArrayList<>();
+    public static final Image backImage =
+        new Image("/images/BackOfCard_Orange.png");            // Shared back‑of‑card image.
+    public List<Integer> cardMap = new ArrayList<>();          // Maps card index → image ID.
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        int cardCount = Main.getCardCount();
+        int count = MainAppHolder.getCardCount();
 
-        for (int i = 0; i < cardCount/2; i++) {
-            cardIDtoImageID.add(i);
-        }
-        for (int j = 0; j < cardCount/2; j++) {
-            cardIDtoImageID.add(j);
-        }
-        Collections.shuffle(cardIDtoImageID);
-        Deck deck = Deck.getInstance();
-        initializeImageView();
+        // Build two of each ID, then shuffle.
+        for (int i = 0; i < count/2; i++) cardMap.add(i);
+        for (int i = 0; i < count/2; i++) cardMap.add(i);
+        Collections.shuffle(cardMap);
 
-        //dynamically resize the GrodPane's images based on the number of rows and columns
-        adjustGridSize(); 
+        // Ensure the currentImages directory is populated.
+        Deck.getInstance();
+
+        initGrid();       // Populate ImageViews and back images.
+        adjustGridSize(); // Make grid adapt to chosen difficulty.
     }
 
-    // This method will initialize the image view and set the back of the card
-    private void initializeImageView() {
+    // Setter injected by FXMLLoader to give controller a link back to the MainApp.
+    public void setMainApp(MainApp mainApp) {
+        this.mainApp = mainApp;
+    }
+
+    /**
+     * Initialize each ImageView in the GridPane:
+     * set back‑of‑card image
+     * tag with userData = its index
+     * add click handler (only when face‑down, up to 2 at a time)
+     */
+    private void initGrid() {
         for (int i = 0; i < imagesGridPane.getChildren().size(); i++) {
-            ImageView imageView = (ImageView) imagesGridPane.getChildren().get(i);
-            imageView.setImage(backImage);  // Set back image for each card
-
-            imageView.setUserData(i); // Each card has an identification number (0, 1, 2, ...)
-
-            // Add mouse click event for card flipping
-            imageView.setOnMouseClicked(event -> {
-                //only allow two cards to be flipped at a time 
-                if (!processingCards && flippedCards.size() < 2) {
-                    flipCard((int) imageView.getUserData());    
+            ImageView iv = (ImageView) imagesGridPane.getChildren().get(i);
+            iv.setImage(backImage);
+            iv.setUserData(i);
+            iv.setOnMouseClicked(e -> {
+                // Only allow two face‑up cards, and only if .
+                if (!processing && flippedCards.size() < 2 && iv.getImage() == backImage) {
+                    flipCard((int) iv.getUserData());
                 }
             });
         }
     }
 
-    // Flip the card (showing the front image and then flipping back to the back)
+    /**
+     * Flip animation and state change:
+     * Prevent double‑clicking same card during flip.
+     * Swap in correct front image halfway through a Y‑axis spin.
+     * After two flips, trigger match evaluation.
+     */
     private void flipCard(int cardID) {
-    ImageView imageView = (ImageView) imagesGridPane.getChildren().get(cardID);
+        ImageView iv = (ImageView) imagesGridPane.getChildren().get(cardID);
+        boolean toFront = iv.getImage() == backImage;
 
-    // Are we flipping from back → front, or front → back?
-    boolean flippingToFront = imageView.getImage() == backImage;
-    Image newImage;
+        // Guard: ignore repeated flips before first half completes.
+        if (toFront && flippedCards.contains(iv)) return;
 
-    if (flippingToFront) {
-        // — your original directory logic —
-        String directoryPath = System.getProperty("user.dir")
-            + File.separator + "src" + File.separator + "main"
-            + File.separator + "resources" + File.separator + "images"
-            + File.separator + "currentImages";
-        File directory = new File(directoryPath);
+        Image newImage;
+        if (toFront) {
+            // Load the front image from currentImages folder.
+            File dir = new File(System.getProperty("user.dir")
+                + "/src/main/resources/images/currentImages");
+            File[] files = dir.listFiles();
+            newImage = new Image(files[cardMap.get(cardID)].toURI().toString());
+            flippedCards.add(iv);
+        } else {
+            // Flip back to the backside.
+            newImage = backImage;
+            flippedCards.remove(iv);
+        }
 
-        // Grab the file and build the Image
-        File[] files = directory.listFiles();
-        File frontImageFile = files[cardIDtoImageID.get(cardID)];
-        newImage = new Image(frontImageFile.toURI().toString());
+        // First half spin: 0 → 90°, then swap image.
+        RotateTransition spinOut = new RotateTransition(Duration.millis(250), iv);
+        spinOut.setAxis(Rotate.Y_AXIS);
+        spinOut.setFromAngle(0);
+        spinOut.setToAngle(90);
+        spinOut.setInterpolator(Interpolator.LINEAR);
+        spinOut.setOnFinished(evt -> {
+            iv.setImage(newImage);
+            iv.setRotate(270);
+            // Second half spin: 270° → 360°.
+            RotateTransition spinIn = new RotateTransition(Duration.millis(250), iv);
+            spinIn.setAxis(Rotate.Y_AXIS);
+            spinIn.setFromAngle(270);
+            spinIn.setToAngle(360);
+            spinIn.setInterpolator(Interpolator.LINEAR);
+            spinIn.play();
+        });
+        spinOut.play();
 
-        flippedCards.add(imageView);
-    } else {
-        newImage = backImage;
-        flippedCards.remove(imageView);
-    }
-
-    // — flip animation —
-    RotateTransition spinOut = new RotateTransition(Duration.millis(250), imageView);
-    spinOut.setAxis(Rotate.Y_AXIS);
-    spinOut.setFromAngle(0);
-    spinOut.setToAngle(90);
-    spinOut.setInterpolator(Interpolator.LINEAR);
-
-    spinOut.setOnFinished(evt -> {
-    // halfway through (90°), swap in the new image
-    imageView.setImage(newImage);
-    // set us up at 270° for the second half
-    imageView.setRotate(270);
-    // spin from 270° → 360° (i.e. back to 0°)
-    RotateTransition spinIn = new RotateTransition(Duration.millis(250), imageView);
-    spinIn.setAxis(Rotate.Y_AXIS);
-    spinIn.setFromAngle(270);
-    spinIn.setToAngle(360);
-    spinIn.setInterpolator(Interpolator.LINEAR);
-    spinIn.play();
-    });
-
-    // kick off the first half
-    spinOut.play();
-
-    // once two cards are face‑up, start your matching logic
-    if (flippedCards.size() == 2) {
-        processingCards = true;
-        processFlippedCards();
-    }
-    }
-
-    
-
-    private void processFlippedCards() {
-        ImageView firstCard = flippedCards.get(0); 
-        ImageView secondCard = flippedCards.get(1);
-
-        // matching logic using the cardIDtoImageID mapping
-        boolean cardsMatch = cardIDtoImageID.get((int) firstCard.getUserData()) == cardIDtoImageID.get((int) secondCard.getUserData());
-
-        if (cardsMatch) {
-            Main.scoreboard.increaseScore(); 
-            PauseTransition pause = new PauseTransition(Duration.seconds(0.8));
-
-           pause.setOnFinished(event -> {
-    firstCard.setVisible(false); 
-    secondCard.setVisible(false); 
-    flippedCards.clear();
-
-    // Check if all cards are matched
-    int totalMatched = 0;
-    for (javafx.scene.Node node : imagesGridPane.getChildren()) {
-        if (node instanceof ImageView && !node.isVisible()) {
-            totalMatched++;
+        // After two are flipped, evaluate match.
+        if (flippedCards.size() == 2) {
+            processing = true;
+            processFlippedCards();
         }
     }
 
-    if (totalMatched == Main.getCardCount()) {
-        Platform.runLater(() -> {
-            main.returnToSwingPanel(); // bring the swing panel back
-            main.showWinScreen();      // then it shows the win screen
-        });
-        
+    /**
+     * Once two cards are face‑up:
+     * If they match, remove them and increase score.
+     * If not, flip both back after a short pause.
+     * When all are matched, trigger win screen.
+     */
+    private void processFlippedCards() {
+        ImageView first  = flippedCards.get(0);
+        ImageView second = flippedCards.get(1);
+        boolean match = cardMap.get((int) first.getUserData())
+                      == cardMap.get((int) second.getUserData());
 
-    }
-});
-
-            pause.play(); 
-
-            processingCards = false;
-        } else {
-            // let player see both cards for 0.8s
-            PauseTransition wait = new PauseTransition(Duration.seconds(0.8));
-            wait.setOnFinished(evt -> {
-                for (ImageView card : flippedCards) {
-                    // 1) spin the front face away: 0° → 90°
-                    RotateTransition spinOut = new RotateTransition(Duration.millis(250), card);
-                    spinOut.setAxis(Rotate.Y_AXIS);
-                    spinOut.setFromAngle(0);
-                    spinOut.setToAngle(90);
-                    spinOut.setInterpolator(Interpolator.LINEAR);
-
-                    spinOut.setOnFinished(e2 -> {
-                        // halfway: swap to the backside
-                        card.setImage(backImage);
-                        // set us up at 270° (i.e. -90°) so the second half spins forward
-                        card.setRotate(270);
-
-                        // 2) spin the back‑face into view: 270° → 360°
-                        RotateTransition spinIn = new RotateTransition(Duration.millis(250), card);
-                        spinIn.setAxis(Rotate.Y_AXIS);
-                        spinIn.setFromAngle(270);
-                        spinIn.setToAngle(360);
-                        spinIn.setInterpolator(Interpolator.LINEAR);
-                        spinIn.play();
-                    });
-
-                    spinOut.play();
-                }
-
-                // clear state once all flip‑backs are running
+        if (match) {
+            // Matched pair: hide them after 0.8s and update score.
+            ScoreBoard.getScoreBoard(null).increaseScore();
+            PauseTransition pause = new PauseTransition(Duration.seconds(0.8));
+            pause.setOnFinished(e -> {
+                first.setVisible(false);
+                second.setVisible(false);
                 flippedCards.clear();
-                processingCards = false;
+
+                // Check for win
+                int done = 0;
+                for (javafx.scene.Node n : imagesGridPane.getChildren()) {
+                    if (n instanceof ImageView && !n.isVisible()) done++;
+                }
+                if (done == MainAppHolder.getCardCount()) {
+                    Platform.runLater(() ->
+                        mainApp.showWinScene(
+                            ScoreBoard.getScoreBoard(null).getScore(),
+                            mainApp.getElapsedTime()
+                        )
+                    );
+                }
+                processing = false;
+            });
+            pause.play();
+        } else {
+            // Not a match: flip both back after 0.8s.
+            PauseTransition wait = new PauseTransition(Duration.seconds(0.8));
+            wait.setOnFinished(e -> {
+                for (ImageView iv : new ArrayList<>(flippedCards)) {
+                    RotateTransition out = new RotateTransition(Duration.millis(250), iv);
+                    out.setAxis(Rotate.Y_AXIS);
+                    out.setFromAngle(0);
+                    out.setToAngle(90);
+                    out.setInterpolator(Interpolator.LINEAR);
+                    out.setOnFinished(e2 -> {
+                        iv.setImage(backImage);
+                        iv.setRotate(270);
+                        RotateTransition in = new RotateTransition(Duration.millis(250), iv);
+                        in.setAxis(Rotate.Y_AXIS);
+                        in.setFromAngle(270);
+                        in.setToAngle(360);
+                        in.setInterpolator(Interpolator.LINEAR);
+                        in.play();
+                    });
+                    out.play();
+                }
+                flippedCards.clear();
+                processing = false;
             });
             wait.play();
-        }        
+        }
     }
-    
+
+    /**
+     * Dynamically adjust the grid’s rows, columns, gaps, and each ImageView’s fit
+     * properties to fill the scene evenly based on the card count.
+     */
     private void adjustGridSize() {
-        int rows = 0;
-        int columns = 0;
-    
-        // Determine grid size based on card count
-        if (Main.getCardCount() == 10) {
-            rows = 2;
-            columns = 5;
-        } else if (Main.getCardCount() == 18) {
-            rows = 3;
-            columns = 6;
-        } else if (Main.getCardCount() == 30) {
-            rows = 5;
-            columns = 6;
-        }
-    
-        // Clear any existing constraints to avoid duplication
-        imagesGridPane.getRowConstraints().clear();
-        imagesGridPane.getColumnConstraints().clear();
-    
-        // Set horizontal and vertical gaps between the cards
-        imagesGridPane.setHgap(10); // Horizontal gap between cards
-        imagesGridPane.setVgap(10); // Vertical gap between cards
-    
-        // Add RowConstraints and ColumnConstraints to evenly distribute space
-        for (int i = 0; i < columns; i++) {
-            javafx.scene.layout.ColumnConstraints column = new javafx.scene.layout.ColumnConstraints();
-            column.setPercentWidth(100.0 / columns);  // Evenly distribute width
-            imagesGridPane.getColumnConstraints().add(column);
-        }
-    
-        for (int i = 0; i < rows; i++) {
-            javafx.scene.layout.RowConstraints row = new javafx.scene.layout.RowConstraints();
-            row.setPercentHeight(100.0 / rows);  // Evenly distribute height
-            imagesGridPane.getRowConstraints().add(row);
+        int rows, cols;
+        switch (MainAppHolder.getCardCount()) {
+            case 10: rows = 2; cols = 5; break;
+            case 18: rows = 3; cols = 6; break;
+            case 30: rows = 5; cols = 6; break;
+            default: rows = 2; cols = 5; break;
         }
 
-        
-    
-        // Adjust the card sizes and spacing
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < columns; col++) {
-                ImageView imageView = (ImageView) imagesGridPane.getChildren().get(row * columns + col);
-    
-                // Ensure cards fit the grid cells and maintain aspect ratio
-                imageView.setPreserveRatio(true);
-    
-                // Increase card size proportionally
-                imageView.fitWidthProperty().bind(imagesGridPane.widthProperty().multiply(0.85).divide(columns).subtract(imagesGridPane.getHgap())); // Adjust width based on column count, subtracting horizontal gap
-                imageView.fitHeightProperty().bind(imagesGridPane.heightProperty().multiply(0.85).divide(rows).subtract(imagesGridPane.getVgap())); // Adjust height based on row count, subtracting vertical gap
-    
-                // Remove any margin around cards to avoid extra space
-                javafx.scene.layout.GridPane.setMargin(imageView, new javafx.geometry.Insets(0)); // No margin
+        imagesGridPane.getRowConstraints().clear();
+        imagesGridPane.getColumnConstraints().clear();
+        imagesGridPane.setHgap(10);
+        imagesGridPane.setVgap(10);
+
+        // Evenly distribute columns.
+        for (int i = 0; i < cols; i++) {
+            javafx.scene.layout.ColumnConstraints cc = new javafx.scene.layout.ColumnConstraints();
+            cc.setPercentWidth(100.0 / cols);
+            imagesGridPane.getColumnConstraints().add(cc);
+        }
+        // Evenly distribute rows.
+        for (int i = 0; i < rows; i++) {
+            javafx.scene.layout.RowConstraints rc = new javafx.scene.layout.RowConstraints();
+            rc.setPercentHeight(100.0 / rows);
+            imagesGridPane.getRowConstraints().add(rc);
+        }
+
+        // Bind each ImageView’s fit size.
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                ImageView iv = (ImageView) imagesGridPane.getChildren().get(r * cols + c);
+                iv.setPreserveRatio(true);
+                iv.fitWidthProperty().bind(
+                    imagesGridPane.widthProperty()
+                        .multiply(0.85).divide(cols)
+                        .subtract(imagesGridPane.getHgap())
+                );
+                iv.fitHeightProperty().bind(
+                    imagesGridPane.heightProperty()
+                        .multiply(0.85).divide(rows)
+                        .subtract(imagesGridPane.getVgap())
+                );
+                javafx.scene.layout.GridPane.setMargin(iv, new javafx.geometry.Insets(0));
             }
         }
 
-        
-    
-        // Center the grid within the available space
-        imagesGridPane.setAlignment(Pos.CENTER); // Center the entire grid in the available space
-    }             
-// Reference to Main
-private Main main;
-
-public void setMain(Main main) {
-    this.main = main;
+        imagesGridPane.setAlignment(Pos.CENTER);
+    }
 }
-
-}
-

@@ -1,133 +1,108 @@
+/**
+ * Abstract base for Easy/edium/Hard screens.
+ * Loads FXML.
+ * Wires controller to MainApp.
+ * Injects shared UI (timer, menu + home, scoreboard).
+ */
 package com;
 
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import javafx.embed.swing.JFXPanel;
-import javax.swing.JFrame;
+import javafx.stage.Stage;
+import javafx.scene.text.Font;
+
 import java.io.IOException;
-import java.net.URL;
 
-public abstract class BaseGameScreen
-{
-    protected JFrame frame;
-    protected JFXPanel jfxPanel;
-    protected String fxmlPath;
+public abstract class BaseGameScreen {
+    protected Stage stage;
+    protected MainApp mainApp;
+    private String fxmlPath;
 
-    private Main main;
-
-public void setMain(Main main) {
-    this.main = main;
-}
-
-
-    public BaseGameScreen(JFrame frame, String fxmlPath)
-    {
-        this.frame = frame;
-        this.fxmlPath = fxmlPath;
-        initializeScreen();
+    public BaseGameScreen(MainApp app, Stage stage, String fxml) {
+        this.mainApp  = app;
+        this.stage    = stage;
+        this.fxmlPath = fxml;
+        load();
     }
 
-    protected void initializeScreen()
-    {
-        Platform.runLater(() ->
-        {
-            try
-            {
-                // Load the FXML file
-                URL url = getClass().getResource(fxmlPath);
-                if (url == null)
-                {
-                    throw new IllegalStateException("FXML not found: " + fxmlPath);
-                }
-                FXMLLoader loader = new FXMLLoader(url);
-                Parent root = loader.load();
-                Object controller = loader.getController();
-              if (controller instanceof GameController) {
-             ((GameController) controller).setMain(Main.getInstance());
-}
+    // Load the FXML, wire the controller, add common UI, show.
+    private void load() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
 
-                
+            // Give the controller a reference back to MainApp.
+            Object ctrl = loader.getController();
+            if (ctrl instanceof GameController) {
+                ((GameController)ctrl).setMainApp(mainApp);
+            }
 
-                // If the loaded root is a Pane, add common UI elements.
-                if (root instanceof Pane)
-                {
-                    Pane pane = (Pane) root;
-                    addCommonElements(pane);
-                }
+            // Inject timer, menu (with Home), and scoreboard.
+            addCommonElements((Pane)root);
 
-                // Create a scene from the loaded FXML
-                Scene scene = new Scene(root, 1600, 900);
-                jfxPanel = new JFXPanel();
-                jfxPanel.setScene(scene);
+            Scene scene = new Scene(root, 1600, 900);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-                // Replace the content of the frame with the new JavaFX content
-                frame.getContentPane().removeAll();
-                frame.getContentPane().add(jfxPanel);
-                frame.revalidate();
-                frame.repaint();
-            } catch (IOException ex)
-            {
+    /**
+     * Inject shared UI into every game screen:
+     * 1) Timer at top‑right
+     * 2) Menu button at top‑left (Save, Restart, Home, Exit)
+     * 3) Singleton scoreboard, safely re‑parented
+     */
+    protected void addCommonElements(Pane pane) {
+        // 1) Game timer
+        GameTimer timer = new GameTimer();
+        mainApp.setGameTimer(timer);
+        timer.setLayoutX(1300);
+        timer.setLayoutY(5);
+        pane.getChildren().add(timer);
+
+        // 2) Load fonts
+        Font rockSalt      = Font.loadFont(getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 30.0);
+        Font rockSaltSmall = Font.loadFont(getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
+
+        // 3) Menu button (Save, Restart, Home, Exit)
+        GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
+        menuButton.setLayoutX(50);
+        menuButton.setLayoutY(50);
+
+        menuButton.setOnSave(e -> System.out.println("Game saved!"));
+        menuButton.setOnRestart(e -> {
+            System.out.println("Restarting the game!");
+            // cClear the score and re‑instantiate this screen.
+            ScoreBoard.getScoreBoard(rockSaltSmall).clearScore();
+            try {
+                BaseGameScreen newScreen = this.getClass()
+                                             .getDeclaredConstructor(MainApp.class, Stage.class)
+                                             .newInstance(mainApp, stage);
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });
-    }
+        // Home should call the same method as your Win‑screen button.
+        menuButton.setOnHome(e -> mainApp.goToStartScene());
+        menuButton.setOnExit(e -> System.exit(0));
 
-    // Add the common UI elements needed on every game screen.
-    protected void addCommonElements(Pane pane)
-    {
-    // Add GameTimer
-    GameTimer gameTimer = new GameTimer();
-    Main.getInstance().setGameTimer(gameTimer);
+        pane.getChildren().add(menuButton);
 
-    gameTimer.setLayoutX(1300);
-    gameTimer.setLayoutY(5);
-    pane.getChildren().add(gameTimer);
-
-    // Load fonts
-    javafx.scene.text.Font rockSalt = javafx.scene.text.Font.loadFont(
-            getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 30.0);
-    javafx.scene.text.Font rockSaltSmall = javafx.scene.text.Font.loadFont(
-            getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
-
-    // Add custom GameMenuButton and configure its actions.
-    GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
-    menuButton.setLayoutX(50);
-    menuButton.setLayoutY(50);
-    
-    // Save action (if needed)
-    menuButton.setOnSave(e -> System.out.println("Game saved!"));
-    
-    // Restart action using reflection to create a new instance of the same game screen.
-    menuButton.setOnRestart(event ->
-    {
-        System.out.println("Restarting the game!");
-        // Clear the score (or any other game state you may need to reset)
-        Main.scoreboard.clearScore();
-        // Use reflection to instantiate a new screen of the same subclass as the current instance.
-        Platform.runLater(() ->
-        {
-            try
-            {
-                // Assumes that each subclass has a constructor that accepts a JFrame.
-                BaseGameScreen newScreen = getClass().getDeclaredConstructor(JFrame.class).newInstance(frame);
-            } catch (Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        });
-    });
-    
-    // Exit action.
-    menuButton.setOnExit(e -> System.exit(0));
-    pane.getChildren().add(menuButton);
-
-    // Assign the scoreboard to Main, positioning it as needed.
-    Main.scoreboard = ScoreBoard.getScoreBoard(rockSaltSmall);
-    Main.scoreboard.setLayoutX(50);
-    Main.scoreboard.setLayoutY(400);
-    pane.getChildren().add(Main.scoreboard);
+        // 4) Safe re‑parent the singleton scoreboard.
+        ScoreBoard board = ScoreBoard.getScoreBoard(rockSaltSmall);
+        Parent oldParent = board.getParent();
+        // Only remove if it's already in a Pane.
+        if (oldParent instanceof Pane) {
+            ((Pane) oldParent).getChildren().remove(board);
+        }
+        // Now add it to THIS pane.
+        mainApp.setScoreboard(board);
+        board.setLayoutX(50);
+        board.setLayoutY(400);
+        pane.getChildren().add(board);
     }
 }

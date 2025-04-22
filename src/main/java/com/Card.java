@@ -1,3 +1,9 @@
+/**
+ * Represents a single card:
+ * holds its image,
+ * knows face‑up/face‑down status,
+ * and whether it’s been matched.
+ */
 package com;
 
 import java.awt.Image;
@@ -6,51 +12,26 @@ import java.io.File;
 import java.io.IOException;
 
 public class Card {
-    private boolean faceUp; // Whether the card is face-up (revealed) or face-down (hidden)
+    private boolean faceUp;
     private boolean matched;
-    private Image image;   // The image of the card
+    private Image image;
 
-    // Constructor to create a card with a specific suit, value, and image
     public Card(String suit, String value, String imagePath) throws IOException {
-        this.faceUp = false; // Cards start face-down by default
-        this.image = loadImage(imagePath); // Load the image from a file path
-        this.matched = false;
+        faceUp = false;
+        matched = false;
+        image = ImageIO.read(new File(imagePath));
     }
 
-    // Method to load an image from a file path
-    private Image loadImage(String imagePath) throws IOException {
-        return ImageIO.read(new File(imagePath)); // Load image from the file system
-    }
+    public boolean isFaceUp()   { return faceUp; }
+    public boolean isMatched()  { return matched; }
+    public Image getImage()     { return image; }
 
-    // Getter for the faceUp status
-    public boolean isFaceUp() {
-        return faceUp;
-    }
+    public void setMatched(boolean m) { matched = m; }
+    public void flipFaceUp()          { faceUp = true;  }
+    public void flipFaceDown()        { faceUp = false; }
 
-    // Getter for the image
-    public Image getImage() {
-        return image;
-    }
-
-    public boolean isMatched() {
-        return matched;
-    }
-
-    public void setMatched(boolean matched) {
-        this.matched = matched;
-    }
-
-    public boolean isSameCard(Card othercard) {
-        return this.image.equals(othercard.getImage());
-    }
-
-    // Method to turn the card face up
-    public void flipFaceUp() {
-        this.faceUp = true;
-    }
-
-    // Method to turn the card face down
-    public void flipFaceDown() {
-        this.faceUp = false;
+    // Compare by image equality.
+    public boolean isSameCard(Card other) {
+        return this.image.equals(other.image);
     }
 }

@@ -1,11 +1,13 @@
+/**
+ * Easy‑difficulty game screen.
+ * Loads easy.fxml and injects common UI.
+ */
 package com;
 
-import javax.swing.JFrame;
+import javafx.stage.Stage;
 
-public class EasyGameScreen extends BaseGameScreen
-{
-    public EasyGameScreen(JFrame frame)
-    {
-        super(frame, "/easy.fxml");
+public class EasyGameScreen extends BaseGameScreen {
+    public EasyGameScreen(MainApp app, Stage stage) {
+        super(app, stage, "/easy.fxml");
     }
 }
