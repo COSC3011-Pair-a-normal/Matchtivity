@@ -92,13 +92,13 @@ public class MainApp extends Application {
         startSaved.setOnAction(e -> primaryStage.setScene(savedScene));
         exitGame.setOnAction(e -> primaryStage.close());
 
-        Image backgroundImage = new Image("/images/purpleBackground.jpg"); 
+        Image backgroundImage = new Image(getClass().getResource("/images/purpleBackground.jpg").toExternalForm());
         BackgroundImage bgImage = new BackgroundImage(
-            backgroundImage, 
-            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, 
-            BackgroundPosition.CENTER, 
+            backgroundImage,
+            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+            BackgroundPosition.CENTER,
             new BackgroundSize(100, 100, true, true, true, false)
-        ); 
+        );
 
         menu.getChildren().addAll(startNew, startSaved, exitGame);
         BorderPane root = new BorderPane(menu);
