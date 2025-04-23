@@ -60,17 +60,21 @@ public class MainApp extends Application {
     private void styleButton(Button btn) {
         btn.setFont(Font.font("Rock Salt", 30));
         btn.setPrefSize(400, 100);
+        btn.setStyle("-fx-background-radius: 50; -fx-border-radius: 50;"); 
     }
 
     // Helper to return uniform background image. 
     private ImageView getBackgroundImage() {
-        ImageView background = new ImageView(new Image("/images/purpleBackground.jpg")); 
-        background.setFitWidth(1600); 
-        background.setFitHeight(900); 
-        background.setPreserveRatio(false); 
-
-        return background; 
+        ImageView background = new ImageView(
+            new Image(getClass().getResource("/images/purpleBackground.jpg").toExternalForm())
+        );
+        background.setFitWidth(1600);
+        background.setFitHeight(900);
+        background.setPreserveRatio(false);
+    
+        return background;
     }
+    
 
     // Build the very first Start screen.
     private void initStartScene() {
