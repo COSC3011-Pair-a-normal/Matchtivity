@@ -10,6 +10,10 @@ import java.io.*;
 import java.net.*;
 import java.nio.file.*;
 import javax.net.ssl.HttpsURLConnection;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,8 +83,8 @@ public class Deck {
      * into CURRENT_DIR.
      */
     private void createDeck(String category, int cardCount) {
-        if ("custom".equals(category)) {
-            createCustomDeck();
+        if (!Arrays.asList("regular", "color", "themed").contains(category)) {
+            createCustomDeck(category, cardCount);
             return;
         }
         File srcDir = new File(IMAGES_DIR + category);
@@ -101,8 +105,102 @@ public class Deck {
         });
     }
 
-    // Placeholder: fetch images via Google API for custom decks.
-    private void createCustomDeck() {
-        // TODO: implement Google Custom Search API download logic
+    private static void downloadImage(String imageUrl, String savePath) throws IOException {
+        URL url = new URL(imageUrl);
+        URLConnection connection = url.openConnection();
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+        connection.connect();
+    
+        String contentType = connection.getContentType();
+        if (contentType != null && contentType.startsWith("image")) {
+            try (InputStream in = connection.getInputStream()) {
+                Files.copy(in, Paths.get(savePath), StandardCopyOption.REPLACE_EXISTING);
+            }
+        } else {
+            System.out.println("Skipped non-image content: " + imageUrl + " (" + contentType + ")");
+            throw new IOException("Not an image: " + contentType);
+        }
+    }
+
+    private void createCustomDeck(String category, int cardCount) {
+        final String API_KEY = "AIzaSyDAKvfkw-UHaaGaA9EX8gyzwW3MFSSsFKE";
+        final String CX = "d647c54e6eecb440b"; // Replace with your Custom Search Engine ID
+        final String QUERY = category;
+        final int totalNeeded = 2 * cardCount; // Total images needed
+        final int batchSize = 10;
+        Set<String> uniqueUrls = new LinkedHashSet<>();
+
+        try {
+            int startIndex = 1;
+
+            while (uniqueUrls.size() < totalNeeded) {
+                String urlStr = "https://www.googleapis.com/customsearch/v1?q=" + URLEncoder.encode(QUERY, "UTF-8")
+                        + "&searchType=image"
+                        + "&num=" + Math.min(batchSize, totalNeeded - uniqueUrls.size())
+                        + "&start=" + startIndex
+                        + "&key=" + API_KEY
+                        + "&cx=" + CX;
+
+                URL url = new URL(urlStr);
+                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder raw = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) raw.append(line);
+                reader.close();
+
+                JSONObject responseJson = new JSONObject(raw.toString());
+                JSONArray items = responseJson.getJSONArray("items");
+
+                for (int i = 0; i < items.length(); i++) {
+                    String imageUrl = items.getJSONObject(i).getString("link");
+                    uniqueUrls.add(imageUrl);
+                    if (uniqueUrls.size() >= totalNeeded) break;
+                }
+
+                startIndex += batchSize;
+
+                // If fewer items returned than requested, break (no more results)
+                if (items.length() < batchSize) break;
+            }
+
+            // Make sure directory exists
+            Files.createDirectories(Paths.get(CURRENT_DIR));
+
+            // Shuffle and download
+            List<String> imageUrls = new ArrayList<>(uniqueUrls);
+            Collections.shuffle(imageUrls);
+
+            for (int i = 0; i < imageUrls.size(); i++) {
+                String imageUrl = imageUrls.get(i);
+                String extension = getFileExtension(imageUrl);
+                String filename = "image_" + i + extension;
+                try {
+                    downloadImage(imageUrl, CURRENT_DIR + File.separator + filename);
+                    System.out.println("Downloaded: " + filename);
+                } catch (IOException e) {
+                    System.out.println("Failed to download: " + imageUrl);
+                }
+            }
+
+            // Cleanup on exit
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                deleteDirectory(new File(CURRENT_DIR));
+                System.out.println("Directory deleted successfully at: " + CURRENT_DIR);
+            }));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private static String getFileExtension(String url) {
+        String lowerUrl = url.toLowerCase();
+        if (lowerUrl.endsWith(".png")) return ".png";
+        if (lowerUrl.endsWith(".jpeg")) return ".jpeg";
+        if (lowerUrl.endsWith(".jpg")) return ".jpg";
+        return ".jpg"; // default fallback
     }
 }
+

@@ -24,52 +24,52 @@
          <children>
             <ImageView fx:id="imageView" fitHeight="250.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <image>
-                  <Image url="@images/classic/2_of_diamonds.png" />
+                  <Image url="@images/regular/2_of_diamonds.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="250.0" fitWidth="200.0" layoutX="64.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <image>
-                  <Image url="@images/classic/2_of_diamonds.png" />
+                  <Image url="@images/regular/2_of_diamonds.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="250.0" fitWidth="200.0" layoutX="10.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <image>
-                  <Image url="@images/classic/2_of_diamonds.png" />
+                  <Image url="@images/regular/2_of_diamonds.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="250.0" fitWidth="200.0" layoutX="10.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <image>
-                  <Image url="@images/classic/2_of_diamonds.png" />
+                  <Image url="@images/regular/2_of_diamonds.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="250.0" fitWidth="200.0" layoutX="10.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <image>
-                  <Image url="@images/classic/2_of_diamonds.png" />
+                  <Image url="@images/regular/2_of_diamonds.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="250.0" fitWidth="200.0" layoutX="64.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <image>
-                  <Image url="@images/classic/2_of_diamonds.png" />
+                  <Image url="@images/regular/2_of_diamonds.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="250.0" fitWidth="200.0" layoutX="10.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <image>
-                  <Image url="@images/classic/2_of_diamonds.png" />
+                  <Image url="@images/regular/2_of_diamonds.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="250.0" fitWidth="200.0" layoutX="10.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <image>
-                  <Image url="@images/classic/2_of_diamonds.png" />
+                  <Image url="@images/regular/2_of_diamonds.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="250.0" fitWidth="200.0" layoutX="10.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <image>
-                  <Image url="@images/classic/2_of_diamonds.png" />
+                  <Image url="@images/regular/2_of_diamonds.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="250.0" fitWidth="200.0" layoutX="10.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <image>
-                  <Image url="@images/classic/2_of_diamonds.png" />
+                  <Image url="@images/regular/2_of_diamonds.png" />
                </image>
             </ImageView>
          </children>
