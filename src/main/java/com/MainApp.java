@@ -21,6 +21,7 @@ import java.util.List;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
+import java.util.Map;
 
 public class MainApp extends Application {
     private Stage primaryStage;
@@ -49,7 +50,7 @@ public class MainApp extends Application {
     // Preload the custom font for use in every screen.
     private void loadFont() {
         Font.loadFont(getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf")
-                     .toExternalForm(), 12);
+                    .toExternalForm(), 12);
     }
 
     // Helper to create a title Label with Rock Salt font.
@@ -242,12 +243,12 @@ public class MainApp extends Application {
         private static final long serialVersionUID = 1L;
         private int score;
         private long elapsedTime;
-        private List<Card> matchedCards; 
+        private Map<Integer, Integer> matchedCardsMap; // Card ID → Position
 
-        public GameState(long elapsedTime, int score, List<Card> matchedCards) {
+        public GameState(long elapsedTime, int score, Map<Integer, Integer> matchedCardsMap) {
             this.score = score;
             this.elapsedTime = elapsedTime;
-            this.matchedCards = matchedCards;
+            this.matchedCardsMap = matchedCardsMap;
         }
 
         public int getScore() {
@@ -257,8 +258,9 @@ public class MainApp extends Application {
         public long getElapsedTime() {
             return elapsedTime;
         }
-        public List<Card> getMatchedCards() {
-            return matchedCards; 
+
+        public Map<Integer, Integer> getMatchedCardsMap() {
+            return matchedCardsMap;
         }
     }
 
@@ -269,15 +271,15 @@ public class MainApp extends Application {
         }
         long elapsedTime = gameTimer.getElapsedTime();
         int score = scoreboard.getScore();
-        List<Card> matchedCards = Deck.getInstance().getMatchedCards(); // Use Deck.getInstance() b/c singleton
+        Map<Integer, Integer> matchedCardsMap = Deck.getInstance().getMatchedCardsMap();
 
-        GameState gameState = new GameState(elapsedTime, score, matchedCards);
+        GameState gameState = new GameState(elapsedTime, score, matchedCardsMap);
 
         String filePath = "savegame.dat";
         System.out.println("Saving game to: " + filePath);
 
         try (FileOutputStream fileOut = new FileOutputStream(filePath);
-             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+            ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
             out.writeObject(gameState);
             System.out.println("Game saved successfully.");
         } catch (IOException e) {

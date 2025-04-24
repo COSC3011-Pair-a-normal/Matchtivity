@@ -15,19 +15,16 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class Deck {
     private static final String IMAGES_DIR = System.getProperty("user.dir")
         + "/src/main/resources/images/";
     private static final String CURRENT_DIR = IMAGES_DIR + "currentImages";
     private static Deck instance;
-
-    private List<Card> matchedCards; // List to store matched cards.
+    private Map<Integer, Integer> matchedCardsMap = new HashMap<>(); // Card ID → Position
 
     private Deck(String category, int cardCount) {
-        matchedCards = new ArrayList<>(); // Initialize the matched cards list.
         createDirectory();               // Wipe old images / ensure folder.
         createDeck(category, cardCount); // Populate folder.
     }
@@ -48,11 +45,11 @@ public class Deck {
         instance = null;
     }
 
-    public void addMatchedCard(Card card) { 
-        matchedCards.add(card); // Add a card to the matched cards list
+    public void addMatchedCard(int cardId, int position) {
+        matchedCardsMap.put(cardId, position);
     }
-    public List<Card> getMatchedCards() {
-        return new ArrayList<>(matchedCards); // Returns a copy
+    public Map<Integer, Integer> getMatchedCardsMap() {
+        return new HashMap<>(matchedCardsMap); // Return a copy
     }
 
     // Wipe or create the currentImages folder and register shutdown cleanup.
@@ -98,7 +95,7 @@ public class Deck {
         list.subList(0, cardCount/2).forEach(f -> {
             try {
                 Files.copy(f.toPath(), Paths.get(CURRENT_DIR, f.getName()),
-                           StandardCopyOption.REPLACE_EXISTING);
+                        StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 e.printStackTrace();
             }
