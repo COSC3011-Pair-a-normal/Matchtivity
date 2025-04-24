@@ -14,6 +14,11 @@ import javafx.scene.layout.*;
 import javafx.geometry.Pos;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import java.io.Serializable;
+import java.util.List;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
 
 public class MainApp extends Application {
     private Stage primaryStage;
@@ -182,6 +187,70 @@ public class MainApp extends Application {
         return (gameTimer != null) ? gameTimer.getElapsedTime() : 0;
     }
 
+    public class GameState implements Serializable {
+        private static final long serialVersionUID = 1L;
+        private int score;
+        private long elapsedTime;
+        private List<Card> matchedCards; 
+
+        public GameState(long elapsedTime, int score, List<Card> matchedCards) {
+            this.score = score;
+            this.elapsedTime = elapsedTime;
+            this.matchedCards = matchedCards;
+        }
+
+        public int getScore() {
+            return score;
+        }
+
+        public long getElapsedTime() {
+            return elapsedTime;
+        }
+        public List<Card> getMatchedCards() {
+            return matchedCards; 
+        }
+    }
+
+    public void saveGame() {
+        if (gameTimer == null || scoreboard == null) {
+            System.out.println("Game state is incomplete. Cannot save.");
+            return;
+        }
+        long elapsedTime = gameTimer.getElapsedTime();
+        int score = scoreboard.getScore();
+        List<Card> matchedCards = Deck.getInstance().getMatchedCards(); // Use Deck.getInstance() b/c singleton
+
+        GameState gameState = new GameState(elapsedTime, score, matchedCards);
+
+        String filePath = "savegame.dat";
+        System.out.println("Saving game to: " + filePath);
+
+        try (FileOutputStream fileOut = new FileOutputStream(filePath);
+             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+            out.writeObject(gameState);
+            System.out.println("Game saved successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to save the game: " + e.getMessage());
+        }
+    }
+    
+    private void initGameScene() {
+        VBox gameLayout = new VBox(20);
+        gameLayout.setAlignment(Pos.CENTER);
+
+        Font rockSaltFont = Font.font("Rock Salt", 30); 
+        GameMenuButton menuButton = new GameMenuButton("Menu", rockSaltFont, this);
+        
+        menuButton.setOnSave(e -> saveGame());
+        // Add the menu button to the layout.
+        gameLayout.getChildren().add(menuButton);
+
+        // Example game scene setup.
+        Scene gameScene = new Scene(gameLayout, 1600, 900);
+        primaryStage.setScene(gameScene);
+    }
+    
     public static void main(String[] args) {
         launch(args);
     }

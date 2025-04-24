@@ -10,8 +10,9 @@ import java.awt.Image;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
-
-public class Card {
+import java.io.Serializable;
+public class Card implements Serializable {
+    private static final long serialVersionUID = 1L;
     private boolean faceUp;
     private boolean matched;
     private Image image;

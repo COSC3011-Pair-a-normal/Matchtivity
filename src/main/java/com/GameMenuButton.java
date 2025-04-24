@@ -31,9 +31,11 @@ public class GameMenuButton extends ToggleButton {
     private MenuItem exitButton;
     private final int buttonPadding = 22;
     private ContextMenu contextMenu;
+    private MainApp mainApp; // Reference to MainApp instance.
 
-    public GameMenuButton(String text, Font font) {
+    public GameMenuButton(String text, Font font, MainApp mainApp) {
         super(text);
+        this.mainApp = mainApp;
         setFont(font);
         setPrefWidth(200);
 
@@ -84,8 +86,8 @@ public class GameMenuButton extends ToggleButton {
     }
 
     // Hook up handlers for each menu item.
-    public void setOnSave(EventHandler<ActionEvent> h)    { saveButton.setOnAction(h); }
-    public void setOnRestart(EventHandler<ActionEvent> h) { restartButton.setOnAction(h); }
-    public void setOnHome(EventHandler<ActionEvent> h)    { homeButton.setOnAction(h); }
-    public void setOnExit(EventHandler<ActionEvent> h)    { exitButton.setOnAction(h); }
+    public void setOnSave(EventHandler<ActionEvent> h) {saveButton.setOnAction(e -> mainApp.saveGame());}
+    public void setOnRestart(EventHandler<ActionEvent> h) { restartButton.setOnAction(h);}
+    public void setOnHome(EventHandler<ActionEvent> h) {homeButton.setOnAction(h);}
+    public void setOnExit(EventHandler<ActionEvent> h) {exitButton.setOnAction(h);}
 }

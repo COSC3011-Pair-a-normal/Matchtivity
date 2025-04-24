@@ -11,6 +11,8 @@ import java.net.*;
 import java.nio.file.*;
 import javax.net.ssl.HttpsURLConnection;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Deck {
     private static final String IMAGES_DIR = System.getProperty("user.dir")
@@ -18,9 +20,12 @@ public class Deck {
     private static final String CURRENT_DIR = IMAGES_DIR + "currentImages";
     private static Deck instance;
 
+    private List<Card> matchedCards; // List to store matched cards.
+
     private Deck(String category, int cardCount) {
-        createDirectory();               // Wipe old images / ensure folder
-        createDeck(category, cardCount); // Populate folder
+        matchedCards = new ArrayList<>(); // Initialize the matched cards list.
+        createDirectory();               // Wipe old images / ensure folder.
+        createDeck(category, cardCount); // Populate folder.
     }
 
     // Singleton accessor.
@@ -37,6 +42,13 @@ public class Deck {
     // Reset singleton so next startGame() recreates a fresh folder.
     public static void resetInstance() {
         instance = null;
+    }
+
+    public void addMatchedCard(Card card) { 
+        matchedCards.add(card); // Add a card to the matched cards list
+    }
+    public List<Card> getMatchedCards() {
+        return new ArrayList<>(matchedCards); // Returns a copy
     }
 
     // Wipe or create the currentImages folder and register shutdown cleanup.

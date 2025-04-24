@@ -69,7 +69,7 @@ public abstract class BaseGameScreen {
         Font rockSaltSmall = Font.loadFont(getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
 
         // 3) Menu button (Save, Restart, Home, Exit)
-        GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt);
+        GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt, mainApp);
         menuButton.setLayoutX(50);
         menuButton.setLayoutY(50);
 
