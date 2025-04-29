@@ -9,6 +9,13 @@ package com;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background; 
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.text.Font;
@@ -41,6 +48,17 @@ public abstract class BaseGameScreen {
 
             // Inject timer, menu (with Home), and scoreboard.
             addCommonElements((Pane)root);
+
+            // Add background image 
+            Image backgroundImage = new Image(getClass().getResource("/images/purpleBackground.jpg").toExternalForm());
+            BackgroundImage bgImage = new BackgroundImage(
+                backgroundImage,
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(100, 100, true, true, true, false)
+            );
+
+            ((Pane) root).setBackground(new Background(bgImage)); 
 
             Scene scene = new Scene(root, 1600, 900);
             stage.setScene(scene);

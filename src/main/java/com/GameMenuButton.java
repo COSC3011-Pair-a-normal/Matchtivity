@@ -38,6 +38,7 @@ public class GameMenuButton extends ToggleButton {
         this.mainApp = mainApp;
         setFont(font);
         setPrefWidth(200);
+        setStyle("-fx-background-radius: 50; -fx-border-radius: 50;"); 
 
         // Save item.
         Label saveLabel = new Label("Save");
