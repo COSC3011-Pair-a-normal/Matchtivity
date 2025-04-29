@@ -7,9 +7,11 @@
 package com;
 
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView; 
@@ -32,6 +34,7 @@ public class MainApp extends Application {
     private String deckCategory;
     private GameTimer gameTimer;
     private ScoreBoard scoreboard;
+    private Scene loadingScene;
 
     @Override
     public void start(Stage stage) {
@@ -43,6 +46,7 @@ public class MainApp extends Application {
         initDifficultyScene(); // Build Difficulty screen.
         initCategoryScene();   // Build Category screen.
         initStartSavedScene(); // Buid Start Saved screen. 
+        initLoadingScene();
 
         stage.setScene(startScene);
         stage.show();
@@ -206,6 +210,21 @@ public class MainApp extends Application {
         savedScene = new Scene(new StackPane(bg, menu), 1600, 900);
     }
 
+
+    private void initLoadingScene() {
+        VBox loadingBox = new VBox(20);
+        loadingBox.setAlignment(Pos.CENTER);
+
+        Label loadingLabel = new Label("Loading...");
+        loadingLabel.setFont(Font.font("Rock Salt", 40));
+        loadingLabel.setStyle("-fx-text-fill: white;");
+
+        ProgressIndicator spinner = new ProgressIndicator();
+
+        loadingBox.getChildren().addAll(loadingLabel, spinner);
+        loadingScene = new Scene(new StackPane(getBackgroundImage(), loadingBox), 1600, 900);
+    }
+
     /**
      * Launch the chosen game screen.
      * Resets the previous deck, passes params via MainAppHolder,
@@ -214,6 +233,39 @@ public class MainApp extends Application {
     private void startGame() {
         Deck.resetInstance();
         MainAppHolder.setParams(cardCount, deckCategory);
+
+        boolean isCustom = !List.of("regular", "color", "themed").contains(deckCategory.toLowerCase());
+
+        if (isCustom) {
+            primaryStage.setScene(loadingScene); // Show loading only for custom decks
+
+            Task<Void> loadDeckTask = new Task<>() {
+                @Override
+                protected Void call() {
+                    Deck.getInstance(); // This will use the Google API
+                    return null;
+                }
+            };
+
+            loadDeckTask.setOnSucceeded(e -> {
+                loadGameScene(); // Continue to the game
+            });
+
+            loadDeckTask.setOnFailed(e -> {
+                Throwable ex = loadDeckTask.getException();
+                ex.printStackTrace();
+            });
+
+            new Thread(loadDeckTask).start();
+
+        } else {
+            Deck.getInstance(); // Loads local deck instantly
+            loadGameScene();    // Skip loading screen
+        }
+
+    }
+
+    private void loadGameScene() {
         if      (cardCount == easyCount)   new EasyGameScreen(this, primaryStage);
         else if (cardCount == mediumCount) new MediumGameScreen(this, primaryStage);
         else if (cardCount == hardCount)   new HardGameScreen(this, primaryStage);
