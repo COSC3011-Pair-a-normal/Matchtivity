@@ -121,9 +121,9 @@ public class Deck {
 
     private void createCustomDeck(String category, int cardCount) {
         final String API_KEY = "AIzaSyDAKvfkw-UHaaGaA9EX8gyzwW3MFSSsFKE";
-        final String CX = "d647c54e6eecb440b"; // Replace with your Custom Search Engine ID
+        final String CX = "d647c54e6eecb440b";
         final String QUERY = category;
-        final int totalNeeded = 2 * cardCount; // Total images needed
+        final int totalNeeded = 2 * cardCount;
         final int batchSize = 10;
         Set<String> uniqueUrls = new LinkedHashSet<>();
 
@@ -156,17 +156,10 @@ public class Deck {
                     uniqueUrls.add(imageUrl);
                     if (uniqueUrls.size() >= totalNeeded) break;
                 }
-
                 startIndex += batchSize;
-
-                // If fewer items returned than requested, break (no more results)
                 if (items.length() < batchSize) break;
             }
-
-            // Make sure directory exists
             Files.createDirectories(Paths.get(CURRENT_DIR));
-
-            // Shuffle and download
             List<String> imageUrls = new ArrayList<>(uniqueUrls);
             Collections.shuffle(imageUrls);
 
@@ -181,8 +174,6 @@ public class Deck {
                     System.out.println("Failed to download: " + imageUrl);
                 }
             }
-
-            // Cleanup on exit
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 deleteDirectory(new File(CURRENT_DIR));
                 System.out.println("Directory deleted successfully at: " + CURRENT_DIR);
