@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView; 
 import javafx.scene.layout.*;
@@ -138,7 +139,6 @@ public class MainApp extends Application {
         difficultyScene = new Scene(new StackPane(bg, menu), 1600, 900);
     }
 
-    // Build the Deck category selection screen.
     private void initCategoryScene() {
         VBox menu = new VBox(20);
         menu.setAlignment(Pos.CENTER);
@@ -147,22 +147,48 @@ public class MainApp extends Application {
         Button reg    = new Button("Regular Deck");
         Button color  = new Button("Color Deck");
         Button themed = new Button("Themed Deck");
-        Button custom = new Button("Custom Deck");
+
+        // Create custom input area
+        HBox customBox = new HBox(10);
+        customBox.setAlignment(Pos.CENTER);
+        Label customLabel = new Label("Custom:");
+        customLabel.setFont(Font.font("Rock Salt", 30));
+        customLabel.setStyle("-fx-text-fill: white;");
+        TextField customField = new TextField();
+        customField.setPrefWidth(400);
+        customField.setFont(Font.font("Rock Salt", 20));
+        Button startCustom = new Button("Start Custom");
+        startCustom.setFont(Font.font("Rock Salt", 24));
+
+        customBox.getChildren().addAll(customLabel, customField, startCustom);
+
+        // Style buttons
         styleButton(reg);
         styleButton(color);
         styleButton(themed);
-        styleButton(custom);
+        styleButton(startCustom);
 
+        // Button actions
         reg.setOnAction(e -> { deckCategory = "regular"; startGame(); });
-        color.setOnAction(e -> { deckCategory = "color";   startGame(); });
-        themed.setOnAction(e -> { deckCategory = "themed";  startGame(); });
-        custom.setOnAction(e -> { deckCategory = "custom";  startGame(); });
+        color.setOnAction(e -> { deckCategory = "color"; startGame(); });
+        themed.setOnAction(e -> { deckCategory = "themed"; startGame(); });
 
-        ImageView bg = getBackgroundImage(); 
+        startCustom.setOnAction(e -> {
+            String customInput = customField.getText().trim();
+            if (!customInput.isEmpty()) {
+                deckCategory = customInput;
+                startGame();
+            }
+        });
 
-        menu.getChildren().addAll(lbl, reg, color, themed, custom);
+        // Background
+        ImageView bg = getBackgroundImage();
+
+        // Build menu
+        menu.getChildren().addAll(lbl, reg, color, themed, customBox);
         categoryScene = new Scene(new StackPane(bg, menu), 1600, 900);
     }
+
 
     private void initStartSavedScene() {
         VBox menu = new VBox(20);
