@@ -31,6 +31,7 @@ public class GameTimer extends StackPane {
     public GameTimer() {
         // Initialize label to 00:00:00.
         timeLabel = new Label("00:00:00");
+        timeLabel.setStyle("-fx-text-fill: white;");
         Font rockSalt = Font.loadFont(
             getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 40);
         timeLabel.setFont(rockSalt);
