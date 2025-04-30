@@ -108,7 +108,9 @@ public class MainApp extends Application {
             backgroundImage,
             BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
             BackgroundPosition.CENTER,
-            new BackgroundSize(100, 100, true, true, true, false)
+            new BackgroundSize(
+                    100, 100, true, true, false, true  // cover the entire area
+            )
         );
 
         menu.getChildren().addAll(startNew, startSaved, exitGame);
