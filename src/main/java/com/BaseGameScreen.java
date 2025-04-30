@@ -56,14 +56,16 @@ public abstract class BaseGameScreen {
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.CENTER,
                 new BackgroundSize(
-                    100, 100, true, true, false, true  // cover the entire area
+                    100, 100, true, true, false, true
                 )
             );
             ((Pane) root).setBackground(new Background(bgImage));
 
-            Scene scene = new Scene(root, 1600, 900);
+            // Create scene using root's preferred size (from FXML)
+            Scene scene = new Scene(root); // dynamic sizing
             stage.setScene(scene);
             stage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
