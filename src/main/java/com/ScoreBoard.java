@@ -16,6 +16,7 @@ public class ScoreBoard extends VBox {
 
     private ScoreBoard() {
         scoreLabel = new Label("Score: 0");
+        scoreLabel.setStyle("-fx-text-fill: white;");
         setSpacing(20);
         setAlignment(Pos.CENTER);
         getChildren().add(scoreLabel);
