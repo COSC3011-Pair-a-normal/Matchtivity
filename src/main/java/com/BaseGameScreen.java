@@ -3,22 +3,24 @@
  * Loads FXML.
  * Wires controller to MainApp.
  * Injects shared UI (timer, menu + home, scoreboard).
- */
+*/
 package com;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background; 
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.scene.text.Font;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 
 import java.io.IOException;
 
@@ -33,8 +35,6 @@ public abstract class BaseGameScreen {
         this.fxmlPath = fxml;
         load();
     }
-
-    // Load the FXML, wire the controller, add common UI, show.
     private void load() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -43,22 +43,23 @@ public abstract class BaseGameScreen {
             // Give the controller a reference back to MainApp.
             Object ctrl = loader.getController();
             if (ctrl instanceof GameController) {
-                ((GameController)ctrl).setMainApp(mainApp);
+                ((GameController) ctrl).setMainApp(mainApp);
             }
 
-            // Inject timer, menu (with Home), and scoreboard.
-            addCommonElements((Pane)root);
+            // Inject shared UI elements into the correct gridpane.
+            addCommonElements((Pane) root);
 
-            // Add background image 
+            // Add background image
             Image backgroundImage = new Image(getClass().getResource("/images/purpleBackground.jpg").toExternalForm());
             BackgroundImage bgImage = new BackgroundImage(
                 backgroundImage,
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.CENTER,
-                new BackgroundSize(100, 100, true, true, true, false)
+                new BackgroundSize(
+                    100, 100, true, true, false, true  // cover the entire area
+                )
             );
-
-            ((Pane) root).setBackground(new Background(bgImage)); 
+            ((Pane) root).setBackground(new Background(bgImage));
 
             Scene scene = new Scene(root, 1600, 900);
             stage.setScene(scene);
@@ -67,60 +68,55 @@ public abstract class BaseGameScreen {
             e.printStackTrace();
         }
     }
-
     /**
      * Inject shared UI into every game screen:
-     * 1) Timer at top‑right
-     * 2) Menu button at top‑left (Save, Restart, Home, Exit)
-     * 3) Singleton scoreboard, safely re‑parented
+     * 1) Menu button (Save, Restart, Home, Exit)
+     * 2) Scoreboard
+     * 3) Timer
+     * All vertically stacked on the left side.
      */
     protected void addCommonElements(Pane pane) {
-        // 1) Game timer
-        GameTimer timer = new GameTimer();
-        mainApp.setGameTimer(timer);
-        timer.setLayoutX(1300);
-        timer.setLayoutY(5);
-        pane.getChildren().add(timer);
-
-        // 2) Load fonts
+        // Load fonts
         Font rockSalt      = Font.loadFont(getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 30.0);
         Font rockSaltSmall = Font.loadFont(getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 16.0);
-
-        // 3) Menu button (Save, Restart, Home, Exit)
-        GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt, mainApp);
-        menuButton.setLayoutX(50);
-        menuButton.setLayoutY(50);
-
-        menuButton.setOnSave(e -> System.out.println("Game saved!"));
-        menuButton.setOnRestart(e -> {
-            System.out.println("Restarting the game!");
-            // cClear the score and re‑instantiate this screen.
-            ScoreBoard.getScoreBoard(rockSaltSmall).clearScore();
-            try {
-                BaseGameScreen newScreen = this.getClass()
-                                             .getDeclaredConstructor(MainApp.class, Stage.class)
-                                             .newInstance(mainApp, stage);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+    
+        // Get the existing commonElements GridPane from the FXML
+        GridPane commonGrid = (GridPane) pane.lookup("#commonElements");
+    
+        // Ensure commonGrid is present
+        if (commonGrid != null) {
+            // 1) Menu button
+            GameMenuButton menuButton = new GameMenuButton("Menu", rockSalt, mainApp);
+            menuButton.setOnSave(e -> System.out.println("Game saved!"));
+            menuButton.setOnRestart(e -> {
+                System.out.println("Restarting the game!");
+                ScoreBoard.getScoreBoard(rockSaltSmall).clearScore();
+                try {
+                    BaseGameScreen newScreen = this.getClass()
+                        .getDeclaredConstructor(MainApp.class, Stage.class)
+                        .newInstance(mainApp, stage);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            });
+            menuButton.setOnHome(e -> mainApp.goToStartScene());
+            menuButton.setOnExit(e -> System.exit(0));
+    
+            commonGrid.add(menuButton, 0, 0);
+    
+            // 2) Scoreboard
+            ScoreBoard board = ScoreBoard.getScoreBoard(rockSaltSmall);
+            Parent oldParent = board.getParent();
+            if (oldParent instanceof Pane) {
+                ((Pane) oldParent).getChildren().remove(board);
             }
-        });
-        // Home should call the same method as your Win‑screen button.
-        menuButton.setOnHome(e -> mainApp.goToStartScene());
-        menuButton.setOnExit(e -> System.exit(0));
-
-        pane.getChildren().add(menuButton);
-
-        // 4) Safe re‑parent the singleton scoreboard.
-        ScoreBoard board = ScoreBoard.getScoreBoard(rockSaltSmall);
-        Parent oldParent = board.getParent();
-        // Only remove if it's already in a Pane.
-        if (oldParent instanceof Pane) {
-            ((Pane) oldParent).getChildren().remove(board);
+            mainApp.setScoreboard(board);
+            commonGrid.add(board, 0, 1);
+    
+            // 3) Game timer
+            GameTimer timer = new GameTimer();
+            mainApp.setGameTimer(timer);
+            commonGrid.add(timer, 0, 2);
         }
-        // Now add it to THIS pane.
-        mainApp.setScoreboard(board);
-        board.setLayoutX(50);
-        board.setLayoutY(400);
-        pane.getChildren().add(board);
-    }
+    }    
 }
