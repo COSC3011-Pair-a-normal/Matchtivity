@@ -1,0 +1,41 @@
+.menu-item {
+    -fx-background-color: #8b6cd9; 
+    -fx-text-fill: white; 
+    -fx-border-color: white; 
+}
+
+.menu-item:hover,
+.menu-item:focused,
+.menu-item:armed {
+    -fx-background-color: #bb850d; 
+    -fx-text-fill: black; 
+}
+
+.menu-button {
+    -fx-background-radius: 50; 
+    -fx-border-radius: 50; 
+    -fx-background-color: #8b6cd9; 
+    -fx-text-fill: white; 
+    -fx-border-color: white; 
+    -fx-border-width: 2; 
+}
+
+.menu-item-label {
+    -fx-text-fill: white; 
+    -fx-padding: 5px 10px; 
+    -fx-alignment: center; 
+    -fx-background-color: transparent; 
+    -fx-cursor: hand; 
+}
+
+.button { 
+    -fx-background-radius: 50px; 
+    -fx-border-radius: 50px; 
+    -fx-background-color: #8b6cd9; 
+    -fx-text-fill: white; 
+    -fx-border-color: white; 
+}
+
+.label {
+    -fx-text-fill: white; 
+}

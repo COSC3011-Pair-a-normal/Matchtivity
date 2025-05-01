@@ -62,7 +62,7 @@ public class MainApp extends Application {
     private Label titleLabel(String text, double size) {
         Label lbl = new Label(text);
         lbl.setFont(Font.font("Rock Salt", size));
-        lbl.setStyle("-fx-text-fill: white;"); 
+        lbl.getStyleClass().add("label"); 
         lbl.setAlignment(Pos.CENTER);
         return lbl;
     }
@@ -71,8 +71,9 @@ public class MainApp extends Application {
     private void styleButton(Button btn) {
         btn.setFont(Font.font("Rock Salt", 30));
         btn.setPrefSize(400, 100);
-        btn.setStyle("-fx-background-radius: 50; -fx-border-radius: 50;"); 
+        btn.getStyleClass().add("button"); 
     }
+
 
     // Helper to return uniform background image. 
     private ImageView getBackgroundImage() {
@@ -120,6 +121,7 @@ public class MainApp extends Application {
         BorderPane.setAlignment(root.getTop(), Pos.CENTER);
 
         startScene = new Scene(root, 1600, 900);
+        startScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
     }
 
     // Build the Difficulty selection screen.
@@ -143,6 +145,7 @@ public class MainApp extends Application {
 
         menu.getChildren().addAll(lbl, easy, medium, hard);
         difficultyScene = new Scene(new StackPane(bg, menu), 1600, 900);
+        difficultyScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
     }
 
     private void initCategoryScene() {
@@ -159,7 +162,7 @@ public class MainApp extends Application {
         customBox.setAlignment(Pos.CENTER);
         Label customLabel = new Label("Custom:");
         customLabel.setFont(Font.font("Rock Salt", 30));
-        customLabel.setStyle("-fx-text-fill: white;");
+        //customLabel.getStyleClass().add("label"); 
         TextField customField = new TextField();
         customField.setPrefWidth(400);
         customField.setFont(Font.font("Rock Salt", 20));
@@ -193,6 +196,7 @@ public class MainApp extends Application {
         // Build menu
         menu.getChildren().addAll(lbl, reg, color, themed, customBox);
         categoryScene = new Scene(new StackPane(bg, menu), 1600, 900);
+        categoryScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
     }
 
 
@@ -210,6 +214,7 @@ public class MainApp extends Application {
 
         menu.getChildren().addAll(lbl, exitGame);
         savedScene = new Scene(new StackPane(bg, menu), 1600, 900);
+        savedScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
     }
 
 
@@ -219,12 +224,13 @@ public class MainApp extends Application {
 
         Label loadingLabel = new Label("Loading...");
         loadingLabel.setFont(Font.font("Rock Salt", 40));
-        loadingLabel.setStyle("-fx-text-fill: white;");
+        loadingLabel.getStyleClass().add("label"); 
 
         ProgressIndicator spinner = new ProgressIndicator();
 
         loadingBox.getChildren().addAll(loadingLabel, spinner);
         loadingScene = new Scene(new StackPane(getBackgroundImage(), loadingBox), 1600, 900);
+        loadingScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
     }
 
     /**
@@ -289,13 +295,13 @@ public class MainApp extends Application {
         Label winLbl   = titleLabel("WOOOOOOO YOU WIN!", 60);
         Label scoreLbl = new Label("Final Score: " + finalScore);
         scoreLbl.setFont(Font.font("Rock Salt", 40));
-        scoreLbl.setStyle("-fx-text-fill: white;"); 
+        //scoreLbl.getStyleClass().add("label"); 
 
         int mins = (int)(elapsedMillis / 60000);
         int secs = (int)(elapsedMillis / 1000) % 60;
         Label timeLbl = new Label(String.format("Time: %02d:%02d", mins, secs));
         timeLbl.setFont(Font.font("Rock Salt", 40));
-        timeLbl.setStyle("-fx-text-fill: white;"); 
+        //timeLbl.getStyleClass().add("label"); 
 
         Button home = new Button("Home");
         styleButton(home);
@@ -306,6 +312,7 @@ public class MainApp extends Application {
         VBox vbox = new VBox(30, winLbl, scoreLbl, timeLbl, home);
         vbox.setAlignment(Pos.CENTER);
         winScene = new Scene(new StackPane(bg, vbox), 1600, 900);
+        winScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
 
         primaryStage.setScene(winScene);
     }

@@ -63,6 +63,7 @@ public abstract class BaseGameScreen {
 
             // Create scene using root's preferred size (from FXML)
             Scene scene = new Scene(root); // dynamic sizing
+            scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
             stage.setScene(scene);
             stage.show();
 
@@ -70,13 +71,13 @@ public abstract class BaseGameScreen {
             e.printStackTrace();
         }
     }
-    /**
+    /*
      * Inject shared UI into every game screen:
      * 1) Menu button (Save, Restart, Home, Exit)
      * 2) Scoreboard
      * 3) Timer
      * All vertically stacked on the left side.
-     */
+    */
     protected void addCommonElements(Pane pane) {
         // Load fonts
         Font rockSalt      = Font.loadFont(getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 30.0);
