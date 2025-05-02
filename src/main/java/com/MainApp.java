@@ -18,13 +18,28 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.geometry.Pos;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Map;
+import java.util.Objects;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.net.URL;
+import javafx.application.Platform;
+
+
+
 
 public class MainApp extends Application {
     private Stage primaryStage;
@@ -35,6 +50,11 @@ public class MainApp extends Application {
     private GameTimer gameTimer;
     private ScoreBoard scoreboard;
     private Scene loadingScene;
+    private GameState loadedGameState;
+
+    public static Font ROCK_SALT_FONT;
+    public static Font ROCK_SALT_SMALL;
+
 
     @Override
     public void start(Stage stage) {
@@ -54,15 +74,36 @@ public class MainApp extends Application {
 
     // Preload the custom font for use in every screen.
     private void loadFont() {
-        Font.loadFont(getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf")
-                    .toExternalForm(), 12);
+        if (ROCK_SALT_FONT != null && ROCK_SALT_SMALL != null) return;
+    
+        URL fontUrl = getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf");
+    
+        if (fontUrl != null) {
+            ROCK_SALT_FONT = Font.loadFont(fontUrl.toExternalForm(), 30.0);
+            ROCK_SALT_SMALL = Font.loadFont(fontUrl.toExternalForm(), 16.0);
+    
+            if (ROCK_SALT_FONT != null && ROCK_SALT_SMALL != null) {
+                System.out.println("Rock Salt font loaded successfully.");
+            } else {
+                System.err.println("Rock Salt font URL found but failed to register.");
+                loadFallbackFonts();
+            }
+        } else {
+            System.err.println("Rock Salt font file not found in /fonts/Rock_Salt/");
+            loadFallbackFonts();
+        }
     }
 
+    private void loadFallbackFonts() {
+        ROCK_SALT_FONT = Font.font("System", 30.0);
+        ROCK_SALT_SMALL = Font.font("System", 16.0);
+    }
+    
     // Helper to create a title Label with Rock Salt font.
     private Label titleLabel(String text, double size) {
         Label lbl = new Label(text);
         lbl.setFont(Font.font("Rock Salt", size));
-        lbl.setStyle("-fx-text-fill: white;"); 
+        lbl.getStyleClass().add("label");
         lbl.setAlignment(Pos.CENTER);
         return lbl;
     }
@@ -71,7 +112,7 @@ public class MainApp extends Application {
     private void styleButton(Button btn) {
         btn.setFont(Font.font("Rock Salt", 30));
         btn.setPrefSize(400, 100);
-        btn.setStyle("-fx-background-radius: 50; -fx-border-radius: 50;"); 
+        btn.getStyleClass().add("button");  
     }
 
     // Helper to return uniform background image. 
@@ -120,6 +161,7 @@ public class MainApp extends Application {
         BorderPane.setAlignment(root.getTop(), Pos.CENTER);
 
         startScene = new Scene(root, 1600, 900);
+        startScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
     }
 
     // Build the Difficulty selection screen.
@@ -143,6 +185,7 @@ public class MainApp extends Application {
 
         menu.getChildren().addAll(lbl, easy, medium, hard);
         difficultyScene = new Scene(new StackPane(bg, menu), 1600, 900);
+        difficultyScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
     }
 
     private void initCategoryScene() {
@@ -159,7 +202,7 @@ public class MainApp extends Application {
         customBox.setAlignment(Pos.CENTER);
         Label customLabel = new Label("Custom:");
         customLabel.setFont(Font.font("Rock Salt", 30));
-        customLabel.setStyle("-fx-text-fill: white;");
+        //customLabel.getStyleClass().add("label"); 
         TextField customField = new TextField();
         customField.setPrefWidth(400);
         customField.setFont(Font.font("Rock Salt", 20));
@@ -193,24 +236,38 @@ public class MainApp extends Application {
         // Build menu
         menu.getChildren().addAll(lbl, reg, color, themed, customBox);
         categoryScene = new Scene(new StackPane(bg, menu), 1600, 900);
+        categoryScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
     }
 
 
     private void initStartSavedScene() {
         VBox menu = new VBox(20);
         menu.setAlignment(Pos.CENTER);
-
-        Label lbl = titleLabel("Start Saved Game", 60); 
-        Button exitGame = new Button("Exit Game");
+    
+        Label lbl = titleLabel("Start Saved Game", 60);
+    
+        Button loadSavedGame = new Button("Load Save");
+        Button backToMenu    = new Button("Back to Menu");
+        Button exitGame      = new Button("Exit Game");
+    
+        styleButton(loadSavedGame);
+        styleButton(backToMenu);
         styleButton(exitGame);
-
+    
+        loadSavedGame.setOnAction(e -> loadGame());
+        backToMenu.setOnAction(e -> {
+            Deck.resetInstance();
+            primaryStage.setScene(startScene); }
+        );
         exitGame.setOnAction(e -> primaryStage.close());
-
-        ImageView bg = getBackgroundImage(); 
-
-        menu.getChildren().addAll(lbl, exitGame);
+    
+        ImageView bg = getBackgroundImage();
+    
+        menu.getChildren().addAll(lbl, loadSavedGame, backToMenu, exitGame);
         savedScene = new Scene(new StackPane(bg, menu), 1600, 900);
+        savedScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
     }
+    
 
 
     private void initLoadingScene() {
@@ -219,12 +276,13 @@ public class MainApp extends Application {
 
         Label loadingLabel = new Label("Loading...");
         loadingLabel.setFont(Font.font("Rock Salt", 40));
-        loadingLabel.setStyle("-fx-text-fill: white;");
+        loadingLabel.getStyleClass().add("label"); 
 
         ProgressIndicator spinner = new ProgressIndicator();
 
         loadingBox.getChildren().addAll(loadingLabel, spinner);
         loadingScene = new Scene(new StackPane(getBackgroundImage(), loadingBox), 1600, 900);
+        loadingScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
     }
 
     /**
@@ -268,14 +326,66 @@ public class MainApp extends Application {
     }
 
     private void loadGameScene() {
+        loadFont();
         if      (cardCount == easyCount)   new EasyGameScreen(this, primaryStage);
         else if (cardCount == mediumCount) new MediumGameScreen(this, primaryStage);
         else if (cardCount == hardCount)   new HardGameScreen(this, primaryStage);
     }
 
+    private void loadSavedGameData(File selectedFile) {
+        System.out.println("Loading game from: " + selectedFile.getAbsolutePath());
+    
+        try (FileInputStream fileIn = new FileInputStream(selectedFile);
+            ObjectInputStream in = new ObjectInputStream(fileIn)) {
+    
+            GameState gameState = (GameState) in.readObject();
+            this.cardCount = gameState.getCardCount();
+            this.deckCategory = gameState.getDeckCategory();
+            this.loadedGameState = gameState;
+    
+            File currentDir = new File("src/main/resources/images/currentImages");
+            if (!currentDir.exists()) currentDir.mkdirs();
+            for (File f : currentDir.listFiles()) f.delete();
+            for (Map.Entry<String, byte[]> entry : gameState.getImageDataMap().entrySet()) {
+                Path path = Paths.get(currentDir.getPath(), entry.getKey());
+                Files.write(path, entry.getValue());
+            }
+
+            System.out.println("Game state loaded successfully.");
+    
+
+            MainAppHolder.setParams(cardCount, deckCategory);
+            Deck.setSavedImagesMode(true);
+            Deck.getInstance();
+            for (int i : loadedGameState.matchedCards) {
+                Deck.getInstance().addMatchedCard(i);
+            }
+            Deck.setSavedImagesMode(false);
+
+            loadGameScene();
+            Platform.runLater(() -> {
+                applyLoadedGameState();
+            });
+    
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load the game: " + e.getMessage());
+        }
+    }
+
+    
+    public void applyLoadedGameState() {
+        if (loadedGameState != null) {
+            gameTimer.setElapsedTime(loadedGameState.getElapsedTime());
+            ScoreBoard.getScoreBoard(null).setScore(loadedGameState.getScore());
+            GameController.setCardMap(loadedGameState.cardMap);
+        }
+    }
+
     // Called by the MenuButton or Win‑screen to return home.
     public void goToStartScene() {
         if (scoreboard != null) scoreboard.clearScore();  // Reset between rounds.
+        Deck.resetInstance();
         primaryStage.setScene(startScene);
     }
 
@@ -286,16 +396,16 @@ public class MainApp extends Application {
      * and stops the in‑game timer.
      */
     public void showWinScene(int finalScore, long elapsedMillis) {
-        Label winLbl   = titleLabel("WOOOOOOO YOU WIN!", 60);
+        Label winLbl   = titleLabel("YOU WIN!", 60);
         Label scoreLbl = new Label("Final Score: " + finalScore);
         scoreLbl.setFont(Font.font("Rock Salt", 40));
-        scoreLbl.setStyle("-fx-text-fill: white;"); 
-
+        //scoreLbl.getStyleClass().add("label"); 
+        
         int mins = (int)(elapsedMillis / 60000);
         int secs = (int)(elapsedMillis / 1000) % 60;
         Label timeLbl = new Label(String.format("Time: %02d:%02d", mins, secs));
         timeLbl.setFont(Font.font("Rock Salt", 40));
-        timeLbl.setStyle("-fx-text-fill: white;"); 
+        //timeLbl.getStyleClass().add("label"); 
 
         Button home = new Button("Home");
         styleButton(home);
@@ -306,6 +416,8 @@ public class MainApp extends Application {
         VBox vbox = new VBox(30, winLbl, scoreLbl, timeLbl, home);
         vbox.setAlignment(Pos.CENTER);
         winScene = new Scene(new StackPane(bg, vbox), 1600, 900);
+
+        winScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
 
         primaryStage.setScene(winScene);
     }
@@ -319,16 +431,24 @@ public class MainApp extends Application {
         return (gameTimer != null) ? gameTimer.getElapsedTime() : 0;
     }
 
-    public class GameState implements Serializable {
+    public static class GameState implements Serializable {
         private static final long serialVersionUID = 1L;
         private int score;
         private long elapsedTime;
-        private Map<Integer, Integer> matchedCardsMap; // Card ID → Position
+        private ArrayList<Integer> matchedCards; // Card ID → Position
+        private int cardCount;
+        private String deckCategory;
+        private Map<String, byte[]> imageDataMap;
+        private List<Integer> cardMap;
 
-        public GameState(long elapsedTime, int score, Map<Integer, Integer> matchedCardsMap) {
+        public GameState(long elapsedTime, int score, ArrayList<Integer> matchedCards, int cardCount, String deckCategory, Map<String, byte[]> imageDataMap, List<Integer> cardMap) {
             this.score = score;
             this.elapsedTime = elapsedTime;
-            this.matchedCardsMap = matchedCardsMap;
+            this.matchedCards = matchedCards;
+            this.cardCount = cardCount;
+            this.deckCategory = deckCategory;
+            this.imageDataMap = imageDataMap;
+            this.cardMap = cardMap;
         }
 
         public int getScore() {
@@ -339,50 +459,83 @@ public class MainApp extends Application {
             return elapsedTime;
         }
 
-        public Map<Integer, Integer> getMatchedCardsMap() {
-            return matchedCardsMap;
+        public ArrayList<Integer> getMatchedCards() {
+            return matchedCards;
         }
-    }
 
-    public void saveGame() {
+        public int getCardCount() {
+            return cardCount;
+        }
+
+        public String getDeckCategory() {
+            return deckCategory;
+        }
+
+        public Map<String, byte[]> getImageDataMap() {
+            return imageDataMap;
+        }
+
+        public List<Integer> getCardMap() {
+            return cardMap;
+        }
+     }
+     public void saveGame() {
         if (gameTimer == null || scoreboard == null) {
             System.out.println("Game state is incomplete. Cannot save.");
             return;
         }
+    
         long elapsedTime = gameTimer.getElapsedTime();
         int score = scoreboard.getScore();
-        Map<Integer, Integer> matchedCardsMap = Deck.getInstance().getMatchedCardsMap();
+        ArrayList<Integer> matchedCards = Deck.getMatchedCards();
+        List<Integer> cardMap = GameController.getCardMap();
+    
+        Map<String, byte[]> imageDataMap = new HashMap<>();
+        File dir = new File("src/main/resources/saves");  // Save in saves directory
 
-        GameState gameState = new GameState(elapsedTime, score, matchedCardsMap);
-
-        String filePath = "savegame.dat";
-        System.out.println("Saving game to: " + filePath);
-
-        try (FileOutputStream fileOut = new FileOutputStream(filePath);
-            ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+    
+        String saveFileName = "savegame_" + System.currentTimeMillis() + ".dat";  // Current time is used to make the file name unique
+        File saveFile = new File(dir, saveFileName);
+    
+        File imageDir = new File("src/main/resources/images/currentImages");
+        for (File file : Objects.requireNonNull(imageDir.listFiles())) {
+            try {
+                byte[] data = Files.readAllBytes(file.toPath());
+                imageDataMap.put(file.getName(), data);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Failed to read image: " + file.getName());
+            }
+        }
+    
+        GameState gameState = new GameState(elapsedTime, score, matchedCards, cardCount, deckCategory, imageDataMap, cardMap);
+    
+        // Save the game state to the file
+        try (FileOutputStream fileOut = new FileOutputStream(saveFile);
+             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
             out.writeObject(gameState);
-            System.out.println("Game saved successfully.");
+            System.out.println("Game saved successfully: " + saveFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Failed to save the game: " + e.getMessage());
         }
     }
     
-    private void initGameScene() {
-        VBox gameLayout = new VBox(20);
-        gameLayout.setAlignment(Pos.CENTER);
 
-        Font rockSaltFont = Font.font("Rock Salt", 30); 
-        GameMenuButton menuButton = new GameMenuButton("Menu", rockSaltFont, this);
-        
-        menuButton.setOnSave(e -> saveGame());
-        // Add the menu button to the layout.
-        gameLayout.getChildren().add(menuButton);
+    public void loadGame() {
+        // Create a FileChooser to select a save file
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Game Save Files", "*.dat"));
+        fileChooser.setInitialDirectory(new File("src/main/resources/saves"));
+    
+        File selectedFile = fileChooser.showOpenDialog(primaryStage);  
 
-        // Example game scene setup.
-        Scene gameScene = new Scene(gameLayout, 1600, 900);
-        primaryStage.setScene(gameScene);
+        loadSavedGameData(selectedFile);
     }
+    
     
     public static void main(String[] args) {
         launch(args);

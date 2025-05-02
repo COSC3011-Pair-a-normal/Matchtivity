@@ -17,12 +17,15 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
+import javafx.scene.control.*; 
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text; 
+import javafx.stage.Stage; 
 
 public class GameMenuButton extends ToggleButton {
     private MenuItem saveButton;
@@ -38,11 +41,18 @@ public class GameMenuButton extends ToggleButton {
         this.mainApp = mainApp;
         setFont(font);
         setPrefWidth(200);
-        setStyle("-fx-background-radius: 50; -fx-border-radius: 50;"); 
+        getStyleClass().add("menu-button"); 
+        //setStyle("-fx-background-radius: 50;" + 
+        //"-fx-border-radius: 50;" + 
+        //"-fx-background-color: #8b6cd9;" +
+        //"-fx-text-fill: white;" + 
+        //"-fx-border-color: white;");  
 
         // Save item.
         Label saveLabel = new Label("Save");
         saveLabel.setFont(font);
+        saveLabel.getStyleClass().add("menu-item-label"); 
+        //saveLabel.setStyle("-fx-text-fill: white;"); 
         saveLabel.setAlignment(Pos.CENTER);
         saveLabel.prefWidthProperty().bind(widthProperty().subtract(buttonPadding));
         saveButton = new MenuItem();
@@ -51,6 +61,8 @@ public class GameMenuButton extends ToggleButton {
         // Restart item.
         Label restartLabel = new Label("Restart");
         restartLabel.setFont(font);
+        restartLabel.getStyleClass().add("menu-item-label"); 
+        //restartLabel.setStyle("-fx-text-fill: white;");
         restartLabel.setAlignment(Pos.CENTER);
         restartLabel.prefWidthProperty().bind(widthProperty().subtract(buttonPadding));
         restartButton = new MenuItem();
@@ -59,6 +71,8 @@ public class GameMenuButton extends ToggleButton {
         // Home item.
         Label homeLabel = new Label("Home");
         homeLabel.setFont(font);
+        homeLabel.getStyleClass().add("menu-item-label"); 
+        //homeLabel.setStyle("-fx-text-fill: white;"); 
         homeLabel.setAlignment(Pos.CENTER);
         homeLabel.prefWidthProperty().bind(widthProperty().subtract(buttonPadding));
         homeButton = new MenuItem();
@@ -67,6 +81,8 @@ public class GameMenuButton extends ToggleButton {
         // Exit item.
         Label exitLabel = new Label("Exit");
         exitLabel.setFont(font);
+        exitLabel.getStyleClass().add("menu-item-label"); 
+        //exitLabel.setStyle("-fx-text-fill: white;"); 
         exitLabel.setAlignment(Pos.CENTER);
         exitLabel.prefWidthProperty().bind(widthProperty().subtract(buttonPadding));
         exitButton = new MenuItem();
@@ -74,8 +90,9 @@ public class GameMenuButton extends ToggleButton {
 
         // Build context menu.
         contextMenu = new ContextMenu(saveButton, restartButton, homeButton, exitButton);
+        //contextMenu.setStyle("-fx-background-color: #8b6cd9;"); 
         contextMenu.setAutoHide(false);
-
+    
         // Toggle menu visibility.
         setOnMouseClicked((MouseEvent e) -> {
             if (isSelected()) {

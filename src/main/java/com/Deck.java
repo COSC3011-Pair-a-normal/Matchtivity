@@ -1,41 +1,39 @@
-/**
- * Manages the “currentImages” folder for the game:
- * Copies a random half‑deck of images from the chosen category folder.
- * Cleans up old images on startup and shutdown.
- * Stub for custom‑deck API logic.
- */
 package com;
 
 import java.io.*;
 import java.net.*;
 import java.nio.file.*;
 import javax.net.ssl.HttpsURLConnection;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.*;
-
 
 public class Deck {
     private static final String IMAGES_DIR = System.getProperty("user.dir")
         + "/src/main/resources/images/";
     private static final String CURRENT_DIR = IMAGES_DIR + "currentImages";
     private static Deck instance;
-    private Map<Integer, Integer> matchedCardsMap = new HashMap<>(); // Card ID → Position
+    private static ArrayList<Integer> matchedCards;
+    private static boolean savedImagesMode = false;
+
+    private Deck() {
+        matchedCards = new ArrayList<Integer>();
+    }
 
     private Deck(String category, int cardCount) {
-        createDirectory();               // Wipe old images / ensure folder.
-        createDeck(category, cardCount); // Populate folder.
+        createDirectory();
+        createDeck(category, cardCount);
+        matchedCards = new ArrayList<>();
     }
 
     // Singleton accessor.
     public static Deck getInstance() {
         if (instance == null) {
-            instance = new Deck(
-                MainAppHolder.getDeckCategory(),
-                MainAppHolder.getCardCount()
-            );
+            if (savedImagesMode) {
+                instance = new Deck();
+            } else {
+                instance = new Deck(MainAppHolder.getDeckCategory(), MainAppHolder.getCardCount());
+            }
         }
         return instance;
     }
@@ -45,11 +43,14 @@ public class Deck {
         instance = null;
     }
 
-    public void addMatchedCard(int cardId, int position) {
-        matchedCardsMap.put(cardId, position);
+    // Add a matched card to the dynamic list
+    public void addMatchedCard(int cardId) {
+        matchedCards.add(cardId);  // Dynamically add the cardId
     }
-    public Map<Integer, Integer> getMatchedCardsMap() {
-        return new HashMap<>(matchedCardsMap); // Return a copy
+
+    // Get the matched cards as an ArrayList
+    public static ArrayList<Integer> getMatchedCards() {
+        return new ArrayList<>(matchedCards); // Return a copy of the list
     }
 
     // Wipe or create the currentImages folder and register shutdown cleanup.
@@ -75,10 +76,7 @@ public class Deck {
         return dir.delete();
     }
 
-    /**
-     * Copy a random set of cardCount/2 images from IMAGES_DIR/category
-     * into CURRENT_DIR.
-     */
+    // Copy a random set of cardCount/2 images from IMAGES_DIR/category
     private void createDeck(String category, int cardCount) {
         if (!Arrays.asList("regular", "color", "themed").contains(category)) {
             createCustomDeck(category, cardCount);
@@ -102,6 +100,7 @@ public class Deck {
         });
     }
 
+    // Download an image from a URL
     private static void downloadImage(String imageUrl, String savePath) throws IOException {
         URL url = new URL(imageUrl);
         URLConnection connection = url.openConnection();
@@ -119,6 +118,7 @@ public class Deck {
         }
     }
 
+    // Custom deck logic for downloading images from Google API
     private void createCustomDeck(String category, int cardCount) {
         final String API_KEY = "AIzaSyDAKvfkw-UHaaGaA9EX8gyzwW3MFSSsFKE";
         final String CX = "d647c54e6eecb440b";
@@ -159,6 +159,7 @@ public class Deck {
                 startIndex += batchSize;
                 if (items.length() < batchSize) break;
             }
+
             Files.createDirectories(Paths.get(CURRENT_DIR));
             List<String> imageUrls = new ArrayList<>(uniqueUrls);
             Collections.shuffle(imageUrls);
@@ -174,15 +175,11 @@ public class Deck {
                     System.out.println("Failed to download: " + imageUrl);
                 }
             }
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                deleteDirectory(new File(CURRENT_DIR));
-                System.out.println("Directory deleted successfully at: " + CURRENT_DIR);
-            }));
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     private static String getFileExtension(String url) {
         String lowerUrl = url.toLowerCase();
         if (lowerUrl.endsWith(".png")) return ".png";
@@ -190,5 +187,8 @@ public class Deck {
         if (lowerUrl.endsWith(".jpg")) return ".jpg";
         return ".jpg"; // default fallback
     }
-}
 
+    public static void setSavedImagesMode(boolean mode) {
+        savedImagesMode = mode;
+    }
+}

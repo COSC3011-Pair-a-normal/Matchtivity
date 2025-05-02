@@ -32,13 +32,13 @@ public class GameController implements Initializable {
 
     public static final Image backImage =
         new Image("/images/BackOfCard_Orange.png");            // Shared back‑of‑card image.
-    public List<Integer> cardMap = new ArrayList<>();          // Maps card index → image ID.
+    public static List<Integer> cardMap = new ArrayList<>();          // Maps card index → image ID.
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         int count = MainAppHolder.getCardCount();
 
-        // Build two of each ID, then shuffle.
+        // Build two of each ID, then shuffle if the game is new
         for (int i = 0; i < count/2; i++) cardMap.add(i);
         for (int i = 0; i < count/2; i++) cardMap.add(i);
         Collections.shuffle(cardMap);
@@ -46,6 +46,7 @@ public class GameController implements Initializable {
         // Ensure the currentImages directory is populated.
         Deck.getInstance();
 
+        loadMatches();
         initGrid();       // Populate ImageViews and back images.
         adjustGridSize(); // Make grid adapt to chosen difficulty.
     }
@@ -142,6 +143,8 @@ public class GameController implements Initializable {
 
         if (match) {
             // Matched pair: hide them after 0.8s and update score.
+            Deck.getInstance().addMatchedCard((int) first.getUserData());
+            Deck.getInstance().addMatchedCard((int) second.getUserData());
             ScoreBoard.getScoreBoard(null).increaseScore();
             PauseTransition pause = new PauseTransition(Duration.seconds(0.8));
             pause.setOnFinished(e -> {
@@ -245,5 +248,31 @@ public class GameController implements Initializable {
         }
 
         imagesGridPane.setAlignment(Pos.CENTER);
+    }
+
+    public void loadMatches() {
+        // Retrieve the list of matched cards
+        List<Integer> matchedCards = Deck.getMatchedCards();
+    
+        // Loop through the matched cards and hide them
+        for (Integer matchedCardId : matchedCards) {
+            ImageView matchedCard = (ImageView) imagesGridPane.getChildren().get(matchedCardId);
+            if (matchedCard != null) {
+                matchedCard.setVisible(false);
+            }
+        }
+    }
+    
+
+    public static List<Integer> getCardMap() {
+        return cardMap;
+    }
+
+    public static void setCardMap(List<Integer> cardMap) {
+        GameController.cardMap = cardMap;
+    }
+
+    public GridPane getImagesGridPane() {
+        return imagesGridPane;
     }
 }

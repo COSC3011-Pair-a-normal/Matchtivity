@@ -31,7 +31,7 @@ public class GameTimer extends StackPane {
     public GameTimer() {
         // Initialize label to 00:00:00.
         timeLabel = new Label("00:00:00");
-        timeLabel.setStyle("-fx-text-fill: white;");
+        timeLabel.getStyleClass().add("label");
         Font rockSalt = Font.loadFont(
             getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 40);
         timeLabel.setFont(rockSalt);
@@ -83,5 +83,9 @@ public class GameTimer extends StackPane {
     // Get total elapsed time in milliseconds.
     public long getElapsedTime() {
         return elapsedGameTime + (System.currentTimeMillis() - startTime);
+    }
+
+    public void setElapsedTime(long elapsedGameTime) {
+        this.elapsedGameTime = elapsedGameTime;
     }
 }
