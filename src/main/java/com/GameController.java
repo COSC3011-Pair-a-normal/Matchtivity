@@ -37,6 +37,7 @@ public class GameController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         int count = MainAppHolder.getCardCount();
+        cardMap.clear();
 
         // Build two of each ID, then shuffle if the game is new
         for (int i = 0; i < count/2; i++) cardMap.add(i);
@@ -83,6 +84,7 @@ public class GameController implements Initializable {
      * After two flips, trigger match evaluation.
      */
     private void flipCard(int cardID) {
+        System.out.println(cardMap);
         ImageView iv = (ImageView) imagesGridPane.getChildren().get(cardID);
         boolean toFront = iv.getImage() == backImage;
 
@@ -270,9 +272,5 @@ public class GameController implements Initializable {
 
     public static void setCardMap(List<Integer> cardMap) {
         GameController.cardMap = cardMap;
-    }
-
-    public GridPane getImagesGridPane() {
-        return imagesGridPane;
     }
 }

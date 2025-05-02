@@ -297,7 +297,7 @@ public class MainApp extends Application {
      * and instantiates Easy/Medium/Hard.
      */
     private void startGame() {
-        Deck.resetInstance();
+        //Deck.resetInstance();
         MainAppHolder.setParams(cardCount, deckCategory);
 
         boolean isCustom = !List.of("regular", "color", "themed").contains(deckCategory.toLowerCase());
@@ -392,6 +392,7 @@ public class MainApp extends Application {
     public void goToStartScene() {
         if (scoreboard != null) scoreboard.clearScore();  // Reset between rounds.
         Deck.resetInstance();
+        GameController.setCardMap(null);
         primaryStage.setScene(startScene);
     }
 
