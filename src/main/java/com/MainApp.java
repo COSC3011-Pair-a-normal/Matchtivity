@@ -112,8 +112,9 @@ public class MainApp extends Application {
     private void styleButton(Button btn) {
         btn.setFont(Font.font("Rock Salt", 30));
         btn.setPrefSize(400, 100);
-        btn.getStyleClass().add("button");  
+        btn.setStyle("-fx-background-radius: 50; -fx-border-radius: 50;"); 
     }
+
 
     // Helper to return uniform background image. 
     private ImageView getBackgroundImage() {
@@ -162,6 +163,7 @@ public class MainApp extends Application {
 
         startScene = new Scene(root, 1600, 900);
         startScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
+        startScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
     }
 
     // Build the Difficulty selection screen.
@@ -185,6 +187,7 @@ public class MainApp extends Application {
 
         menu.getChildren().addAll(lbl, easy, medium, hard);
         difficultyScene = new Scene(new StackPane(bg, menu), 1600, 900);
+        difficultyScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
         difficultyScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
     }
 
@@ -237,6 +240,7 @@ public class MainApp extends Application {
         menu.getChildren().addAll(lbl, reg, color, themed, customBox);
         categoryScene = new Scene(new StackPane(bg, menu), 1600, 900);
         categoryScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
+        categoryScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
     }
 
 
@@ -266,6 +270,7 @@ public class MainApp extends Application {
         menu.getChildren().addAll(lbl, loadSavedGame, backToMenu, exitGame);
         savedScene = new Scene(new StackPane(bg, menu), 1600, 900);
         savedScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
+        savedScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
     }
     
 
@@ -282,6 +287,7 @@ public class MainApp extends Application {
 
         loadingBox.getChildren().addAll(loadingLabel, spinner);
         loadingScene = new Scene(new StackPane(getBackgroundImage(), loadingBox), 1600, 900);
+        loadingScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
         loadingScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
     }
 
@@ -405,6 +411,7 @@ public class MainApp extends Application {
         int secs = (int)(elapsedMillis / 1000) % 60;
         Label timeLbl = new Label(String.format("Time: %02d:%02d", mins, secs));
         timeLbl.setFont(Font.font("Rock Salt", 40));
+        //timeLbl.getStyleClass().add("label"); 
         //timeLbl.getStyleClass().add("label"); 
 
         Button home = new Button("Home");

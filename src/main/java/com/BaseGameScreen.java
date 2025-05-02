@@ -77,7 +77,7 @@ public abstract class BaseGameScreen {
      * 2) Scoreboard
      * 3) Timer
      * All vertically stacked on the left side.
-     */
+    */
     protected void addCommonElements(Pane pane) {
         // Load fonts
         Font rockSalt      = MainApp.ROCK_SALT_FONT;
