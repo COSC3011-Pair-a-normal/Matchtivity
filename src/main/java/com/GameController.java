@@ -148,6 +148,11 @@ public class GameController implements Initializable {
             Deck.getInstance().addMatchedCard((int) first.getUserData());
             Deck.getInstance().addMatchedCard((int) second.getUserData());
             ScoreBoard.getScoreBoard(null).increaseScore();
+            try {
+                SoundManager.play("ding.mp3");
+            } catch (Exception e) {
+                System.out.println("Sound error: " + e.getMessage());
+            }
             PauseTransition pause = new PauseTransition(Duration.seconds(0.8));
             pause.setOnFinished(e -> {
                 first.setVisible(false);
@@ -264,7 +269,6 @@ public class GameController implements Initializable {
             }
         }
     }
-    
 
     public static List<Integer> getCardMap() {
         return cardMap;
