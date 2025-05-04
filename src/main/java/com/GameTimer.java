@@ -32,9 +32,11 @@ public class GameTimer extends StackPane {
         // Initialize label to 00:00:00.
         timeLabel = new Label("00:00:00");
         timeLabel.getStyleClass().add("label");
-        Font rockSalt = Font.loadFont(
-            getClass().getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf").toExternalForm(), 40);
-        timeLabel.setFont(rockSalt);
+        Font base = MainApp.ROCK_SALT_FONT;
+        Font timerFont = (base != null)
+            ? Font.font(base.getFamily(), 40)
+            : Font.font("System", 40);
+        timeLabel.setFont(timerFont);
 
         getChildren().add(timeLabel);
         startTimer();

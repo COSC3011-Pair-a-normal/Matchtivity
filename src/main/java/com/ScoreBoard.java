@@ -28,6 +28,10 @@ public class ScoreBoard extends VBox {
             instance = new ScoreBoard();
             instance.scoreLabel.setFont(font);
         }
+        Font f = (font != null)
+            ? font
+            : Font.font("System", 16);
+        instance.scoreLabel.setFont(f);
         return instance;
     }
 

@@ -52,6 +52,7 @@ public class MainApp extends Application {
     private ScoreBoard scoreboard;
     private Scene loadingScene;
     private GameState loadedGameState;
+    private Scene highScoresScene;
 
     public static Font ROCK_SALT_FONT;
     public static Font ROCK_SALT_SMALL;
@@ -67,6 +68,7 @@ public class MainApp extends Application {
         initDifficultyScene(); // Build Difficulty screen.
         initCategoryScene();   // Build Category screen.
         initStartSavedScene(); // Buid Start Saved screen. 
+        initHighScoresScene(); // Build High Scores screen.
         initLoadingScene();
 
         stage.setScene(startScene);
@@ -137,13 +139,19 @@ public class MainApp extends Application {
 
         Button startNew   = new Button("Start New Game");
         Button startSaved = new Button("Start Saved Game");
+        Button highScoresBtn = new Button("High Scores");
         Button exitGame   = new Button("Exit Game");
         styleButton(startNew);
         styleButton(startSaved);
+        styleButton(highScoresBtn);
         styleButton(exitGame);
 
         startNew.setOnAction(e -> primaryStage.setScene(difficultyScene));
         startSaved.setOnAction(e -> primaryStage.setScene(savedScene));
+        highScoresBtn.setOnAction(e -> {
+            initHighScoresScene();
+            primaryStage.setScene(highScoresScene);
+          });
         exitGame.setOnAction(e -> primaryStage.close());
 
         Image backgroundImage = new Image(getClass().getResource("/images/purpleBackground.jpg").toExternalForm());
@@ -152,11 +160,11 @@ public class MainApp extends Application {
             BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
             BackgroundPosition.CENTER,
             new BackgroundSize(
-                    100, 100, true, true, false, true  // cover the entire area
+                    100, 100, true, true, false, true
             )
         );
 
-        menu.getChildren().addAll(startNew, startSaved, exitGame);
+        menu.getChildren().addAll(startNew, startSaved, highScoresBtn, exitGame);
         BorderPane root = new BorderPane(menu);
         root.setTop(titleLabel("Pair‑A‑Normal Matchtivity", 60));
         root.setBackground(new Background(bgImage));
@@ -166,6 +174,48 @@ public class MainApp extends Application {
         startScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
         startScene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); 
     }
+
+    // Build high scores screen.
+    private void initHighScoresScene() {
+        Font rockSaltLarge  = Font.font("Rock Salt", 60);
+        Font rockSaltMedium = Font.font("Rock Salt", 20);
+
+        Label title = titleLabel("High Scores", 60);
+        title.setFont(rockSaltLarge);
+
+        VBox list = new VBox(10);
+        list.setAlignment(Pos.CENTER);
+      
+        var top10 = HighScoresManager.getInstance().getTop10();
+        if (top10.isEmpty()) {
+        Label noScores = new Label("No high scores yet.");
+        noScores.setFont(rockSaltMedium);
+        list.getChildren().add(noScores);
+        } else {
+        for (HighScoreEntry e : top10) {
+            Label row = new Label(
+            e.getName() + " — " + e.getScore() + " — " + e.getMode()
+            );
+            row.setFont(rockSaltMedium);
+            list.getChildren().add(row);
+        }
+        }
+      
+        Button back = new Button("Back");
+        styleButton(back);
+        back.setOnAction(evt -> primaryStage.setScene(startScene));
+      
+        VBox root = new VBox(30, title, list, back);
+        root.setAlignment(Pos.CENTER);
+        highScoresScene = new Scene(
+          new StackPane(getBackgroundImage(), root),
+          1600, 900
+        );
+        highScoresScene.getStylesheets().add(
+          getClass().getResource("/style.css").toExternalForm()
+        );
+      }
+      
 
     // Build the Difficulty selection screen.
     private void initDifficultyScene() {
@@ -403,7 +453,7 @@ public class MainApp extends Application {
      * offers a Home button (instead of Exit),
      * and stops the in‑game timer.
      */
-    public void showWinScene(int finalScore, long elapsedMillis) {
+    public void showWinScene(int finalScore, long elapsedMillis, String mode) {
         Label winLbl   = titleLabel("YOU WIN!", 60);
         Label scoreLbl = new Label("Final Score: " + finalScore);
         scoreLbl.setFont(Font.font("Rock Salt", 40));
@@ -422,7 +472,20 @@ public class MainApp extends Application {
 
         ImageView bg = getBackgroundImage(); 
 
-        VBox vbox = new VBox(30, winLbl, scoreLbl, timeLbl, home);
+        TextField nameField = new TextField();
+        nameField.setPromptText("Enter your name");
+        nameField.setMaxWidth(300);
+        Button submit = new Button("Submit Score");
+        submit.setOnAction(e -> {
+            String name = nameField.getText().strip();
+            if (!name.isEmpty()) {
+                HighScoresManager.getInstance().add(name, finalScore, mode);
+                initHighScoresScene();
+                primaryStage.setScene(highScoresScene);
+            }
+        });
+
+        VBox vbox = new VBox(30, winLbl, scoreLbl, timeLbl, nameField, submit, home);
         vbox.setAlignment(Pos.CENTER);
         winScene = new Scene(new StackPane(bg, vbox), 1600, 900);
 

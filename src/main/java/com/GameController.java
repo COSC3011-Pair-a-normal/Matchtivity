@@ -29,6 +29,9 @@ public class GameController implements Initializable {
     private MainApp mainApp;                    // Reference back to the JavaFX application.
     private List<ImageView> flippedCards = new ArrayList<>(); // Currently face‑up cards.
     private boolean processing = false;         // Prevents extra clicks during evaluation.
+    private ScoreManager scoreManager;
+    private int totalScore;
+    private String currentMode;
 
     public static final Image backImage =
         new Image("/images/BackOfCard_Orange.png");            // Shared back‑of‑card image.
@@ -37,7 +40,17 @@ public class GameController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         int count = MainAppHolder.getCardCount();
+        switch (count) {
+            case 10: currentMode = "EASY";   break;
+            case 18: currentMode = "MEDIUM"; break;
+            case 30: currentMode = "HARD";   break;
+            default: currentMode = "UNKNOWN";break;
+        }
         cardMap.clear();
+
+        scoreManager = new ScoreManager();
+        totalScore = 0;
+        ScoreBoard.getScoreBoard(null).clearScore();
 
         // Build two of each ID, then shuffle if the game is new
         for (int i = 0; i < count/2; i++) cardMap.add(i);
@@ -69,8 +82,10 @@ public class GameController implements Initializable {
             iv.setImage(backImage);
             iv.setUserData(i);
             iv.setOnMouseClicked(e -> {
-                // Only allow two face‑up cards, and only if .
-                if (!processing && flippedCards.size() < 2 && iv.getImage() == backImage) {
+                if (!processing
+                 && flippedCards.size() < 2
+                 && iv.getImage() == backImage)
+                {
                     flipCard((int) iv.getUserData());
                 }
             });
@@ -147,12 +162,17 @@ public class GameController implements Initializable {
             // Matched pair: hide them after 0.8s and update score.
             Deck.getInstance().addMatchedCard((int) first.getUserData());
             Deck.getInstance().addMatchedCard((int) second.getUserData());
-            ScoreBoard.getScoreBoard(null).increaseScore();
+            ScoreBoard.getScoreBoard(null).setScore(totalScore);
             try {
                 SoundManager.play("ding.mp3");
             } catch (Exception e) {
                 System.out.println("Sound error: " + e.getMessage());
             }
+
+            int earned = scoreManager.collectHiddenValue();
+            totalScore += earned;
+            ScoreBoard.getScoreBoard(null).setScore(totalScore);
+
             PauseTransition pause = new PauseTransition(Duration.seconds(0.8));
             pause.setOnFinished(e -> {
                 first.setVisible(false);
@@ -167,8 +187,9 @@ public class GameController implements Initializable {
                 if (done == MainAppHolder.getCardCount()) {
                     Platform.runLater(() ->
                         mainApp.showWinScene(
-                            ScoreBoard.getScoreBoard(null).getScore(),
-                            mainApp.getElapsedTime()
+                            totalScore,
+                            mainApp.getElapsedTime(),
+                            currentMode
                         )
                     );
                 }
@@ -176,6 +197,8 @@ public class GameController implements Initializable {
             });
             pause.play();
         } else {
+
+            scoreManager.recordMistake();
             // Not a match: flip both back after 0.8s.
             PauseTransition wait = new PauseTransition(Duration.seconds(0.8));
             wait.setOnFinished(e -> {

@@ -39,7 +39,10 @@ public class GameMenuButton extends ToggleButton {
     public GameMenuButton(String text, Font font, MainApp mainApp) {
         super(text);
         this.mainApp = mainApp;
-        setFont(font);
+        Font actual = (font != null)
+            ? font
+            : Font.font("System", 30);
+        setFont(actual);
         setPrefWidth(200);
         getStyleClass().add("menu-button"); 
         //setStyle("-fx-background-radius: 50;" + 
@@ -50,7 +53,7 @@ public class GameMenuButton extends ToggleButton {
 
         // Save item.
         Label saveLabel = new Label("Save");
-        saveLabel.setFont(font);
+        saveLabel.setFont(actual);
         saveLabel.getStyleClass().add("menu-item-label"); 
         //saveLabel.setStyle("-fx-text-fill: white;"); 
         saveLabel.setAlignment(Pos.CENTER);
@@ -60,7 +63,7 @@ public class GameMenuButton extends ToggleButton {
 
         // Restart item.
         Label restartLabel = new Label("Restart");
-        restartLabel.setFont(font);
+        restartLabel.setFont(actual);
         restartLabel.getStyleClass().add("menu-item-label"); 
         //restartLabel.setStyle("-fx-text-fill: white;");
         restartLabel.setAlignment(Pos.CENTER);
@@ -70,7 +73,7 @@ public class GameMenuButton extends ToggleButton {
 
         // Home item.
         Label homeLabel = new Label("Home");
-        homeLabel.setFont(font);
+        homeLabel.setFont(actual);
         homeLabel.getStyleClass().add("menu-item-label"); 
         //homeLabel.setStyle("-fx-text-fill: white;"); 
         homeLabel.setAlignment(Pos.CENTER);
@@ -80,7 +83,7 @@ public class GameMenuButton extends ToggleButton {
 
         // Exit item.
         Label exitLabel = new Label("Exit");
-        exitLabel.setFont(font);
+        exitLabel.setFont(actual);
         exitLabel.getStyleClass().add("menu-item-label"); 
         //exitLabel.setStyle("-fx-text-fill: white;"); 
         exitLabel.setAlignment(Pos.CENTER);
