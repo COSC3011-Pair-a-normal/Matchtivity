@@ -50,7 +50,7 @@ public class GameController implements Initializable {
 
         scoreManager = new ScoreManager();
         totalScore = 0;
-        ScoreBoard.getScoreBoard(null).clearScore();
+        ScoreBoard.getScoreBoard(mainApp.ROCK_SALT_SMALL).clearScore();
 
         // Build two of each ID, then shuffle if the game is new
         for (int i = 0; i < count/2; i++) cardMap.add(i);
@@ -162,7 +162,7 @@ public class GameController implements Initializable {
             // Matched pair: hide them after 0.8s and update score.
             Deck.getInstance().addMatchedCard((int) first.getUserData());
             Deck.getInstance().addMatchedCard((int) second.getUserData());
-            ScoreBoard.getScoreBoard(null).setScore(totalScore);
+            ScoreBoard.getScoreBoard(mainApp.ROCK_SALT_SMALL).setScore(totalScore);
             try {
                 SoundManager.play("ding.mp3");
             } catch (Exception e) {
@@ -171,7 +171,7 @@ public class GameController implements Initializable {
 
             int earned = scoreManager.collectHiddenValue();
             totalScore += earned;
-            ScoreBoard.getScoreBoard(null).setScore(totalScore);
+            ScoreBoard.getScoreBoard(mainApp.ROCK_SALT_SMALL).setScore(totalScore);
 
             PauseTransition pause = new PauseTransition(Duration.seconds(0.8));
             pause.setOnFinished(e -> {

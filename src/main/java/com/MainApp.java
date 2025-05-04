@@ -434,7 +434,7 @@ public class MainApp extends Application {
     public void applyLoadedGameState() {
         if (loadedGameState != null) {
             gameTimer.setElapsedTime(loadedGameState.getElapsedTime());
-            ScoreBoard.getScoreBoard(null).setScore(loadedGameState.getScore());
+            ScoreBoard.getScoreBoard(ROCK_SALT_SMALL).setScore(loadedGameState.getScore());
             GameController.setCardMap(loadedGameState.cardMap);
         }
     }
