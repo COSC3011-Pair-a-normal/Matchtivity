@@ -77,6 +77,7 @@ public class GameController implements Initializable {
      * add click handler (only when face‑down, up to 2 at a time)
      */
     private void initGrid() {
+        loadMatches();
         for (int i = 0; i < imagesGridPane.getChildren().size(); i++) {
             ImageView iv = (ImageView) imagesGridPane.getChildren().get(i);
             iv.setImage(backImage);

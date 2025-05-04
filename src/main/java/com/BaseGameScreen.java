@@ -98,6 +98,11 @@ public abstract class BaseGameScreen {
                     BaseGameScreen newScreen = this.getClass()
                         .getDeclaredConstructor(MainApp.class, Stage.class)
                         .newInstance(mainApp, stage);
+                    Deck.resetInstance();
+                    BaseGameScreen newScreen2 = this.getClass()
+                        .getDeclaredConstructor(MainApp.class, Stage.class)
+                        .newInstance(mainApp, stage);
+                    Deck.resetInstance();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
