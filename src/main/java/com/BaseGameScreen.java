@@ -95,14 +95,10 @@ public abstract class BaseGameScreen {
                 System.out.println("Restarting the game!");
                 ScoreBoard.getScoreBoard(rockSaltSmall).clearScore();
                 try {
+                    Deck.resetInstance();
                     BaseGameScreen newScreen = this.getClass()
                         .getDeclaredConstructor(MainApp.class, Stage.class)
                         .newInstance(mainApp, stage);
-                    Deck.resetInstance();
-                    BaseGameScreen newScreen2 = this.getClass()
-                        .getDeclaredConstructor(MainApp.class, Stage.class)
-                        .newInstance(mainApp, stage);
-                    Deck.resetInstance();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
