@@ -454,6 +454,7 @@ public class MainApp extends Application {
      * and stops the in‑game timer.
      */
     public void showWinScene(int finalScore, long elapsedMillis, String mode) {
+        Deck.resetInstance();
         Label winLbl   = titleLabel("YOU WIN!", 60);
         Label scoreLbl = new Label("Final Score: " + finalScore);
         scoreLbl.setFont(Font.font("Rock Salt", 40));
