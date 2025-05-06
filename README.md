@@ -1,6 +1,25 @@
 # Matchtivity
 Software Design Group Project
 
+# COMPILE INSTRUCTIONS:
+
+From the powershell terminal in VScode you can execute the following command to run the program: 
+
+.\run.ps1
+
+As long as Java is installed on the system, simply pressing "Run without debugging" in VScode should also work (other dependencies have been localized, so it shouldn't be the case that you need to install JavaFX on your system).
+
+I (Caden) am currently working on trying to compile the project into a standalone .exe application, but I am having troubles.
+
+
+
+
+
+
+
+
+
+
 SCRUM Planning: 
 
 February 27, 2025: 
@@ -23,13 +42,6 @@ March 6, 2025:
 - Scoreboard (Carlie)
 - Win Game display (Kobe) 
 
-Commands for compiling and running if using the terminal:
-
-javac -cp ".;C:/javafx-sdk-21.0.6/lib/*" src/main/java/com/Main.java -d out
-java -cp ".;C:/javafx-sdk-21.0.6/lib/*;out" src.main.java.com.Main
-
-
-Google API key:
 
 
 773ee75beed1b221bc266fc7aee2b774cae5864fdd288dc78faed4a2b7910653
