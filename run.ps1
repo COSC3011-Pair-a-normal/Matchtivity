@@ -1,7 +1,7 @@
 $srcDir = "src/main/java"
 $outDir = "out"
 $resourcesDir = "src/main/resources"
-$jsonJar = ".vscode/json-20210307.jar"
+$jsonJar = "lib/json-20210307.jar"  # Update to lib/ for better organization
 $mainClass = "com.MainApp"
 
 $javafxLib = "lib/javafx-sdk-21.0.6/lib"
@@ -14,6 +14,7 @@ if (!(Test-Path -Path $outDir)) {
     New-Item -ItemType Directory -Path $outDir | Out-Null
 }
 
+# Copy resources to the output directory
 Copy-Item -Path "$resourcesDir\*" -Destination $outDir -Recurse -Force
 
 Write-Host "Compiling..."
@@ -23,7 +24,10 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "Compilation successful."
     Write-Host "Running $mainClass..."
 
-    $runClasspath = "$outDir;" + ($javafxJars -join ";")
+    # Build classpath for runtime (including compiled classes and JavaFX JARs)
+    $runClasspath = "$outDir;" + ($javafxJars -join ";") + ";$jsonJar"
+
+    # Run the application with JavaFX modules
     java --module-path $javafxLib --add-modules javafx.controls,javafx.fxml,javafx.media -cp $runClasspath $mainClass
 } else {
     Write-Host "Compilation failed."
