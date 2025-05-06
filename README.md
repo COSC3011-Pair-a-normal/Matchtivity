@@ -3,7 +3,12 @@ Software Design Group Project
 
 # COMPILE INSTRUCTIONS:
 
-From the powershell terminal in VScode you can execute the following command to run the program: 
+
+From the powershell terminal in VScode you can execute the following command to enable script running:
+
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+And then run this script to run the program:
 
 .\run.ps1
 
