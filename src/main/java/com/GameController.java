@@ -99,7 +99,6 @@ public class GameController implements Initializable {
      * After two flips, trigger match evaluation.
      */
     private void flipCard(int cardID) {
-        System.out.println(cardMap);
         ImageView iv = (ImageView) imagesGridPane.getChildren().get(cardID);
         boolean toFront = iv.getImage() == backImage;
 
