@@ -9,13 +9,20 @@ $resourcesDir = "src/main/resources"
 $classpath = "$jsonJar;" + ($javafxJars -join ";") + ";$resourcesDir"
 $javaFiles = Get-ChildItem -Recurse -Filter *.java -Path $srcDir | ForEach-Object { $_.FullName }
 
+if (!(Test-Path -Path $outDir)) {
+    New-Item -ItemType Directory -Path $outDir | Out-Null
+}
+
+Copy-Item -Path "$resourcesDir\*" -Destination $outDir -Recurse -Force
+
 Write-Host "Compiling..."
 javac --class-path $classpath -d $outDir $javaFiles
+
 if ($LASTEXITCODE -eq 0) {
     Write-Host "Compilation successful."
     Write-Host "Running $mainClass..."
     
-    $runClasspath = "$outDir;" + ($javafxJars -join ";") + ";$resourcesDir"
+    $runClasspath = "$outDir;" + ($javafxJars -join ";")
     java --module-path $javafxLib --add-modules javafx.controls,javafx.fxml,javafx.media -cp $runClasspath $mainClass
 } else {
     Write-Host "Compilation failed."
