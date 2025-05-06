@@ -80,23 +80,20 @@ public class MainApp extends Application {
     private void loadFont() {
         if (ROCK_SALT_FONT != null && ROCK_SALT_SMALL != null) return;
     
-        try {
-            String fontUrl = Objects.requireNonNull(getClass()
-                .getResource("/fonts/Rock_Salt/RockSalt-Regular.ttf")).toExternalForm();
-    
-            Font font30 = Font.loadFont(fontUrl, 30);
-            Font font16 = Font.loadFont(fontUrl, 16);
-    
-            if (font30 != null && font16 != null) {
-                ROCK_SALT_FONT = font30;
-                ROCK_SALT_SMALL = font16;
+        try (InputStream fontStream = getClass().getResourceAsStream("/fonts/Rock_Salt/RockSalt-Regular.ttf")) {
+            if (fontStream != null) {
+                ROCK_SALT_FONT = Font.loadFont(fontStream, 30.0);
+                // Re-open the stream since it cannot be reused
+                try (InputStream fontStreamSmall = getClass().getResourceAsStream("/fonts/Rock_Salt/RockSalt-Regular.ttf")) {
+                    ROCK_SALT_SMALL = Font.loadFont(fontStreamSmall, 16.0);
+                }
                 System.out.println("Rock Salt font loaded successfully.");
             } else {
-                System.err.println("Rock Salt font found but failed to register.");
+                System.err.println("Rock Salt font not found.");
                 loadFallbackFonts();
             }
-        } catch (Exception e) {
-            System.err.println("Rock Salt font not found.");
+        } catch (IOException e) {
+            e.printStackTrace();
             loadFallbackFonts();
         }
     }
