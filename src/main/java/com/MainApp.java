@@ -479,6 +479,7 @@ public class MainApp extends Application {
         nameField.setPromptText("Enter your name");
         nameField.setMaxWidth(300);
         Button submit = new Button("Submit Score");
+        styleButton(submit);
         submit.setOnAction(e -> {
             String name = nameField.getText().strip();
             if (!name.isEmpty()) {
